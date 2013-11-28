@@ -1,15 +1,15 @@
 === Birthdays Widget ===
 Plugin Name: Birthdays Widget
-Plugin URI: http://wordpress.org/extend/plugins/ TODO
+Plugin URI: http://wordpress.org/plugins/birthdays-widget/
 Description: Birthdays Widget
 Author: lion2486
-Version: 0.1
+Version: 0.2
 Author URI: http://codescar.eu 
 Contributors: lion2486
 Tags: widget, birthdays, custom
 Requires at least: 3.0.1
 Tested up to: 3.7.1
-Stable tag: 0.1
+Stable tag: 0.2
 Text Domain: birthdays-widget
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,7 +24,6 @@ display it in a widget only when it's necessary.
 Some features:
 
 *   Export to csv file
-*   Ajax request on widget
 
 == Installation ==
 
@@ -35,8 +34,19 @@ This section describes how to install the plugin and get it working.
 3. Add your birthdays List in Birthdays Widget Settings page
 4. Add the widget to your sidebar.
 
+== Screenshots ==
+
+1. Settings Page
+2. Widget preview
+
 == Changelog ==
 
 = 0.1 =
 * first version
 * Only Greek language support for now. 
+
+= 0.2 =
+* English Language now is the stable
+* Translated to Greek (with l10n tools)
+* Some locale fixes for dates
+* Ajax disabled for now

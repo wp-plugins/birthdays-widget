@@ -24,22 +24,40 @@ class Birthdays_Widget extends WP_Widget {
 	 * @param array $instance Saved values from database.
 	 */
 	public function widget( $args, $instance ) {
-		$title = apply_filters( 'widget_title', $instance['Template'] );
 
-		echo $args['before_widget'];
+		$birthdays = birthdays_widget_check_for_birthdays();
 		
-		wp_enqueue_script('birthdays-widget-script', plugins_url('script.js', __FILE__ ), array('jquery'));
-		wp_localize_script('birthdays-widget-script', 'ratingsL10n', array(
+		if( count($birthdays) >= 1 ){
+			
+			$flag = false;
+			
+			/* wp_enqueue_script('birthdays-widget-script', plugins_url('script.js', __FILE__ ), array('jquery'));
+			wp_localize_script('birthdays-widget-script', 'ratingsL10n', array(
 			'admin_ajax_url' => admin_url('admin-ajax.php')
-		));
-		
-		if ( ! empty( $title ) )
-			;//echo $args['before_title'] . $title . $args['after_title'];
-		echo '<div id="birthdays-widget">';
-		
+			)); */
+			
+			echo $args['before_widget'];
+			echo '<div id="birthdays-widget">';
 		?>
-			<span id="birthday"></span>
-			<script type='text/javascript'>
+			<span id="birthday">
+				<span style="color: red; font-weight: bold; margin: 5px auto 5px auto; text-align: center;">
+						<img style="display: block;" src="<?php echo plugins_url( '/images/birthday_cake.png' , __FILE__ ); ?>" alt="birthday_cake" class="aligncenter" width="100" height="100"/>
+						<?php _e( 'Happy Birthday', 'birthdays-widget' ); ?>
+				</span>
+				<?php 
+				foreach( $birthdays as $name ){
+					if( $flag )
+						echo ', ';
+					echo $name->name;
+					$flag = true;
+				}
+					
+				?>
+			</span>
+			
+			<?php //TODO make again ajax support?
+		/* 
+				<script type='text/javascript'>
 				function showNames(data){
 					var a = data.split(";", 100);
 					var ret = "";
@@ -52,9 +70,12 @@ class Birthdays_Widget extends WP_Widget {
 					return ret;
 				}
 			</script>
+			*/ ?>
 		<?php
-		echo $args['after_widget'];
-		echo '</div>';
+			echo $args['after_widget'];
+			
+			echo '</div>';
+		}
 	}
 
 	/**
