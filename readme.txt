@@ -41,12 +41,12 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 0.1 =
-* first version
-* Only Greek language support for now. 
-
 = 0.2 =
 * English Language now is the stable
 * Translated to Greek (with l10n tools)
 * Some locale fixes for dates
 * Ajax disabled for now
+
+= 0.1 =
+* first version
+* Only Greek language support for now. 
