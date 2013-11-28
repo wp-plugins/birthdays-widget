@@ -56,19 +56,19 @@
 			}
 			
 			echo '<div class="wrap">';
-			echo 	'<h2><div id="icon-options-general" class="icon32"></div>'.__( 'Καλώς ήρθατε στο πρόσθετο για εμφάνιση των γενεθλίων', 'birthdays-widget' ).
-					'<a href="#birthday_name" class="add-new-h2">'. __( 'Προσθήκη', 'birthdays-widget' ) .'</a></h2>';
+			echo 	'<h2><div id="icon-options-general" class="icon32"></div>'.__( 'Birthdays Widget Settings', 'birthdays-widget' ).
+					'<a href="#birthday_name" class="add-new-h2">'. __( 'Add New', 'birthdays-widget' ) .'</a></h2>';
 			
 				$table_name = $wpdb->prefix . 'birthdays';
 				
 				if( isset( $_POST['birthdays_add_new'] ) ){
 					if( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] ))
-						echo '<div id="message" class="error"><p>'. __( 'Παρακαλώ συμπλήρωσε όλα τα πεδία!' ) .'</p></div>';
+						echo '<div id="message" class="error"><p>'. __( 'Please fill all the boxes!' ) .'</p></div>';
 					else{
 						//add the new entry
 						$insert_query = "INSERT INTO $table_name (name, date) VALUES (%s, %s);";	
 						if( $wpdb->query( $wpdb->prepare( $insert_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime($_POST['birthday_date'] ) ) ) ) == 1)
-							echo '<div id="message" class="updated"><p>'. __( 'Η νέα εγγραφή καταχωρήθηκε επιτυχώς!', 'birthdays-widget' ) .'</p></div>';
+							echo '<div id="message" class="updated"><p>'. __( 'Your new record was added!', 'birthdays-widget' ) .'</p></div>';
 						else 
 							echo '<div id="message" class="error"><p>Query error</p></div>';
 					}
@@ -76,14 +76,14 @@
 				
 				if( isset( $_GET['action'] ) ){
 					if( !isset( $_GET['id'] ) || empty( $_GET['id'] ) )
-						echo '<div id="message" class="error"><p>'. __( 'Προέκυψε κάποιο σφάλμα!', 'birthdays-widget' ) .'</p></div>';
+						echo '<div id="message" class="error"><p>'. __( 'There was an error!', 'birthdays-widget' ) .'</p></div>';
 					
 					elseif( $_GET['action'] == "delete" ){
 						
 						$delete_query = "DELETE FROM $table_name WHERE id = '%d' LIMIT 1;";
 						
 						if( $wpdb->query( $wpdb->prepare( $delete_query, $_GET['id'] ) ) == 1 )
-							echo '<div id="message" class="updated"><p>'. __( 'Η εγγραφή διαγράφηκε επιτυχώς!', 'birthdays-widget' ) .'</p></div>';
+							echo '<div id="message" class="updated"><p>'. __( 'The record was deleted!', 'birthdays-widget' ) .'</p></div>';
 						else
 							echo '<div id="message" class="error"><p>Query error</p></div>';
 						
@@ -92,12 +92,12 @@
 						if( isset( $_GET['do'] ) && $_GET['do'] == "save" && isset( $_POST['birthdays_edit'] ) ){
 							//update the record
 							if( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] ) )
-								echo '<div id="message" class="error"><p>'. __( 'Παρακαλώ συμπλήρωσε όλα τα πεδία!', 'birthdays-widget' ) .'</p></div>';
+								echo '<div id="message" class="error"><p>'. __( 'Please fill all the boxes!', 'birthdays-widget' ) .'</p></div>';
 							else {
 								$update_query = "UPDATE $table_name SET name = '%s', date = '%s' WHERE id = '%d' LIMIT 1;";
 							
 								if( $wpdb->query( $wpdb->prepare( $update_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime( $_POST['birthday_date'] ) ), $_GET['id'] ) ) == 1)
-									echo '<div id="message" class="updated"><p>'. __( 'Η εγγραφή ενημερώθηκε επιτυχώς!', 'birthdays-widget' ) .'</p></div>';
+									echo '<div id="message" class="updated"><p>'. __( 'The recoed was updated!', 'birthdays-widget' ) .'</p></div>';
 							}
 						}
 						else{
