@@ -3,13 +3,13 @@ Plugin Name: Birthdays Widget
 Plugin URI: http://wordpress.org/plugins/birthdays-widget/
 Description: Birthdays Widget
 Author: lion2486
-Version: 0.2
+Version: 0.3
 Author URI: http://codescar.eu 
 Contributors: lion2486
 Tags: widget, birthdays, custom
 Requires at least: 3.0.1
 Tested up to: 3.7.1
-Stable tag: 0.2
+Stable tag: 0.3
 Text Domain: birthdays-widget
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -40,6 +40,10 @@ This section describes how to install the plugin and get it working.
 2. Widget preview
 
 == Changelog ==
+
+= 0.3 =
+* added some screens
+* an SVN TAG problem
 
 = 0.2 =
 * English Language now is the stable
