@@ -15,6 +15,9 @@
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 	
+
+	load_plugin_textdomain('birthdays-widget', false, basename( dirname( __FILE__ ) ) . '/languages' );
+
 	require_once dirname( __FILE__ ) . '/class-birthdays-widget.php';
 	require_once dirname( __FILE__ ) . '/class-birthdays-widget-installer.php';
 	require_once dirname( __FILE__ ) . '/class-birthdays-widget-settings.php';	
