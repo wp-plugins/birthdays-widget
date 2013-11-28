@@ -37,9 +37,9 @@ class Birthdays_Widget extends WP_Widget {
 			)); */
 			
 			echo $args['before_widget'];
-			echo '<div id="birthdays-widget">';
+			echo '<div class="birthdays-widget">';
 		?>
-			<span id="birthday">
+			<span class="birthday">
 				<span style="color: red; font-weight: bold; margin: 5px auto 5px auto; text-align: center;">
 						<img style="display: block;" src="<?php echo plugins_url( '/images/birthday_cake.png' , __FILE__ ); ?>" alt="birthday_cake" class="aligncenter" width="100" height="100"/>
 						<?php _e( 'Happy Birthday', 'birthdays-widget' ); ?>

@@ -4,7 +4,7 @@
 	Plugin URI: http://wordpress.org/extend/plugins/ TODO
 	Description: Birthdays Widget
 	Author: lion2486
-	Version: 1.1
+	Version: 1.2
 	Author URI: http://codescar.eu 
 	Contributors: lion2486
 	Tags: widget, birthdays, custom
