@@ -107,9 +107,9 @@
 							
 							echo '<div id="edit">
 									<form method="POST" action="'. $setting_url .'&action=edit&id='. $_GET['id'] .'&do=save">
-										<label for="birthday_name">'. __( 'Όνομα:', 'birthdays-widget' ) .'</label><input type="text" maxlength="45" size="10" id="birthday_name" name="birthday_name" value="'. $result->name .'" />
-										<label for="birthday_date">'. __( 'Ημερομηνία:', 'birthdays-widget' ) .'</label><input type="text" size="10" id="birthday_date" name="birthday_date" value="'. date( 'd-m-Y', strtotime( $result->date ) ) .'" />
-										<input name="save" type="submit" class="button-primary" value="'. __( 'Ενημέρωση', 'birthdays-widget' ) .'" />
+										<label for="birthday_name">'. __( 'Name', 'birthdays-widget' ) .':</label><input type="text" maxlength="45" size="10" id="birthday_name" name="birthday_name" value="'. $result->name .'" />
+										<label for="birthday_date">'. __( 'Date', 'birthdays-widget' ) .':</label><input type="text" size="10" id="birthday_date" name="birthday_date" value="'. date_i18n( 'd-m-Y', strtotime( $result->date ) ) .'" />
+										<input name="save" type="submit" class="button-primary" value="'. __( 'Update', 'birthdays-widget' ) .'" />
 										<input type="hidden" name="birthdays_edit" value="1" />
 									</form>
 								</div>';
@@ -117,7 +117,7 @@
 					}
 				}
 					
-				echo '<div id="birthdays_list">'. __( 'Όλα τα γενέθλια που υπάρχουν τώρα:', 'birthdays-widget' );
+				echo '<div id="birthdays_list">'. __( 'All birthdays currenlty are', 'birthdays-widget' ) .': ';
 				
 				$query = "SELECT * FROM $table_name;";
 				
@@ -127,17 +127,17 @@
 						<thead>
 						    <tr>
 						        <th>ID</th>
-						        <th>'. __( 'Όνομα', 'birthdays-widget' ).'</th>       
-						        <th>'. __( 'Ημερομηνία', 'birthdays-widget' ).'</th>
-						        <th>'. __( 'Ενέργεια', 'birthdays-widget' ).'</th>
+						        <th>'. __( 'Name', 'birthdays-widget' ).'</th>       
+						        <th>'. __( 'Date', 'birthdays-widget' ).'</th>
+						        <th>'. __( 'Action', 'birthdays-widget' ).'</th>
 						    </tr>
 						</thead>
 						<tfoot>
 						    <tr>
 						 		<th>ID</th>
-						        <th>'. __( 'Όνομα', 'birthdays-widget' ).'</th>       
-						        <th>'. __( 'Ημερομηνία', 'birthdays-widget' ).'</th>
-						        <th>'. __( 'Ενέργεια', 'birthdays-widget' ).'</th>
+						        <th>'. __( 'Name', 'birthdays-widget' ).'</th>       
+						        <th>'. __( 'Date', 'birthdays-widget' ).'</th>
+						        <th>'. __( 'Action', 'birthdays-widget' ).'</th>
 						    </tr>
 						</tfoot>
 						<tbody>';
@@ -147,8 +147,8 @@
 					echo '<tr>
 						     <td>'. $row->id .'</td>
 						     <td>'. $row->name .'</td>
-						     <td>'. date( get_option( 'date_format' ), strtotime( $row->date ) ) .'</td>
-						     <td><a href="'. $setting_url .'&action=edit&id='. $row->id .'">'. __( 'Επεξεργασία', 'birthdays-widget' ) .'</a> | <a class="delete_link" href="'. $setting_url .'&action=delete&id='. $row->id .'">'. __( 'Διαγραφή', 'birthdays-widget' ) .'</a></td>
+						     <td>'. date_i18n( get_option( 'date_format' ), strtotime( $row->date ) ) .'</td>
+						     <td><a href="'. $setting_url .'&action=edit&id='. $row->id .'">'. __( 'Edit', 'birthdays-widget' ) .'</a> | <a class="delete_link" href="'. $setting_url .'&action=delete&id='. $row->id .'">'. __( 'Delete', 'birthdays-widget' ) .'</a></td>
 				   
 				   		</tr>';
 				}
@@ -160,9 +160,9 @@
 			
 			echo 	'<div id="add_new">
 						<form method="POST" action="'. $setting_url .'">
-							<label for="birthday_name">'. __( 'Όνομα:', 'birthdays-widget' ) .'</label><input type="text" maxlength="45" size="10" id="birthday_name" name="birthday_name" />
-							<label for="birthday_date">'. __( 'Ημερομηνία:', 'birthdays-widget' ) .'</label><input type="text" size="10" id="birthday_date" name="birthday_date" />
-							<input name="save" type="submit" class="button-primary" value="'. __( 'Προσθήκη', 'birthdays-widget' ) .'" />
+							<label for="birthday_name">'. __( 'Name', 'birthdays-widget' ) .':</label><input type="text" maxlength="45" size="10" id="birthday_name" name="birthday_name" />
+							<label for="birthday_date">'. __( 'Date', 'birthdays-widget' ) .':</label><input type="text" size="10" id="birthday_date" name="birthday_date" />
+							<input name="save" type="submit" class="button-primary" value="'. __( 'Add', 'birthdays-widget' ) .'" />
 							<input type="hidden" name="birthdays_add_new" value="1" />
 						</form>
 					</div>';
@@ -176,7 +176,7 @@
 	    					"dateFormat" : "dd-mm-yy"
 	    				});
 						jQuery(".delete_link").click(function(){
-							return confirm("'. __( 'Είσαι σίγουρος ότι θέλεις να διαγράψεις αυτή την εγγραφή;', 'birthdays-widget' ) .'");
+							return confirm("'. __( 'Are you sure you want to delete this record?', 'birthdays-widget' ) .'");
 						});
 					});
 					</script>';
@@ -196,8 +196,8 @@
 		
 		public function create_submenu_page_export() {
 			echo 	'<div class="wrap">
-						<p>'. __( 'Για να κατεβάσετε τα δεδομένα των γενεθλίων πατήστε το παρακάτω κουμπί', 'birthdays-widget' ) .'<br/>
-							<a href="'. admin_url( 'admin-ajax.php' ) .'?action=get_birthdays_export_file" target="_blank" class="button-primary" id="birthdays-export-button">'. __( 'Κατέβασμα', 'birthdays-widget' ) .'</a>
+						<p>'. __( 'In order to download the export file press the button below', 'birthdays-widget' ) .'<br/>
+							<a href="'. admin_url( 'admin-ajax.php' ) .'?action=get_birthdays_export_file" target="_blank" class="button-primary" id="birthdays-export-button">'. __( 'Download', 'birthdays-widget' ) .'</a>
 						</p>
 					</div>';
 		}

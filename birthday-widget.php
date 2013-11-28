@@ -44,7 +44,7 @@
 			// The "page" query string value must be equal to the slug
 			// of the Settings admin page we defined earlier, which in
 			// this case equals "myplugin-settings".
-			$settings_link = '<a href="' . get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=birthdays-widget">'. _( 'Ρυθμίσεις' ) .'</a>';
+			$settings_link = '<a href="' . get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=birthdays-widget">'. _( 'Settings' ) .'</a>';
 			array_unshift($links, $settings_link);
 		}
 	

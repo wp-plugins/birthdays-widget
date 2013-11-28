@@ -43,6 +43,6 @@
 			if( ! get_option ( 'Birthdays_Widget_Installed' ) )
 				return Birthdays_Widget_Installer::install();
 			
-			return "Activated";
+			return;
 		}
 	}
