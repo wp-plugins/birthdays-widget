@@ -54,7 +54,7 @@ function get_birthdays_export_file_callback(){
 	
 	$table_name = $wpdb->prefix . "birthdays";
 	
-	$results = $wpdb->get_results( "SELECT * FROM $table_name;", ARRAY_A );
+	$results = $wpdb->get_results( "SELECT name, date FROM $table_name;", ARRAY_A );
 	
 	$output = fopen("php://output", "w");
 	

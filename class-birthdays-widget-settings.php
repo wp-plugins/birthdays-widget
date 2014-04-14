@@ -11,7 +11,7 @@
 	        add_menu_page( 'Birthdays Widget', 'Birthdays Widget', 'read', 'birthdays-widget', array( &$this, 'create_plugin_page' ) );
 	        
 	       // add_submenu_page( 'birthdays-widget', 'Overview', 'Overview', 'read', 'birthdays-widget-overview', array( &$this, 'create_submenu_page_overview' ) );
-	       // add_submenu_page( 'birthdays-widget', 'Import', 'Import', 'read', 'birthdays-widget-import', array( &$this, 'create_submenu_page_import' ) );
+	        add_submenu_page( 'birthdays-widget', 'Import', 'Import', 'read', 'birthdays-widget-import', array( &$this, 'create_submenu_page_import' ) );
 	        add_submenu_page( 'birthdays-widget', 'Export', 'Export', 'read', 'birthdays-widget-export', array( &$this, 'create_submenu_page_export' ) );
 	    }
 	
@@ -63,7 +63,7 @@
 				
 				if( isset( $_POST['birthdays_add_new'] ) ){
 					if( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] ))
-						echo '<div id="message" class="error"><p>'. __( 'Please fill all the boxes!' ) .'</p></div>';
+						echo '<div id="message" class="error"><p>'. __( 'Please fill all the boxes!', 'birthdays-widget' ) .'</p></div>';
 					else{
 						//add the new entry
 						$insert_query = "INSERT INTO $table_name (name, date) VALUES (%s, %s);";	
@@ -190,7 +190,71 @@
 		}
 		
 		public function create_submenu_page_import() {
-			
+			if( isset( $_POST['birthdays_upload_file'] ) && $_POST['birthdays_upload_file'] == 1 ){
+				if( !isset( $_FILES['uploadedfile'] ) ){
+					echo '<div id="message" class="error"><p>'. __( 'Select a file first!', 'birthdays-widget' ) .'</p></div>';
+				}else{
+					
+					$target_path = dirname( __FILE__ )."/uploads/";
+					
+					$target_path = $target_path . basename( $_FILES['uploadedfile']['name'] );
+					
+					if( move_uploaded_file( $_FILES['uploadedfile']['tmp_name'], $target_path ) ) {
+						echo "The file ".  basename( $_FILES['uploadedfile']['name'] ) ." has been uploaded";
+						
+						$row = 0;
+						if( FALSE !== ( $handle = fopen( $target_path, "r" ) ) ) {
+							global $wpdb;
+								
+							$table_name = $wpdb->prefix . "birthdays";
+							
+							while( FALSE !== ( $data = fgetcsv( $handle, 1000, "," ) ) ) {
+								if( 2 != count( $data ) ){
+									echo 'Wrong csv format!<br/>';
+									break;
+								}
+								$row++;
+								
+								$new_record['name'] = $data[0];
+								$new_record['date'] = $data[1];
+								
+								//TODO meybe convert date format
+								
+								$wpdb->insert( 
+											$table_name, 
+											array( 
+												'name' => $new_record['name'], 
+												'date' => $new_record['date'] 
+											), 
+											array( 
+												'%s', 
+												'%s' 
+											));
+							}
+							
+							echo $row.' records inserted!<br/>';
+							fclose($handle);
+						}
+						
+						@unlink($target_path);
+						
+						echo '';
+						
+					} else{
+						echo '<div id="message" class="error"><p>'. __( 'There was an error uploading the file, please try again!', 'birthdays-widget' ) .'</p></div>';
+					}
+				}
+			}
+			echo 	'<div class="wrap">
+					<span>'. __( 'Here you can upload a CSV file with youw own data or from a plugin-export. (CSV must have format <name>,<date> as <name> an string and <date> as Y-m-D)', 'birthdays-widget' ) .'</span>
+					<form action="" method="POST" enctype="multipart/form-data">
+						<label for="uploadedfile">'. __( 'File', 'birthdays-widget' ) .'</label> <input type="file" name="uploadedfile" id="uploadedfile" accept=".csv" />
+						<input name="upload" type="submit" class="button-primary" value="'. __( 'Upload', 'birthdays-widget' ) .'" />
+						<input type="hidden" name="birthdays_upload_file" value="1" />
+					</form>
+					
+					
+					</div>';
 			
 		}
 		

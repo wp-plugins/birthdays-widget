@@ -3,13 +3,13 @@ Plugin Name: Birthdays Widget
 Plugin URI: http://wordpress.org/plugins/birthdays-widget/
 Description: Birthdays Widget
 Author: lion2486
-Version: 1.2
+Version: 1.3
 Author URI: http://codescar.eu 
 Contributors: lion2486
 Tags: widget, birthdays, custom
 Requires at least: 3.0.1
-Tested up to: 3.7.1
-Stable tag: 1.2
+Tested up to: 3.8.2
+Stable tag: 1.3
 Text Domain: birthdays-widget
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -23,7 +23,9 @@ display it in a widget only when it's necessary.
 
 Some features:
 
-*   Export to csv file
+* Export to csv file
+* Import/Restore from csv
+* Greek & English Languages
 
 == Installation ==
 
@@ -40,6 +42,10 @@ This section describes how to install the plugin and get it working.
 2. Widget preview
 
 == Changelog ==
+
+= 1.3 =
+* Upload support (csv file)
+* possible restore-transfer of data
 
 = 1.2 =
 * el_GR changed to el

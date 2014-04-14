@@ -4,12 +4,12 @@
 	Plugin URI: http://wordpress.org/extend/plugins/ TODO
 	Description: Birthdays Widget
 	Author: lion2486
-	Version: 1.2
+	Version: 1.3
 	Author URI: http://codescar.eu 
 	Contributors: lion2486
 	Tags: widget, birthdays, custom
 	Requires at least: 3.0.1
-	Tested up to: 3.7.1
+	Tested up to: 3.8.2
 	Text Domain: birthdays-widget
 	License: GPLv2
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
