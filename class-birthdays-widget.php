@@ -27,7 +27,7 @@ class Birthdays_Widget extends WP_Widget {
 
 		$birthdays = birthdays_widget_check_for_birthdays();
 		
-		if( count($birthdays) >= 1 ){
+		if( count( $birthdays ) >= 1 ){
 			
 			$flag = false;
 			
@@ -38,10 +38,11 @@ class Birthdays_Widget extends WP_Widget {
 			
 			echo $args['before_widget'];
 			echo '<div class="birthdays-widget">';
-		?>
+		    ?>
 			<span class="birthday">
 				<span style="color: red; font-weight: bold; margin: 5px auto 5px auto; text-align: center;">
-						<img style="display: block;" src="<?php echo plugins_url( '/images/birthday_cake.png' , __FILE__ ); ?>" alt="birthday_cake" class="aligncenter" width="100" height="100"/>
+						<img style="display: block;" src="<?php echo plugins_url( '/images/birthday_cake.png' , __FILE__ ); ?>"
+                             alt="birthday_cake" class="aligncenter" width="100" height="100"/>
 						<?php _e( 'Happy Birthday', 'birthdays-widget' ); ?>
 				</span>
 				<?php 
@@ -51,7 +52,6 @@ class Birthdays_Widget extends WP_Widget {
 					echo $name->name;
 					$flag = true;
 				}
-					
 				?>
 			</span>
 			
@@ -72,9 +72,8 @@ class Birthdays_Widget extends WP_Widget {
 			</script>
 			*/ ?>
 		<?php
-			echo $args['after_widget'];
-			
 			echo '</div>';
+			echo $args[ 'after_widget' ];
 		}
 	}
 
@@ -88,11 +87,12 @@ class Birthdays_Widget extends WP_Widget {
 	public function form( $instance ) {
 		?>
 		<p>
-		<label for="<?php echo $this->get_field_id( 'Template' ); ?>"><?php _e( 'Template:', 'birthdays-widget' ); ?></label> 
-		<select class="widefat" id="<?php echo $this->get_field_id( 'Template' ); ?>" name="<?php echo $this->get_field_name( 'Template' ); ?>">
-			<option value="0">Default</option>
-		</select>
-		This widget diplays happy birthday from your birthday list
+		    <label for="<?php echo $this->get_field_id( 'Template' ); ?>"><?php _e( 'Template:', 'birthdays-widget' ); ?></label> 
+		    <select class="widefat" id="<?php echo $this->get_field_id( 'Template' ); ?>" 
+                    name="<?php echo $this->get_field_name( 'Template' ); ?>">
+			    <option value="0">Default</option>
+		    </select>
+		    This widget diplays happy birthday from your birthday list
 		</p>
 		<?php 
 	}
@@ -109,7 +109,7 @@ class Birthdays_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
-		$instance['Template'] = ( ! empty( $new_instance['Template'] ) ) ? strip_tags( $new_instance['Template'] ) : '';
+		$instance[ 'Template' ] = ( ! empty( $new_instance[ 'Template' ] ) ) ? strip_tags( $new_instance[ 'Template' ] ) : '';
 
 		return $instance;
 	}

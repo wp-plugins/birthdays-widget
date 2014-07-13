@@ -58,3 +58,41 @@
 	}
 	
 	add_action('plugins_loaded', 'birthdays_widget_load_languages');
+
+    function birthdays_widget_usr_profile() {
+        wp_enqueue_script( 'jquery-ui-datepicker' );
+        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+
+        $user_id = get_current_user_id();
+        $date = get_user_meta( $user_id, 'birthday');
+        $date = $date[ 0 ];
+        echo '<table class="form-table">
+                <tr>
+                    <th><label for="birthday_date">' . __( 'User Birthday', 'birthdays-widget' ) . '</label></th>
+                    <td>
+                        <input  type="text" size="10" id="birthday_date" name="birthday_date" 
+                                value="'. date_i18n( 'd-m-Y', strtotime( $date ) ) .'" />
+                        <br /><span class="description">Please enter user\'s birthday requested by birthdays widget</span>
+                    </td> 
+                </tr></table>';
+        echo '<script type="text/javascript">
+				    jQuery(document).ready(function(){
+					    jQuery("#birthday_date").datepicker({
+						    changeMonth: true,
+      						changeYear: true,
+        					"dateFormat" : "dd-mm-yy"
+        				})});
+			  </script>';
+    }
+
+    add_action( 'edit_user_profile', 'birthdays_widget_usr_profile' );
+    add_action( 'show_user_profile', 'birthdays_widget_usr_profile' );
+
+    function birthdays_widget_update_profile() {
+        $user_id = get_current_user_id();
+        $value = $_POST[ 'birthday_date' ];
+        update_user_meta( $user_id, 'birthday', $value, '' );
+    }
+
+    add_action( 'profile_update', 'birthdays_widget_update_profile' );
+
