@@ -74,11 +74,11 @@
 					}
 				}
 				
-				if( isset( $_GET['action'] ) ){
-					if( !isset( $_GET['id'] ) || empty( $_GET['id'] ) )
+				if( isset( $_GET['action'] ) && !isset($_POST['birthdays_add_new']) ){
+					if( !isset( $_GET['id'] ) || empty( $_GET['id'] ) ){
 						echo '<div id="message" class="error"><p>'. __( 'There was an error!', 'birthdays-widget' ) .'</p></div>';
 					
-					elseif( $_GET['action'] == "delete" ){
+					}elseif( $_GET['action'] == "delete" ){
 						
 						$delete_query = "DELETE FROM $table_name WHERE id = '%d' LIMIT 1;";
 						
@@ -97,7 +97,7 @@
 								$update_query = "UPDATE $table_name SET name = '%s', date = '%s' WHERE id = '%d' LIMIT 1;";
 							
 								if( $wpdb->query( $wpdb->prepare( $update_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime( $_POST['birthday_date'] ) ), $_GET['id'] ) ) == 1)
-									echo '<div id="message" class="updated"><p>'. __( 'The recoed was updated!', 'birthdays-widget' ) .'</p></div>';
+									echo '<div id="message" class="updated"><p>'. __( 'The record was updated!', 'birthdays-widget' ) .'</p></div>';
 							}
 						}
 						else{
@@ -105,19 +105,20 @@
 							
 							$result = $wpdb->get_row( $wpdb->prepare( $select_query, $_GET['id'] ) );
 							
-							echo '<div id="edit">
+							/*echo '<div id="edit">
 									<form method="POST" action="'. $setting_url .'&action=edit&id='. $_GET['id'] .'&do=save">
 										<label for="birthday_name">'. __( 'Name', 'birthdays-widget' ) .':</label><input type="text" maxlength="45" size="10" id="birthday_name" name="birthday_name" value="'. $result->name .'" />
 										<label for="birthday_date">'. __( 'Date', 'birthdays-widget' ) .':</label><input type="text" size="10" id="birthday_date" name="birthday_date" value="'. date_i18n( 'd-m-Y', strtotime( $result->date ) ) .'" />
 										<input name="save" type="submit" class="button-primary" value="'. __( 'Update', 'birthdays-widget' ) .'" />
 										<input type="hidden" name="birthdays_edit" value="1" />
 									</form>
-								</div>';
+								</div>';*/
+							$birthday_edit = true;
 						}
 					}
 				}
 					
-				echo '<div id="birthdays_list">'. __( 'All birthdays currenlty are', 'birthdays-widget' ) .': ';
+				echo '<div id="birthdays_list">';
 				
 				$query = "SELECT * FROM $table_name;";
 				
@@ -152,20 +153,29 @@
 				   
 				   		</tr>';
 				}
+				$flag = isset( $birthday_edit );
+				echo '<tr><form method="POST" action="'. $setting_url .'&action=edit&id='. $_GET['id'] .'&do=save">';
+				if ($flag) {
+					echo '<td>'. __( 'Editing', 'birthdays-widget') .'</td>';
+				} else {
+					echo '<td>'. __( 'New', 'birthdays-widget') .'</td>';
+				}
+				echo '<td><input type="text" maxlength="45" style="width: 85%;" size="10" value="';
+				echo ($flag) ? $result->name : '';
+				echo '" id="birthday_name" name="birthday_name" /></td>';
 				
+				echo '<td><input type="text" size="10" id="birthday_date" name="birthday_date" value="';
+				echo ($flag) ? date_i18n( 'd-m-Y', strtotime( $result->date ) ) : '';
+				echo '" id="station_url" name="station_url" /></td>';
+				
+				echo '<td><input name="save" type="submit" class="button-primary" value="'. __( 'Save', 'birthdays-widget' ) .'" />';
+				echo '<input type="hidden" name="birthdays_add_new" value="1" /></td>';
 				echo '</tbody>
 				</table>';
 			
 			echo '</div>';
+					
 			
-			echo 	'<div id="add_new">
-						<form method="POST" action="'. $setting_url .'">
-							<label for="birthday_name">'. __( 'Name', 'birthdays-widget' ) .':</label><input type="text" maxlength="45" size="10" id="birthday_name" name="birthday_name" />
-							<label for="birthday_date">'. __( 'Date', 'birthdays-widget' ) .':</label><input type="text" size="10" id="birthday_date" name="birthday_date" />
-							<input name="save" type="submit" class="button-primary" value="'. __( 'Add', 'birthdays-widget' ) .'" />
-							<input type="hidden" name="birthdays_add_new" value="1" />
-						</form>
-					</div>';
 		
 			echo '</div>';
 			echo '	<script type="text/javascript">
