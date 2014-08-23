@@ -4,7 +4,7 @@
     Plugin URI: https://wordpress.org/plugins/birthdays-widget/
     Description: Birthdays Widget
     Author: lion2486, Sudavar
-    Version: 1.3
+    Version: 1.4
     Author URI: http://codescar.eu 
     Contributors: lion2486, Sudavar
     Tags: widget, birthdays, custom
