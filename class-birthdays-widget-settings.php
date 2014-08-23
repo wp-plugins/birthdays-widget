@@ -45,31 +45,90 @@
         
         public function create_options_page() {
             ?> <div class="wrap">
-            <h2><?php _e( 'Birthdays List Access ', 'birthdays-widget' ); ?></h2>
-            <p><?php _e( 'Here you can select which roles of your website can have access to page editing/viewing the birthday list.', 'birthdays-widget' ); ?></p>
+            <h2><?php _e( 'Birthdays Widget Options ', 'birthdays-widget' ); ?></h2>
+            <form method="POST">
             <?php
-                if ( isset( $_POST['birthdays_save_roles'] ) && !empty( $_POST['birthdays_save_roles'] ) ) {
-                    update_option('birthdays_widget_roles', $_POST['roles']);
+                wp_enqueue_media();
+                if ( isset( $_POST['birthdays_save'] ) ) {
+                    update_option( 'birthdays_widget_roles', $_POST['roles'] );
+                    if ( isset( $_POST['birthdays_register_form'] ) ) {
+                        update_option( 'birthdays_register_form', '1' );
+                    } else {
+                        update_option( 'birthdays_register_form', '0' );
+                    }
+                    if ( isset( $_POST['birthdays_widget_image'] ) && !empty( $_POST['birthdays_widget_image'] ) ) {
+                        update_option( 'birthdays_widget_image', $_POST['birthdays_widget_image'] );
+                    } else {
+                        update_option( 'birthdays_widget_image', plugins_url( '/images/birthday_cake.png' , __FILE__ ) );
+                    }
                 }
+                $register_form = get_option( 'birthdays_register_form' );
+                $image_url = get_option( 'birthdays_widget_image' );
                 $sup_roles = get_editable_roles();
-                $cur_roles = get_option('birthdays_widget_roles');
-                $current_roles = maybe_unserialize($cur_roles);
+                $cur_roles = get_option( 'birthdays_widget_roles' );
+                $current_roles = maybe_unserialize( $cur_roles );
                 $supported_roles = array();
-                foreach($sup_roles as $role){
+                foreach ( $sup_roles as $role ) {
                     $supported_roles[] = $role['name'];
                 } ?>
                 <div class="wrap">
-                <form method="POST">
+                    <p><?php _e( 'Here you can select which roles of your website can have access to page editing/viewing the birthday list.', 'birthdays-widget' ); ?></p>
                     <?php foreach ( $supported_roles as $role ) : ?>
                         <input type="checkbox" name="roles[]" value="<?php echo $role; ?>" 
-                        <?php if( in_array( $role, $current_roles ) ) echo 'checked="checked"'; ?> />
-                        <?php echo $role.'<br />'; ?>
-                    <?php endforeach; ?>
-                    <input type="hidden" name="birthdays_save_roles" value="1" /><br />
-                    <input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" />
-                </form>
+                            <?php if( in_array( $role, $current_roles ) ) echo 'checked="checked"'; ?> />
+                        <?php echo $role.'<br />';
+                    endforeach; ?>
+                    <input type="hidden" name="birthdays_save" value="1" />
+                </div><br />
+                <div class="wrap">
+                    <p><?php _e( 'Select if you want to enable user\'s name and birthday fields at user registration form', 'birthdays-widget' ); ?></p>
+                    <input type="checkbox" name="birthdays_register_form" value="1" 
+                        <?php if( $register_form == TRUE ) echo 'checked="checked"'; ?> />
+                    <?php _e('User\'s name and birthday field in registration form', 'birthdays-widget' ); ?><br />
+                </div><br />
+                <div class="wrap">
+                    <p><?php _e('Select the image you want for the birthdays widget. Leaving this field empty will revert to use the default image.', 'birthdays-widget'); ?></p>
+                    <input id="bw_image" type="text" size="55" name="birthdays_widget_image" value="<?php echo $image_url; ?>" />
+                    <input name="image" type="button" class="button-primary upload_image_button" value="<?php _e( 'Select Image', 'birthdays-widget' ); ?>" />
+                    <input id="default-image" name="default-image" type="button" class="button-primary" value="<?php _e( 'Default', 'birthdays-widget' ); ?>" />
+                    <p><input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" /></p>
                 </div>
+            </form>
             </div>
+            <script type="text/javascript">
+                // Uploading files
+                var file_frame;              
+                jQuery('.upload_image_button').live('click', function( event ){
+                    event.preventDefault();
+                    // If the media frame already exists, reopen it.
+                    if ( file_frame ) {
+                        file_frame.open();
+                        return;
+                    }
+                    // Create the media frame.
+                    file_frame = wp.media.frames.file_frame = wp.media({
+                        title: jQuery( this ).data( 'uploader_title' ),
+                        button: {
+                            text: jQuery( this ).data( 'uploader_button_text' ),
+                        },
+                        multiple: false  // Set to true to allow multiple files to be selected
+                    });
+                    // When an image is selected, run a callback.
+                    file_frame.on( 'select', function() {
+                        // We set multiple to false so only get one image from the uploader
+                        attachment = file_frame.state().get('selection').first().toJSON();
+                        // Do something with attachment.id and/or attachment.url here
+                        jQuery('#bw_image').val(attachment.url);
+                    });
+                    // Finally, open the modal
+                    file_frame.open();
+                  });
+                  
+                  jQuery('#default-image').click(function(){
+                    var deflt = '<?php echo plugins_url( '/images/birthday_cake.png' , __FILE__ ); ?>';
+                    jQuery('#bw_image').val(deflt);
+                  });
+            </script>
         <?php
         }
         public function birthdays_user_edit(){
@@ -223,6 +282,7 @@
                             changeYear: true,
                             "dateFormat" : "dd-mm-yy"
                         });
+                        jQuery("#ui-datepicker-div").hide();
                         jQuery(".delete_link").click(function(){
                             return confirm("'. __( 'Are you sure you want to delete this record?', 'birthdays-widget' ) .'");
                         });
