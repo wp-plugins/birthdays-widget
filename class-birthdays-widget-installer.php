@@ -20,7 +20,7 @@
             
             add_option( 'Birthdays_Widget_Installed', '1' );
             add_option( 'birthdays_register_form', '0' );
-			add_option( 'birthdays_widget_image', plugins_url( '/images/birthday_cake.png' , __FILE__ ) );
+            add_option( 'birthdays_widget_image', plugins_url( '/images/birthday_cake.png' , __FILE__ ) );
             $roles = array( 'Administrator' => 'Administrator' );
             add_option( 'birthdays_widget_roles', $roles );
             return;
@@ -36,7 +36,7 @@
             
             delete_option( 'Birthdays_Widget_Installed' );
             delete_option( 'birthdays_register_form' );
-			delete_option( 'birthdays_widget_image' );
+            delete_option( 'birthdays_widget_image' );
             delete_option( 'birthdays_widget_roles' );
         }
         
