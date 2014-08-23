@@ -47,17 +47,17 @@
             ?> <div class="wrap">
             <h2><?php _e( 'Birthdays List Access ', 'birthdays-widget' ); ?></h2>
             <p><?php _e( 'Here you can select which roles of your website can have access to page editing/viewing the birthday list.', 'birthdays-widget' ); ?></p>
-			<form method="POST">
+            <form method="POST">
             <?php
                 if ( isset( $_POST['birthdays_save'] ) ) {
                     update_option( 'birthdays_widget_roles', $_POST['roles'] );
-					if ( isset( $_POST['birthdays_register_form'] ) ) {
-						update_option( 'birthdays_register_form', '1' );
-					} else {
-						update_option( 'birthdays_register_form', '0' );
-					}
+                    if ( isset( $_POST['birthdays_register_form'] ) ) {
+                        update_option( 'birthdays_register_form', '1' );
+                    } else {
+                        update_option( 'birthdays_register_form', '0' );
+                    }
                 }
-				$register_form = get_option( 'birthdays_register_form' );
+                $register_form = get_option( 'birthdays_register_form' );
                 $sup_roles = get_editable_roles();
                 $cur_roles = get_option( 'birthdays_widget_roles' );
                 $current_roles = maybe_unserialize( $cur_roles );
@@ -68,19 +68,19 @@
                 <div class="wrap">
                     <?php foreach ( $supported_roles as $role ) : ?>
                         <input type="checkbox" name="roles[]" value="<?php echo $role; ?>" 
-							<?php if( in_array( $role, $current_roles ) ) echo 'checked="checked"'; ?> />
+                            <?php if( in_array( $role, $current_roles ) ) echo 'checked="checked"'; ?> />
                         <?php echo $role.'<br />';
                     endforeach; ?>
                     <input type="hidden" name="birthdays_save" value="1" /><br />
                 </div>
-				<p><?php _e( 'Select if you want to enable user\'s name and birthday fields at user registration form', 'birthdays-widget' ); ?></p>
-				<div class="wrap">
-					<input type="checkbox" name="birthdays_register_form" value="1" 
-						<?php if( $register_form == TRUE ) echo 'checked="checked"'; ?> />
-					<?php _e('User\'s name and birthday field in registration form', 'birthdays-widget' ); ?><br />
-				</div>
-				<p><input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" /></p>
-			</form>
+                <p><?php _e( 'Select if you want to enable user\'s name and birthday fields at user registration form', 'birthdays-widget' ); ?></p>
+                <div class="wrap">
+                    <input type="checkbox" name="birthdays_register_form" value="1" 
+                        <?php if( $register_form == TRUE ) echo 'checked="checked"'; ?> />
+                    <?php _e('User\'s name and birthday field in registration form', 'birthdays-widget' ); ?><br />
+                </div>
+                <p><input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" /></p>
+            </form>
             </div>
         <?php
         }
@@ -235,6 +235,7 @@
                             changeYear: true,
                             "dateFormat" : "dd-mm-yy"
                         });
+                        jQuery("#ui-datepicker-div").hide();
                         jQuery(".delete_link").click(function(){
                             return confirm("'. __( 'Are you sure you want to delete this record?', 'birthdays-widget' ) .'");
                         });
