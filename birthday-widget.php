@@ -80,13 +80,9 @@
         </p> <?php
     }
 
-    //2. Add validation. In this case, we make sure first_name is required.
-    function birthdays_widget_registration_errors ($errors, $sanitized_user_login, $user_email) {
-        if ( empty( $_POST['first_name'] ) )
-            $errors->add( 'first_name_error', __('<strong>ERROR</strong>: You must include a first name.','birthdays-widget') );
-
-        return $errors;
-    }
+    //2. Add validation. No need yet
+    //function birthdays_widget_registration_errors ($errors, $sanitized_user_login, $user_email) {
+    //}
 
     //3. Finally, save our extra registration user meta.
     function birthdays_widget_user_register ($user_id) {
@@ -99,7 +95,6 @@
     $register_form = get_option( 'birthdays_register_form' );
     if ( $register_form == TRUE ) {
         add_action('register_form','birthdays_widget_register_form');
-        add_action('user_register', 'birthdays_widget_user_register');
         add_filter('registration_errors', 'birthdays_widget_registration_errors', 10, 3);
     }
 
