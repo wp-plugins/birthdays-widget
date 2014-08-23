@@ -19,9 +19,9 @@
 			dbDelta( $sql );
 			
 			add_option( 'Birthdays_Widget_Installed', '1' );
-			$roles = array('Administrator' => 'Administrator');
-			add_option('birthdays_widget_roles', $roles);
-			
+			add_option( 'birthdays_register_form', '0' );
+			$roles = array( 'Administrator' => 'Administrator' );
+			add_option( 'birthdays_widget_roles', $roles );
 			return;
 		}
 		
