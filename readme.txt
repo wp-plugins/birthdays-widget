@@ -14,8 +14,8 @@ Text Domain: birthdays-widget
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Birthdays widget plugin produces a widget for your Wordpress website which displays a happy birthday image to your clients/users. 
-Data are saved in a custom table and are available through a nice list.
+Birthdays widget plugin produces a widget for your Wordpress website which 
+displays a happy birthday image to your clients/users.
 
 == Description ==
 
