@@ -19,8 +19,8 @@ Data are saved in a custom table and are available through a nice list.
 
 == Description ==
 
-Birthdays Widget allows to add your custom birthday-list of any person you want and 
-display it in a widget only when it's necessary.
+Birthdays widget plugin produces a widget for your Wordpress website which 
+displays a happy birthday image to your clients/users.
 
 Some features:
 
