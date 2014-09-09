@@ -289,6 +289,11 @@
             }
             $flag = isset( $birthday_edit );
             if ($flag) {
+                echo '<script type="text/javascript">
+                    jQuery(document).ready(function(){
+                        jQuery("#birthday_name").focus();
+                    });
+                  </script>';
                 echo '<tr><form method="POST" action="'. $setting_url .'&action=edit&id='. $_GET['id'] .'&do=save">
                       <td>'. __( 'Editing', 'birthdays-widget') .'</td>
                       <input type="hidden" name="birthdays_edit" value="1" />';
