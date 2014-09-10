@@ -56,6 +56,21 @@
                     } else {
                         update_option( 'birthdays_register_form', '0' );
                     }
+					if ( isset( $_POST['birthdays_profile_page'] ) ) {
+                        update_option( 'birthdays_profile_page', '1' );
+                    } else {
+                        update_option( 'birthdays_profile_page', '0' );
+                    }
+                    if ( isset( $_POST['birthdays_meta_field'] ) ) {
+                        update_option( 'birthdays_meta_field', $_POST['birthdays_meta_field'] );
+                    } else {
+                        update_option( 'birthdays_meta_field', 'display_name' );
+                    }
+                    if ( isset( $_POST['birthdays_widget_image_width'] ) ) {
+                        update_option( 'birthdays_widget_image_width', $_POST['birthdays_widget_image_width'] );
+                    } else {
+                        update_option( 'birthdays_widget_image_width', '55%' );
+                    }
                     if ( isset( $_POST['birthdays_widget_image'] ) && !empty( $_POST['birthdays_widget_image'] ) ) {
                         update_option( 'birthdays_widget_image', $_POST['birthdays_widget_image'] );
                     } else {
@@ -63,7 +78,10 @@
                     }
                 }
                 $register_form = get_option( 'birthdays_register_form' );
+				$profile_page = get_option( 'birthdays_profile_page' );
+                $birthdays_meta_field = get_option( 'birthdays_meta_field' );
                 $image_url = get_option( 'birthdays_widget_image' );
+                $image_width = get_option( 'birthdays_widget_image_width' );
                 $sup_roles = get_editable_roles();
                 $cur_roles = get_option( 'birthdays_widget_roles' );
                 $current_roles = maybe_unserialize( $cur_roles );
@@ -79,18 +97,45 @@
                         <?php echo $role.'<br />';
                     endforeach; ?>
                     <input type="hidden" name="birthdays_save" value="1" />
-                </div><br />
+                </div>
+                <hr />
+				<div class="wrap">
+                    <p><?php _e( 'Select if you want to enable user\'s birthday field at user profile page', 'birthdays-widget' ); ?></p>
+                    <input type="checkbox" name="birthdays_profile_page" value="1" 
+                        <?php if( $profile_page == TRUE ) echo 'checked="checked"'; ?> />
+                    <?php _e('User\'s birthday field in profile page', 'birthdays-widget' ); ?><br />
+                </div>
                 <div class="wrap">
                     <p><?php _e( 'Select if you want to enable user\'s name and birthday fields at user registration form', 'birthdays-widget' ); ?></p>
                     <input type="checkbox" name="birthdays_register_form" value="1" 
                         <?php if( $register_form == TRUE ) echo 'checked="checked"'; ?> />
                     <?php _e('User\'s name and birthday field in registration form', 'birthdays-widget' ); ?><br />
-                </div><br />
+                </div>
+                <hr />
                 <div class="wrap">
-                    <p><?php _e('Select the image you want for the birthdays widget. Leaving this field empty will revert to use the default image.', 'birthdays-widget'); ?></p>
+                    <p>
+                        <?php _e('Select which Wordpress User\'s meta value you like to be shown as name in widget.', 'birthdays-widget'); ?><br />
+                        <select name="birthdays_meta_field">
+                            <?php $meta_keys = self::birthday_get_filtered_meta( $birthdays_meta_field );
+                                foreach ( $meta_keys as $key ): ?>
+                                    <option value="<?php echo $key; ?>" <?php echo ($birthdays_meta_field == $key) ? "selected=\"selected\"" : ''; ?> ><?php echo $key; ?></option>
+                            <?php endforeach; ?>
+                        </select><br />
+                        <span class="description">
+                            <?php _e('Careful! The meta you select must be present in every WP User you set a birthday, otherwise nothing will be displayed.', 'birthdays-widget'); ?>
+                        </span>
+                    </p>
+                </div>
+                <hr />
+                <div class="wrap">
+                    <p><?php _e('Select the image you want for the birthdays widget. Leaving this field empty will revert to the default image.', 'birthdays-widget'); ?></p>
                     <input id="bw_image" type="text" size="55" name="birthdays_widget_image" value="<?php echo $image_url; ?>" />
                     <input name="image" type="button" class="button-primary upload_image_button" value="<?php _e( 'Select Image', 'birthdays-widget' ); ?>" />
                     <input id="default-image" name="default-image" type="button" class="button-primary" value="<?php _e( 'Default', 'birthdays-widget' ); ?>" />
+                    <p>
+                        <?php _e('Select the width of the widget\'s image', 'birthdays-widget'); ?>
+                        <input name="birthdays_widget_image_width" type="text" size="3" value="<?php echo $image_width; ?>" />
+                    </p>
                     <p><input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" /></p>
                 </div>
             </form>
@@ -131,6 +176,25 @@
             </script>
         <?php
         }
+
+        public function birthday_get_filtered_meta( $role ) {
+            global $wpdb;
+            $select = "SELECT distinct $wpdb->usermeta.meta_key FROM $wpdb->usermeta";
+            $tmp = $wpdb->get_results( $select );
+            $meta_keys = array();
+            foreach( $tmp as $key )
+                $meta_keys[] = $key->meta_key;
+            $arr = array( 'rich_editing', 'comment_shortcuts', 'admin_color', 'use_ssl', 'show_admin_bar_front', 'wp_capabilities', 
+                            'wp_user_level', 'dismissed_wp_pointers', 'show_welcome_panel', 'wp_dashboard_quick_press_last_post_id',
+                            'session_tokens', 'wporg_favorites', 'birthday_id' );
+            //remove those meta for security reasons
+            $meta_keys = array_diff( $meta_keys, $arr );
+            $arr = array ( 'user_login', 'user_nicename', 'user_url', 'user_email', 'display_name' );
+            //add some meta that are saved in wp_user table and can't be fetched with get_metadata
+            $meta_keys = array_merge( $meta_keys, $arr );
+            return $meta_keys;
+        }
+
         public function birthdays_user_edit(){
             $current_user = wp_get_current_user();
             $current_roles = get_option('birthdays_widget_roles');
@@ -152,134 +216,144 @@
                 wp_die( __( 'You do not have sufficient permissions to access this page.', 'birthdays-widget' ) );
             }
 
-            echo '<div class="wrap">';
-            echo    '<h2><div id="icon-options-general" class="icon32"></div>'.__( 'Birthdays Widget - List of Birthdays', 'birthdays-widget' ).
-                    '<a href="#birthday_name" class="add-new-h2">'. __( 'Add New', 'birthdays-widget' ) .'</a></h2>';
-            
-                $table_name = $wpdb->prefix . 'birthdays';
+            echo '<div class="wrap">
+                    <h2><div id="icon-options-general" class="icon32"></div>'.__( 'Birthdays Widget - List of Birthdays', 'birthdays-widget' ).
+                        '<a href="#birthday_name" class="add-new-h2">'. __( 'Add New', 'birthdays-widget' ) .'</a>'.
+                        '<a href="#birthday_date" class="add-new-h2">'. __( 'Bottom', 'birthdays-widget' ) .'</a></h2>';
+            $table_name = $wpdb->prefix . 'birthdays';
                 
-                if( isset( $_POST['birthdays_add_new'] ) ){
-                    if( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] ))
-                        echo '<div id="message" class="error"><p>'. __( 'Please fill all the boxes!', 'birthdays-widget' ) .'</p></div>';
-                    else{
-                        //add the new entry
-                        $insert_query = "INSERT INTO $table_name (name, date) VALUES (%s, %s);";    
-                        if( $wpdb->query( $wpdb->prepare( $insert_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime($_POST['birthday_date'] ) ) ) ) == 1)
-                            echo '<div id="message" class="updated"><p>'. __( 'Your new record was added!', 'birthdays-widget' ) .'</p></div>';
-                        else 
-                            echo '<div id="message" class="error"><p>Query error</p></div>';
-                    }
-                }
-                
-                if( isset( $_GET['action'] ) && !isset($_POST['birthdays_add_new']) ){
-                    if( !isset( $_GET['id'] ) || empty( $_GET['id'] ) ){
-                        echo '<div id="message" class="error"><p>'. __( 'There was an error!', 'birthdays-widget' ) .'</p></div>';
-                    
-                    }elseif( $_GET['action'] == "delete" ){
-                        
-                        $delete_query = "DELETE FROM $table_name WHERE id = '%d' LIMIT 1;";
-                        
-                        if( $wpdb->query( $wpdb->prepare( $delete_query, $_GET['id'] ) ) == 1 )
-                            echo '<div id="message" class="updated"><p>'. __( 'The record was deleted!', 'birthdays-widget' ) .'</p></div>';
-                        else
-                            echo '<div id="message" class="error"><p>Query error</p></div>';
-                        
-                    }elseif( $_GET['action'] == "edit" ){
-                        
-                        if( isset( $_GET['do'] ) && $_GET['do'] == "save" && isset( $_POST['birthdays_edit'] ) ){
-                            //update the record
-                            if( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] ) )
-                                echo '<div id="message" class="error"><p>'. __( 'Please fill all the boxes!', 'birthdays-widget' ) .'</p></div>';
-                            else {
-                                $update_query = "UPDATE $table_name SET name = '%s', date = '%s' WHERE id = '%d' LIMIT 1;";
-                            
-                                if( $wpdb->query( $wpdb->prepare( $update_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime( $_POST['birthday_date'] ) ), $_GET['id'] ) ) == 1)
-                                    echo '<div id="message" class="updated"><p>'. __( 'The record was updated!', 'birthdays-widget' ) .'</p></div>';
-                            }
-                        }
-                        else{
-                            $select_query = "SELECT * FROM $table_name WHERE id = '%d' LIMIT 1;";
-                            
-                            $result = $wpdb->get_row( $wpdb->prepare( $select_query, $_GET['id'] ) );
-                            
-                            /*echo '<div id="edit">
-                                    <form method="POST" action="'. $setting_url .'&action=edit&id='. $_GET['id'] .'&do=save">
-                                        <label for="birthday_name">'. __( 'Name', 'birthdays-widget' ) .':</label><input type="text" maxlength="45" size="10" id="birthday_name" name="birthday_name" value="'. $result->name .'" />
-                                        <label for="birthday_date">'. __( 'Date', 'birthdays-widget' ) .':</label><input type="text" size="10" id="birthday_date" name="birthday_date" value="'. date_i18n( 'd-m-Y', strtotime( $result->date ) ) .'" />
-                                        <input name="save" type="submit" class="button-primary" value="'. __( 'Update', 'birthdays-widget' ) .'" />
-                                        <input type="hidden" name="birthdays_edit" value="1" />
-                                    </form>
-                                </div>';*/
-                            $birthday_edit = true;
-                        }
-                    }
-                }
-                    
-                echo '<div id="birthdays_list">';
-                
-                $query = "SELECT * FROM $table_name;";
-                
-                $results = $wpdb->get_results( $query );
-                
-                echo '<table class="widefat">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>'. __( 'Name', 'birthdays-widget' ).'</th>       
-                                <th>'. __( 'Date', 'birthdays-widget' ).'</th>
-                                <th>'. __( 'Action', 'birthdays-widget' ).'</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <th>ID</th>
-                                <th>'. __( 'Name', 'birthdays-widget' ).'</th>       
-                                <th>'. __( 'Date', 'birthdays-widget' ).'</th>
-                                <th>'. __( 'Action', 'birthdays-widget' ).'</th>
-                            </tr>
-                        </tfoot>
-                        <tbody>';
-                   
-                
-                foreach( $results as $row ){
-                    echo '<tr>
-                             <td>'. $row->id .'</td>
-                             <td>'. $row->name .'</td>
-                             <td>'. date_i18n( get_option( 'date_format' ), strtotime( $row->date ) ) .'</td>
-                             <td><a href="'. $setting_url .'&action=edit&id='. $row->id .'">'. __( 'Edit', 'birthdays-widget' ) .'</a> | <a class="delete_link" href="'. $setting_url .'&action=delete&id='. $row->id .'">'. __( 'Delete', 'birthdays-widget' ) .'</a></td>
-                   
-                        </tr>';
-                }
-                $flag = isset( $birthday_edit );
-                echo '<tr><form method="POST" action="'. $setting_url .'&action=edit&id='. $_GET['id'] .'&do=save">';
-                if ($flag) {
-                    echo '<td>'. __( 'Editing', 'birthdays-widget') .'</td>';
+            if( isset( $_POST['birthdays_add_new'] ) ){
+                if( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] )) {
+                    echo '<div id="message" class="error"><p>'. __( 'Please fill all the boxes!', 'birthdays-widget' ) .'</p></div>';
                 } else {
-                    echo '<td>'. __( 'New', 'birthdays-widget') .'</td>';
+                    //add the new entry
+                    $insert_query = "INSERT INTO $table_name (name, date) VALUES (%s, %s);";    
+                    if( $wpdb->query( $wpdb->prepare( $insert_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime($_POST['birthday_date'] ) ) ) ) == 1)
+                        echo '<div id="message" class="updated"><p>'. __( 'Your new record was added!', 'birthdays-widget' ) .'</p></div>';
+                    else 
+                        echo '<div id="message" class="error"><p>Query error</p></div>';
                 }
-                echo '<td><input type="text" maxlength="45" style="width: 85%;" size="10" value="';
-                echo ($flag) ? $result->name : '';
-                echo '" id="birthday_name" name="birthday_name" /></td>';
-                
-                echo '<td><input type="text" size="10" id="birthday_date" name="birthday_date" value="';
-                echo ($flag) ? date_i18n( 'd-m-Y', strtotime( $result->date ) ) : '';
-                echo '" id="station_url" name="station_url" /></td>';
-                
-                echo '<td><input name="save" type="submit" class="button-primary" value="'. __( 'Save', 'birthdays-widget' ) .'" />';
-                echo '<input type="hidden" name="birthdays_add_new" value="1" /></td>';
-                echo '</tbody>
-                </table>';
+            }
             
-            echo '</div>';
-                    
-            
-        
-            echo '</div>';
-            echo '  <script type="text/javascript">
+            if( isset( $_GET['action'] ) && !isset($_POST['birthdays_add_new']) ){
+                if( !isset( $_GET['id'] ) || empty( $_GET['id'] ) ){
+                    //id is not set, some error must have occured
+                    echo '<div id="message" class="error"><p>'. __( 'There was an error!', 'birthdays-widget' ) .'</p></div>';
+                } elseif ( $_GET['action'] == "delete" ) {
+                    //delete the record
+                    $delete_query = "DELETE FROM $table_name WHERE id = '%d' LIMIT 1;";
+                    if( $wpdb->query( $wpdb->prepare( $delete_query, $_GET['id'] ) ) == 1 )
+                        echo '<div id="message" class="updated"><p>'. __( 'The record was deleted!', 'birthdays-widget' ) .'</p></div>';
+                    else
+                        echo '<div id="message" class="error"><p>Query error</p></div>';
+                }elseif( $_GET['action'] == "edit" ){
+                    if( isset( $_GET['do'] ) && $_GET['do'] == "save" && isset( $_POST['birthdays_edit'] ) ){
+                        //update the record
+                        if( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] ) ) {
+                            echo '<div id="message" class="error"><p>'. __( 'Please fill all the boxes!', 'birthdays-widget' ) .'</p></div>';
+                            var_dump ( $_POST );
+                        } else {
+                            $update_query = "UPDATE $table_name SET name = '%s', date = '%s' WHERE id = '%d' LIMIT 1;";
+                            if( $wpdb->query( $wpdb->prepare( $update_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime( $_POST['birthday_date'] ) ), $_GET['id'] ) ) == 1)
+                                echo '<div id="message" class="updated"><p>'. __( 'The record was updated!', 'birthdays-widget' ) .'</p></div>';
+                        }
+                    }
+                    else{
+                        //get record to edit
+                        $select_query = "SELECT * FROM $table_name WHERE id = '%d' LIMIT 1;";
+                        $result = $wpdb->get_row( $wpdb->prepare( $select_query, $_GET['id'] ) );
+                        $birthday_edit = true;
+                    }
+                }
+            }
+
+            echo '<div id="birthdays_list">';
+
+            $query = "SELECT * FROM $table_name;";
+            $results = $wpdb->get_results( $query );
+
+            echo '<table class="widefat">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>'. __( 'Name', 'birthdays-widget' ).'</th>       
+                            <th>'. __( 'Date', 'birthdays-widget' ).'</th>
+                            <th>'. __( 'Action', 'birthdays-widget' ).'</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>'. __( 'Name', 'birthdays-widget' ).'</th>       
+                            <th>'. __( 'Date', 'birthdays-widget' ).'</th>
+                            <th>'. __( 'Action', 'birthdays-widget' ).'</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>';
+            $meta_key = get_option( 'birthdays_meta_field' );
+            $prefix = "cs_birth_widg_";
+            foreach( $results as $row ){
+                $wp_usr = strpos( $row->name, $prefix );
+                if ( $wp_usr !== false ) {
+                    $birth_user = get_userdata( substr( $row->name, strlen( $prefix ) ) );
+                    $row->name = $birth_user->{$meta_key};
+                }
+                echo '<tr>
+                        <td>'. $row->id .'</td>
+                        <td>'. $row->name .'</td>
+                        <td>'. date_i18n( get_option( 'date_format' ), strtotime( $row->date ) ) .'</td>
+                        <td><a href="'. $setting_url .'&action=edit&id='. $row->id .'">'. __( 'Edit', 'birthdays-widget' ) .'</a> 
+                            | <a class="delete_link" href="'. $setting_url .'&action=delete&id='. $row->id .'">'. __( 'Delete', 'birthdays-widget' ) .'</a>
+                        </td>                   
+                    </tr>';
+            }
+            $flag = isset( $birthday_edit );
+            if ($flag) {
+                echo '<script type="text/javascript">
+                    jQuery(document).ready(function(){
+                        jQuery("#birthday_date").focus();
+                    });
+                  </script>';
+                echo '<tr><form method="POST" action="'. $setting_url .'&action=edit&id='. $_GET['id'] .'&do=save">
+                      <td>'. __( 'Editing', 'birthdays-widget') .'</td>
+                      <input type="hidden" name="birthdays_edit" value="1" />';
+            } else {
+                echo '<tr><form method="POST" action="'. $setting_url .'">
+                      <td>'. __( 'New', 'birthdays-widget') .'</td>
+                      <input type="hidden" name="birthdays_add_new" value="1" /></td>';
+            }
+            echo '<td><input type="text" maxlength="45" style="width: 85%;" size="10" ';
+                $wp_usr = false;
+                if ( $flag ) {
+                    $wp_usr = strpos( $result->name, $prefix );
+                    if ( $wp_usr !== false ) {
+                        $birth_usr_id = substr( $result->name, strlen( $prefix ) );
+                        $birth_user = get_userdata( $birth_usr_id );
+                        $result->name = $birth_user->{$meta_key};
+                        echo 'disabled="disabled"';
+                    }
+                    echo 'value="' . $result->name . '"';
+                } else {
+                    echo 'value=""';
+                }
+                echo ' id="birthday_name" name="birthday_name" />';
+                if ( $flag && $wp_usr !== false )
+                    echo '<input type="hidden" name="birthday_name" value="cs_birth_widg_' . $birth_usr_id . '"/>';
+                echo '</td><td><input type="text" size="10" id="birthday_date" name="birthday_date" value="';
+            echo ($flag) ? date_i18n( 'd-m-Y', strtotime( $result->date ) ) : '';
+            echo '" id="station_url" name="station_url" /></td>
+                    <td><input name="save" type="submit" class="button-primary" value="'. __( 'Save', 'birthdays-widget' ) .'" /></td>
+                    </form></tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>';
+            echo '<script type="text/javascript">
                     jQuery(document).ready(function(){
                         jQuery("#birthday_date").datepicker({
                             changeMonth: true,
                             changeYear: true,
+                            maxDate: "+0D",
                             "dateFormat" : "dd-mm-yy"
                         });
                         jQuery("#ui-datepicker-div").hide();
@@ -287,7 +361,7 @@
                             return confirm("'. __( 'Are you sure you want to delete this record?', 'birthdays-widget' ) .'");
                         });
                     });
-                    </script>';
+                  </script>';
         }
 
         public function create_submenu_page_import() {
@@ -364,11 +438,11 @@
             if ( ! current_user_can( 'manage_options' ) && ! self::birthdays_user_edit() ) {
                 wp_die( __( 'You do not have sufficient permissions to access this page.', 'birthdays-widget' ) );
             }
-            echo    '<div class="wrap">
-                        <p>'. __( 'In order to download the export file press the button below', 'birthdays-widget' ) .'<br/>
-                            <a href="'. admin_url( 'admin-ajax.php' ) .'?action=get_birthdays_export_file" target="_blank" class="button-primary" id="birthdays-export-button">'. __( 'Download', 'birthdays-widget' ) .'</a>
-                        </p>
-                    </div>';
+            echo '<div class="wrap">
+                    <p>'. __( 'In order to download the export file press the button below', 'birthdays-widget' ) .'<br/>
+                        <a href="'. admin_url( 'admin-ajax.php' ) .'?action=get_birthdays_export_file" target="_blank" class="button-primary" id="birthdays-export-button">'. __( 'Download', 'birthdays-widget' ) .'</a>
+                    </p>
+                </div>';
         }
         
     }
