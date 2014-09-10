@@ -46,8 +46,10 @@ This section describes how to install the plugin and get it working.
 == Changelog ==
 
 = 1.5.1 =
-*
-*
+* WP User's meta key selected as user's name is not saved in our table, it is fetched every time so it can undergo changes
+* Future day can not be selected as birthday date
+* Fixed error in registration form
+* Added widget's image width option
 
 = 1.5 =
 * Added option to select which WP User's meta data you like to be displayed as a name
