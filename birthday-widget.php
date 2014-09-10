@@ -4,7 +4,7 @@
     Plugin URI: https://wordpress.org/plugins/birthdays-widget/
     Description: Birthdays Widget
     Author: lion2486, Sudavar
-    Version: 1.5
+    Version: 1.5.1
     Author URI: http://codescar.eu 
     Contributors: lion2486, Sudavar
     Tags: widget, birthdays, custom
@@ -72,6 +72,7 @@
                     jQuery("#birthday_date").datepicker({
                         changeMonth: true,
                         changeYear: true,
+                        maxDate: "+0D",
                         "dateFormat" : "dd-mm-yy"
                     });
                     jQuery("#ui-datepicker-div").hide();
@@ -81,8 +82,9 @@
     }
 
     //2. Add validation. No need yet
-    //function birthdays_widget_registration_errors ($errors, $sanitized_user_login, $user_email) {
-    //}
+    function birthdays_widget_registration_errors ($errors, $sanitized_user_login, $user_email) {
+        return $errors;
+    }
 
     //3. Finally, save our extra registration user meta.
     function birthdays_widget_user_register ($user_id) {
@@ -113,7 +115,7 @@
         $id = get_user_meta( $user_id, 'birthday_id' );
         if ( empty( $id ) ) {
 			unset( $id );
-            $date = "";
+            unset( $date );
         } else {
             $id = $id[ 0 ];
             $table_name = $wpdb->prefix . "birthdays";
@@ -122,20 +124,23 @@
             if ( empty( $results ) ) {
                 delete_user_meta( $user_id, 'birthday_id' );
                 unset( $id );
-                $date = "";
+                unset( $date );
             } else {
                 $date = $results[ 0 ]->date;
             }
         }
-
-        echo '<table class="form-table">
+        ?>
+            <table class="form-table">
                 <tr>
-                    <th><label for="birthday_date">' . __( 'User Birthday', 'birthdays-widget' ) . '</label></th>
-                    <td>
-                        <input type="text" size="10" id="birthday_date" name="birthday_date" 
-                               value="'. date_i18n( 'd-m-Y', strtotime( $date ) ) .'" />
-                        <br /><span class="description">Please enter user\'s birthday requested by birthdays widget</span>
-						<input type="hidden" name="birthday_usr_id" value="' . $user_id . '" />';
+                    <th><label for="birthday_date"><?php _e( 'User Birthday', 'birthdays-widget' ); ?></label></th>
+                    <td><input type="text" size="10" id="birthday_date" name="birthday_date" 
+                        <?php if( isset( $date ) )
+                                echo 'value="' . date_i18n( 'd-m-Y', strtotime( $date ) ) . '" />';
+                              else
+                                echo 'value="" />'; ?>
+                        <br /><span class="description"><?php _e( 'Please enter user\'s birthday requested by birthdays widget', 'birthdays-widget' ); ?></span>
+						<input type="hidden" name="birthday_usr_id" value="<?php echo $user_id; ?>" />
+        <?php 
         if ( isset( $id ) )
             echo '<input type="hidden" name="birthday_id" value="' . $id . '" />';
         echo '      </td> 
@@ -145,6 +150,7 @@
                         jQuery("#birthday_date").datepicker({
                             changeMonth: true,
                             changeYear: true,
+                            maxDate: "+0D",
                             "dateFormat" : "dd-mm-yy"
                         });
                         jQuery("#ui-datepicker-div").hide();
@@ -155,12 +161,16 @@
 	//2. Validate and update field in WP user structure
     function birthdays_widget_update_profile() {
         global $wpdb;
+        
+        if ( empty ( $_POST[ 'birthday_date' ] ) )
+            return;
+        
         $user_id = $_POST[ 'birthday_usr_id' ];
         $value = $_POST[ 'birthday_date' ];
+        $meta_key = get_option( 'birthdays_meta_field' );
 
-		//Shall now save it in our database table too
-        $birth_user = get_userdata( $user_id );
-        $birth_user = $birth_user->display_name;
+		//Shall now save it in our database table
+        $birth_user = "cs_birth_widg_" . $user_id;
         $table_name = $wpdb->prefix . 'birthdays';
 
         if ( !isset( $_POST[ 'birthday_id' ] ) ) {
@@ -172,8 +182,8 @@
             update_user_meta( $user_id, 'birthday_id', $birth_id, '' );
         } else {
             //update the existing entry
-            $update_query = "UPDATE $table_name SET date = %s WHERE id = %d;";    
-            if( $wpdb->query( $wpdb->prepare( $update_query, date( 'Y-m-d' , strtotime($value) ), $_POST[ 'birthday_id' ] ) ) != 1)
+            $update_query = "UPDATE $table_name SET date = %s, name = %s WHERE id = %d;";    
+            if( $wpdb->query( $wpdb->prepare( $update_query, date( 'Y-m-d' , strtotime($value) ), $birth_user, $_POST[ 'birthday_id' ] ) ) != 1)
                 echo '<div id="message" class="error"><p>Query error</p></div>';
         }
     }

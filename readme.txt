@@ -3,24 +3,24 @@ Plugin Name: Birthdays Widget
 Plugin URI: http://wordpress.org/plugins/birthdays-widget/
 Description: Birthdays Widget
 Author: lion2486, Sudavar
-Version: 1.5
+Version: 1.5.1
 Author URI: http://codescar.eu 
 Contributors: lion2486, Sudavar
 Tags: widget, birthdays, custom
 Requires at least: 3.0.1
 Tested up to: 4.0
-Stable tag: 1.5
+Stable tag: 1.5.1
 Text Domain: birthdays-widget
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Birthdays widget plugin produces a widget for your Wordpress website which displays a happy birthday image to your clients/users. 
-Data are saved in a custom table and are available through a nice list.
+Birthdays widget plugin produces a widget for your Wordpress website which 
+displays a happy birthday image to your clients/users.
 
 == Description ==
 
-Birthdays widget plugin produces a widget for your Wordpress website which 
-displays a happy birthday image to your clients/users.
+Birthdays Widget allows to add your custom birthday-list of any person you want and 
+display it in a widget only when it's necessary.
 
 Some features:
 
@@ -45,7 +45,11 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 1.5. =
+= 1.5.1 =
+*
+*
+
+= 1.5 =
 * Added option to select which WP User's meta data you like to be displayed as a name
 * Added option to disable integration with WP User Profile
 * All birthdays are now saved in our table, not in wp_usermeta

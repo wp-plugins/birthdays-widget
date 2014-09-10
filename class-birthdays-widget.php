@@ -26,37 +26,37 @@ class Birthdays_Widget extends WP_Widget {
     public function widget( $args, $instance ) {
 
         $birthdays = birthdays_widget_check_for_birthdays();
-        
         if( count( $birthdays ) >= 1 ){
-            
             $flag = false;
-            
             /* wp_enqueue_script('birthdays-widget-script', plugins_url('script.js', __FILE__ ), array('jquery'));
             wp_localize_script('birthdays-widget-script', 'ratingsL10n', array(
             'admin_ajax_url' => admin_url('admin-ajax.php')
             )); */
             
             echo $args['before_widget'];
-            echo '<div class="birthdays-widget">';
             ?>
-            <span class="birthday">
-                <span style="color: red; font-weight: bold; margin: 5px auto 5px auto; text-align: center;">
-                        <img style="display: block;" src="<?php echo get_option( 'birthdays_widget_image' ); ?>"
-                             alt="birthday_cake" class="aligncenter" width="100" height="100"/>
-                        <?php _e( 'Happy Birthday', 'birthdays-widget' ); ?>
-                </span>
-                <?php 
-                foreach( $birthdays as $name ){
+            <div class="birthdays-widget" style=" text-align: center;">
+                <img style="display: block; width: <?php echo get_option( 'birthdays_widget_image_width' ); ?>;" 
+                    src="<?php echo get_option( 'birthdays_widget_image' ); ?>" alt="birthday_cake" class="aligncenter" />
+                <span style="color: red; font-weight: bold;">
+                    <?php _e( 'Happy Birthday', 'birthdays-widget' ); ?>
+                </span><br />
+                <?php $meta_key = get_option( 'birthdays_meta_field' );
+                $prefix = "cs_birth_widg_";
+                foreach( $birthdays as $row ){
+                    $wp_usr = strpos( $row->name, $prefix );
+                    if ( $wp_usr !== false ) {
+                        $birth_user = get_userdata( substr( $row->name, strlen( $prefix ) ) );
+                        $row->name = $birth_user->{$meta_key};
+                    }
                     if( $flag )
                         echo ', ';
-                    echo $name->name;
+                    echo $row->name;
                     $flag = true;
-                }
-                ?>
-            </span>
-            
-            <?php //TODO make again ajax support?
-        /* 
+                } ?>
+            </div>
+            <?php
+            /* //TODO make again ajax support?
                 <script type='text/javascript'>
                 function showNames(data){
                     var a = data.split(";", 100);
@@ -70,9 +70,7 @@ class Birthdays_Widget extends WP_Widget {
                     return ret;
                 }
             </script>
-            */ ?>
-        <?php
-            echo '</div>';
+            */
             echo $args[ 'after_widget' ];
         }
     }

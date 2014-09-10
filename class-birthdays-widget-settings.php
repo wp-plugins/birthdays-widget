@@ -66,6 +66,11 @@
                     } else {
                         update_option( 'birthdays_meta_field', 'display_name' );
                     }
+                    if ( isset( $_POST['birthdays_widget_image_width'] ) ) {
+                        update_option( 'birthdays_widget_image_width', $_POST['birthdays_widget_image_width'] );
+                    } else {
+                        update_option( 'birthdays_widget_image_width', '55%' );
+                    }
                     if ( isset( $_POST['birthdays_widget_image'] ) && !empty( $_POST['birthdays_widget_image'] ) ) {
                         update_option( 'birthdays_widget_image', $_POST['birthdays_widget_image'] );
                     } else {
@@ -76,6 +81,7 @@
 				$profile_page = get_option( 'birthdays_profile_page' );
                 $birthdays_meta_field = get_option( 'birthdays_meta_field' );
                 $image_url = get_option( 'birthdays_widget_image' );
+                $image_width = get_option( 'birthdays_widget_image_width' );
                 $sup_roles = get_editable_roles();
                 $cur_roles = get_option( 'birthdays_widget_roles' );
                 $current_roles = maybe_unserialize( $cur_roles );
@@ -115,15 +121,21 @@
                                     <option value="<?php echo $key; ?>" <?php echo ($birthdays_meta_field == $key) ? "selected=\"selected\"" : ''; ?> ><?php echo $key; ?></option>
                             <?php endforeach; ?>
                         </select><br />
-                        <i><?php _e('Careful! The meta you select must be present in every WP User you set a birthday, otherwise nothing will be displayed.', 'birthdays-widget'); ?></i>
+                        <span class="description">
+                            <?php _e('Careful! The meta you select must be present in every WP User you set a birthday, otherwise nothing will be displayed.', 'birthdays-widget'); ?>
+                        </span>
                     </p>
                 </div>
                 <hr />
                 <div class="wrap">
-                    <p><?php _e('Select the image you want for the birthdays widget. Leaving this field empty will revert to use the default image.', 'birthdays-widget'); ?></p>
+                    <p><?php _e('Select the image you want for the birthdays widget. Leaving this field empty will revert to the default image.', 'birthdays-widget'); ?></p>
                     <input id="bw_image" type="text" size="55" name="birthdays_widget_image" value="<?php echo $image_url; ?>" />
                     <input name="image" type="button" class="button-primary upload_image_button" value="<?php _e( 'Select Image', 'birthdays-widget' ); ?>" />
                     <input id="default-image" name="default-image" type="button" class="button-primary" value="<?php _e( 'Default', 'birthdays-widget' ); ?>" />
+                    <p>
+                        <?php _e('Select the width of the widget\'s image', 'birthdays-widget'); ?>
+                        <input name="birthdays_widget_image_width" type="text" size="3" value="<?php echo $image_width; ?>" />
+                    </p>
                     <p><input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" /></p>
                 </div>
             </form>
@@ -206,7 +218,8 @@
 
             echo '<div class="wrap">
                     <h2><div id="icon-options-general" class="icon32"></div>'.__( 'Birthdays Widget - List of Birthdays', 'birthdays-widget' ).
-                        '<a href="#birthday_name" class="add-new-h2">'. __( 'Add New', 'birthdays-widget' ) .'</a></h2>';
+                        '<a href="#birthday_name" class="add-new-h2">'. __( 'Add New', 'birthdays-widget' ) .'</a>'.
+                        '<a href="#birthday_date" class="add-new-h2">'. __( 'Bottom', 'birthdays-widget' ) .'</a></h2>';
             $table_name = $wpdb->prefix . 'birthdays';
                 
             if( isset( $_POST['birthdays_add_new'] ) ){
@@ -238,6 +251,7 @@
                         //update the record
                         if( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] ) ) {
                             echo '<div id="message" class="error"><p>'. __( 'Please fill all the boxes!', 'birthdays-widget' ) .'</p></div>';
+                            var_dump ( $_POST );
                         } else {
                             $update_query = "UPDATE $table_name SET name = '%s', date = '%s' WHERE id = '%d' LIMIT 1;";
                             if( $wpdb->query( $wpdb->prepare( $update_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime( $_POST['birthday_date'] ) ), $_GET['id'] ) ) == 1)
@@ -276,8 +290,14 @@
                         </tr>
                     </tfoot>
                     <tbody>';
-
+            $meta_key = get_option( 'birthdays_meta_field' );
+            $prefix = "cs_birth_widg_";
             foreach( $results as $row ){
+                $wp_usr = strpos( $row->name, $prefix );
+                if ( $wp_usr !== false ) {
+                    $birth_user = get_userdata( substr( $row->name, strlen( $prefix ) ) );
+                    $row->name = $birth_user->{$meta_key};
+                }
                 echo '<tr>
                         <td>'. $row->id .'</td>
                         <td>'. $row->name .'</td>
@@ -291,7 +311,7 @@
             if ($flag) {
                 echo '<script type="text/javascript">
                     jQuery(document).ready(function(){
-                        jQuery("#birthday_name").focus();
+                        jQuery("#birthday_date").focus();
                     });
                   </script>';
                 echo '<tr><form method="POST" action="'. $setting_url .'&action=edit&id='. $_GET['id'] .'&do=save">
@@ -302,13 +322,28 @@
                       <td>'. __( 'New', 'birthdays-widget') .'</td>
                       <input type="hidden" name="birthdays_add_new" value="1" /></td>';
             }
-            echo '<td><input type="text" maxlength="45" style="width: 85%;" size="10" value="';
-            echo ($flag) ? $result->name : '';
-            echo '" id="birthday_name" name="birthday_name" /></td>
-                 <td><input type="text" size="10" id="birthday_date" name="birthday_date" value="';
+            echo '<td><input type="text" maxlength="45" style="width: 85%;" size="10" ';
+                $wp_usr = false;
+                if ( $flag ) {
+                    $wp_usr = strpos( $result->name, $prefix );
+                    if ( $wp_usr !== false ) {
+                        $birth_usr_id = substr( $result->name, strlen( $prefix ) );
+                        $birth_user = get_userdata( $birth_usr_id );
+                        $result->name = $birth_user->{$meta_key};
+                        echo 'disabled="disabled"';
+                    }
+                    echo 'value="' . $result->name . '"';
+                } else {
+                    echo 'value=""';
+                }
+                echo ' id="birthday_name" name="birthday_name" />';
+                if ( $flag && $wp_usr !== false )
+                    echo '<input type="hidden" name="birthday_name" value="cs_birth_widg_' . $birth_usr_id . '"/>';
+                echo '</td><td><input type="text" size="10" id="birthday_date" name="birthday_date" value="';
             echo ($flag) ? date_i18n( 'd-m-Y', strtotime( $result->date ) ) : '';
             echo '" id="station_url" name="station_url" /></td>
-                     <td><input name="save" type="submit" class="button-primary" value="'. __( 'Save', 'birthdays-widget' ) .'" />
+                    <td><input name="save" type="submit" class="button-primary" value="'. __( 'Save', 'birthdays-widget' ) .'" /></td>
+                    </form></tr>
                     </tbody>
                 </table>
                 </div>
@@ -318,6 +353,7 @@
                         jQuery("#birthday_date").datepicker({
                             changeMonth: true,
                             changeYear: true,
+                            maxDate: "+0D",
                             "dateFormat" : "dd-mm-yy"
                         });
                         jQuery("#ui-datepicker-div").hide();

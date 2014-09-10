@@ -24,6 +24,7 @@
 			add_option( 'birthdays_profile_page', '0' );
             add_option( 'birthdays_meta_field', 'display_name' );
             add_option( 'birthdays_widget_image', plugins_url( '/images/birthday_cake.png' , __FILE__ ) );
+            add_option( 'birthdays_widget_image_width', '55%' );
             $roles = array( 'Administrator' => 'Administrator' );
             add_option( 'birthdays_widget_roles', $roles );
             return;
@@ -43,12 +44,13 @@
             delete_option( 'birthdays_register_form' );
 			delete_option( 'birthdays_profile_page' );
             delete_option( 'birthdays_widget_image' );
+            delete_option( 'birthdays_widget_image_width' );
             delete_option( 'birthdays_widget_roles' );
             
             //delete all of our user meta
             $users = get_users( array( 'fields' => 'id' ) );
             foreach ( $users as $id ) {
-                delete_user_meta( $id, 'birthday_id');
+                delete_user_meta( $id, 'birthday_id' );
             }
         }
         
