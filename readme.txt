@@ -40,8 +40,9 @@ This section describes how to install the plugin and get it working.
 
 == Screenshots ==
 
-1. Settings Page
-2. Widget preview
+1. Birthdays List Page
+2. Options Page
+3. Widget preview
 
 == Changelog ==
 
