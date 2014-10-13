@@ -2,7 +2,7 @@
 /*
     Plugin Name: Birthdays Widget
     Plugin URI: https://wordpress.org/plugins/birthdays-widget/
-    Description: Birthdays Widget
+    Description: Birthdays widget plugin produces a widget for your Wordpress website which displays a happy birthday image and wish to your clients/users.
     Author: lion2486, Sudavar
     Version: 1.5.1
     Author URI: http://codescar.eu 
@@ -21,9 +21,10 @@
     require_once dirname( __FILE__ ) . '/birthdays-widget-ajax-callback.php';   
     
     register_activation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'activate' ) );
-    register_uninstall_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'uninstall' ) );
+    register_deactivation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'deactivate' ) );
+    //register_uninstall_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'uninstall' ) );
     
-    add_filter( 'plugin_action_links', 'birthdays_widget_action_links', 10, 2);
+    add_filter( 'plugin_action_links', 'birthdays_widget_action_links', 10, 2 );
     
     if( is_admin() )
         $my_settings_page = new Birthdays_Widget_Settings();
@@ -50,9 +51,12 @@
     }
 
     function birthdays_widget_load_languages() {
-        load_plugin_textdomain('birthdays-widget', false, basename( dirname( __FILE__ ) ) . '/languages' );
+        load_plugin_textdomain( 'birthdays-widget', false, basename( dirname( __FILE__ ) ) . '/languages' );
     }
     add_action('plugins_loaded', 'birthdays_widget_load_languages');
+
+    $birthdays_settings = get_option( 'birthdays_settings' );
+    $birthdays_settings = maybe_unserialize( $birthdays_settings );
 
     //1. Add a new form element...
     function birthdays_widget_register_form (){
@@ -95,8 +99,7 @@
     }
 
 	//4. If option is on, enable that feature
-    $register_form = get_option( 'birthdays_register_form' );
-    if ( $register_form == TRUE ) {
+    if ( $birthdays_settings[ 'register_form' ] == TRUE ) {
         add_action('register_form','birthdays_widget_register_form');
         add_filter('registration_errors', 'birthdays_widget_registration_errors', 10, 3);
     }
@@ -167,7 +170,6 @@
         
         $user_id = $_POST[ 'birthday_usr_id' ];
         $value = $_POST[ 'birthday_date' ];
-        $meta_key = get_option( 'birthdays_meta_field' );
 
 		//Shall now save it in our database table
         $birth_user = "cs_birth_widg_" . $user_id;
@@ -175,23 +177,27 @@
 
         if ( !isset( $_POST[ 'birthday_id' ] ) ) {
             //add the new entry
-            $insert_query = "INSERT INTO $table_name (name, date) VALUES (%s, %s);";    
-            if( $wpdb->query( $wpdb->prepare( $insert_query, $birth_user, date( 'Y-m-d' , strtotime($value) ) ) ) != 1)
+            $insert_query = "INSERT INTO $table_name (name, date) VALUES (%s, %s);";
+            if( $wpdb->query( $wpdb->prepare( $insert_query, $birth_user, date( 'Y-m-d' , strtotime($value) ) ) ) != 1 )
                 echo '<div id="message" class="error"><p>Query error</p></div>';
             $birth_id = $wpdb->insert_id;
             update_user_meta( $user_id, 'birthday_id', $birth_id, '' );
         } else {
             //update the existing entry
-            $update_query = "UPDATE $table_name SET date = %s, name = %s WHERE id = %d;";    
-            if( $wpdb->query( $wpdb->prepare( $update_query, date( 'Y-m-d' , strtotime($value) ), $birth_user, $_POST[ 'birthday_id' ] ) ) != 1)
+            $update_query = "UPDATE $table_name SET date = %s, name = %s WHERE id = %d;";
+            if( $wpdb->query( $wpdb->prepare( $update_query, date( 'Y-m-d' , strtotime($value) ), $birth_user, $_POST[ 'birthday_id' ] ) ) != 1 )
                 echo '<div id="message" class="error"><p>Query error</p></div>';
         }
     }
 	
 	//3. If option is on, enable that feature
-	$profile_page = get_option( 'birthdays_profile_page' );
-    if ( $profile_page == TRUE ) {
+    if ( $birthdays_settings[ 'profile_page' ] == TRUE ) {
 		add_action( 'profile_update', 'birthdays_widget_update_profile' );
 		add_action( 'edit_user_profile', 'birthdays_widget_usr_profile' );
 		add_action( 'show_user_profile', 'birthdays_widget_usr_profile' );
     }
+    
+    function birthdays_extra_files() {
+        wp_enqueue_style( 'birthdays-widget', plugins_url().'/birthdays-widget/birthdays-widget.css');
+    }
+    add_action( 'wp_enqueue_scripts', 'birthdays_extra_files' );

@@ -9,10 +9,25 @@ add_action( 'wp_ajax_get_birthdays_export_file', 'get_birthdays_export_file_call
 function birthdays_widget_check_for_birthdays(){
     global $wpdb;
 
-    $table_name = $wpdb->prefix . "birthdays";    
+    $table_name = $wpdb->prefix . "birthdays";
     $query = "SELECT * FROM $table_name WHERE date LIKE '%%%s' ;";
     $results = $wpdb->get_results( $wpdb->prepare( $query, date_i18n( '-m-d' ) ) );
 
+    $birthdays_settings = get_option( 'birthdays_settings' );
+    $birthdays_settings = maybe_unserialize( $birthdays_settings );
+    $birthday_date_meta_field = $birthdays_settings[ 'date_meta_field' ];
+    $birthdays_meta_field = $birthdays_settings[ 'meta_field' ];
+    $users = get_users();
+    foreach ( $users as $user ) {
+        if ( isset( $user->{$birthday_date_meta_field} ) ) {
+            $date = date( "-m-d", strtotime( $user->{$birthday_date_meta_field} ) );
+            if ( $date == date_i18n( '-m-d' ) ) {
+                $tmp_user = new stdClass();
+                $tmp_user->name = $user->{$birthdays_meta_field};
+                array_push( $results, $tmp_user );
+            }
+        }
+    }
     return $results;
 }
 
@@ -56,7 +71,16 @@ function get_birthdays_export_file_callback(){
     
     $output = fopen("php://output", "w");
     
+    $birthdays_settings = get_option( 'birthdays_settings' );
+    $birthdays_settings = maybe_unserialize( $birthdays_settings );
+    $meta_key = $birthdays_settings[ 'meta_field' ];
+    $prefix = "cs_birth_widg_";
     foreach($results as $row){
+        $wp_usr = strpos( $row[ 'name' ], $prefix );
+        if ( $wp_usr !== false ) {
+            $birth_user = get_userdata( substr( $row[ 'name' ], strlen( $prefix ) ) );
+            $row[ 'name' ] = $birth_user->$meta_key;
+        }
         fputcsv($output, $row);
     }
     

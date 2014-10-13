@@ -1,7 +1,7 @@
 === Birthdays Widget ===
 Plugin Name: Birthdays Widget
 Plugin URI: http://wordpress.org/plugins/birthdays-widget/
-Description: Birthdays Widget
+Description: Birthdays widget plugin produces a widget for your Wordpress website which displays a happy birthday image and wish to your clients/users.
 Author: lion2486, Sudavar
 Version: 1.5.1
 Author URI: http://codescar.eu 
@@ -40,9 +40,8 @@ This section describes how to install the plugin and get it working.
 
 == Screenshots ==
 
-1. Birthdays List Page
-2. Options Page
-3. Widget preview
+1. Settings Page
+2. Widget preview
 
 == Changelog ==
 
