@@ -17,7 +17,6 @@
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
             
             dbDelta( $sql );
-            
             //add some default options
             $birthdays_settings = array(
                 'widget_installed' => '1',
@@ -32,9 +31,28 @@
                 'wish' => __( 'Happy Birthday', 'birthdays-widget' ),
                 'roles' => array( 'Administrator' => 'Administrator' )
                 );
-            $birthdays_settings = maybe_serialize ( $birthdays_settings );
+            $birthdays_settings = maybe_serialize( $birthdays_settings );
             add_option( 'birthdays_settings', $birthdays_settings );
             return;
+        }
+
+        static function unistall() {
+            //delete plugin's options
+            delete_option( 'birthdays_settings' );
+
+            //delete all of our user meta
+            $users = get_users( array( 'fields' => 'id' ) );
+            foreach ( $users as $id ) {
+                delete_user_meta( $id, 'birthday_id' );
+            }
+
+            //drop a custom db table
+            global $wpdb;
+            $table_name = $wpdb->prefix . "birthdays";
+            $sql = "DROP TABLE IF EXISTS `$table_name`;" ;
+            $e = $wpdb->query( $sql );
+            die( var_dump( $e ) );
+
         }
 
         static function activate() {

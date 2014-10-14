@@ -22,18 +22,16 @@
     
     register_activation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'activate' ) );
     register_deactivation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'deactivate' ) );
-    //register_uninstall_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'uninstall' ) );
-    
-    add_filter( 'plugin_action_links', 'birthdays_widget_action_links', 10, 2 );
-    
+   //register_uninstall_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'uninstall' ) );
+
     if( is_admin() )
         $my_settings_page = new Birthdays_Widget_Settings();
 
-    add_action( 'widgets_init', 'register_birthdays_widget' );
     // register Birthdays_Widget widget
     function register_birthdays_widget() {
         register_widget( 'Birthdays_Widget' );
     }
+    add_action( 'widgets_init', 'register_birthdays_widget' );
 
     function birthdays_widget_action_links($links, $file) {
         static $this_plugin;
@@ -49,6 +47,7 @@
         }
         return $links;
     }
+    add_filter( 'plugin_action_links', 'birthdays_widget_action_links', 10, 2 );
 
     function birthdays_widget_load_languages() {
         load_plugin_textdomain( 'birthdays-widget', false, basename( dirname( __FILE__ ) ) . '/languages' );
