@@ -15,16 +15,19 @@ function birthdays_widget_check_for_birthdays(){
 
     $birthdays_settings = get_option( 'birthdays_settings' );
     $birthdays_settings = maybe_unserialize( $birthdays_settings );
-    $birthday_date_meta_field = $birthdays_settings[ 'date_meta_field' ];
-    $birthdays_meta_field = $birthdays_settings[ 'meta_field' ];
-    $users = get_users();
-    foreach ( $users as $user ) {
-        if ( isset( $user->{$birthday_date_meta_field} ) ) {
-            $date = date( "-m-d", strtotime( $user->{$birthday_date_meta_field} ) );
-            if ( $date == date_i18n( '-m-d' ) ) {
-                $tmp_user = new stdClass();
-                $tmp_user->name = $user->{$birthdays_meta_field};
-                array_push( $results, $tmp_user );
+    
+    if ( $birthdays_settings[ 'date_from_profile' ] ) {
+        $birthday_date_meta_field = $birthdays_settings[ 'date_meta_field' ];
+        $birthdays_meta_field = $birthdays_settings[ 'meta_field' ];
+        $users = get_users();
+        foreach ( $users as $user ) {
+            if ( isset( $user->{$birthday_date_meta_field} ) ) {
+                $date = date( "-m-d", strtotime( $user->{$birthday_date_meta_field} ) );
+                if ( $date == date_i18n( '-m-d' ) ) {
+                    $tmp_user = new stdClass();
+                    $tmp_user->name = $user->{$birthdays_meta_field};
+                    array_push( $results, $tmp_user );
+                }
             }
         }
     }

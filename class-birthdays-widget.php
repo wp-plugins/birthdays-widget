@@ -45,20 +45,31 @@ class Birthdays_Widget extends WP_Widget {
             <div class="birthdays-widget">
                 <?php $img_flag = $birthdays_settings[ 'image_enabled' ];
                     if( $img_flag ) { ?>
-                        <img style="display: block; width: <?php echo $birthdays_settings[ 'image_width' ]; ?>;" 
+                        <img style="width: <?php echo $birthdays_settings[ 'image_width' ]; ?>;" 
                             src="<?php echo $birthdays_settings[ 'image_url' ]; ?>" alt="birthday_cake" class="aligncenter" />
                     <?php } 
                 ?>
-                <span style="color: red; font-weight: bold;">
+                <div class="birthday-wish">
                     <?php echo $birthdays_settings[ 'wish' ]; ?>
-                </span><br />
-                <?php $meta_key = $birthdays_settings[ 'meta_field' ];
+                </div>
+                <?php
+                /*
+                 * For each user that has birthday today, if his name is
+                 * in the cs_birth_widg_# format (which means he is a WP User),
+                 * show his name if and only if the option to 
+                 * save Users' birthdays in our table is enabled.
+                 */
+                $meta_key = $birthdays_settings[ 'meta_field' ];
                 $prefix = "cs_birth_widg_";
                 foreach( $birthdays as $row ){
                     $wp_usr = strpos( $row->name, $prefix );
                     if ( $wp_usr !== false ) {
-                        $birth_user = get_userdata( substr( $row->name, strlen( $prefix ) ) );
-                        $row->name = $birth_user->{$meta_key};
+                        if ( $birthdays_settings[ 'profile_page' ] ) {
+                            $birth_user = get_userdata( substr( $row->name, strlen( $prefix ) ) );
+                            $row->name = $birth_user->{$meta_key};
+                        } else {
+                            continue;
+                        }
                     }
                     if( $flag )
                         echo ', ';

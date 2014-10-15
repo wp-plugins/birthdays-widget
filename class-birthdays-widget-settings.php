@@ -48,6 +48,7 @@
             <h2><?php _e( 'Birthdays Widget Options ', 'birthdays-widget' ); ?></h2>
             <form method="POST">
             <?php
+                wp_enqueue_style( 'birthdays-widget', plugins_url().'/birthdays-widget/birthdays-widget.css');
                 wp_enqueue_media();
                 
                 $birthdays_settings = get_option( 'birthdays_settings' );
@@ -59,11 +60,6 @@
                     } else {
                         $birthdays_settings[ 'register_form' ] = 0;
                     }
-					if ( isset( $_POST[ 'birthdays_profile_page' ] ) ) {
-                        $birthdays_settings[ 'profile_page' ] = 1;
-                    } else {
-                        $birthdays_settings[ 'profile_page' ] = 0;
-                    }
                     if ( isset( $_POST[ 'birthdays_meta_field' ] ) ) {
                         $birthdays_settings[ 'meta_field' ] = $_POST[ 'birthdays_meta_field' ];
                     } else {
@@ -74,10 +70,26 @@
                     } else {
                         $birthdays_settings[ 'date_meta_field' ] = '';
                     }
-                    if ( isset( $_POST[ 'birthdays_date_from_profile' ] ) ) {
-                        $birthdays_settings[ 'date_from_profile' ] = 1;
+                    if ( isset( $_POST[ 'birthdays_user_data' ] ) ) {
+                        $birthdays_settings[ 'user_data' ] = $_POST[ 'birthdays_user_data' ];
+                        if ( $_POST[ 'birthdays_user_data' ] == 0 ) {
+                            /* Birthdays of WP Users are saved in our table and field in WP Profile is shown */
+                            $birthdays_settings[ 'profile_page' ] = 1;
+                            $birthdays_settings [ 'date_from_profile' ] = 0;
+                            //TODO Maybe add a function to delete all WP User Birthdays saved in our table
+                        } elseif ( $_POST[ 'birthdays_user_data' ] == 1 ) {
+                            /* Birthdays of WP Users are beign drawn from a WP User meta field specified by the user */
+                            $birthdays_settings[ 'profile_page' ] = 0;
+                            $birthdays_settings [ 'date_from_profile' ] = 1;
+                        } else {
+                            /* Birthdays of WP Users are disabled, which is the default scenario */
+                            $birthdays_settings[ 'profile_page' ] = 0;
+                            $birthdays_settings [ 'date_from_profile' ] = 0;
+                        }
                     } else {
-                        $birthdays_settings[ 'date_from_profile' ] = 0;
+                        $birthdays_settings[ 'user_data' ] = 2;
+                        $birthdays_settings[ 'profile_page' ] = 0;
+                        $birthdays_settings [ 'date_from_profile' ] = 0;
                     }
                     if ( isset( $_POST[ 'birthdays_widget_image_width' ] ) ) {
                         $birthdays_settings[ 'image_width' ] = $_POST[ 'birthdays_widget_image_width' ];
@@ -109,69 +121,59 @@
                     $supported_roles[] = $role[ 'name' ];
                 } ?>
                 <div class="wrap">
-                    <p><?php _e( 'Here you can select which roles of your website can have access to page editing/viewing the birthday list.', 'birthdays-widget' ); ?></p>
-                    <?php foreach ( $supported_roles as $role ) : ?>
-                        <input type="checkbox" name="roles[]" value="<?php echo $role; ?>" 
-                            <?php if( in_array( $role, $current_roles ) ) echo 'checked="checked"'; ?> />
-                        <?php echo $role.'<br />';
-                    endforeach; ?>
-                    <input type="hidden" name="birthdays_save" value="1" />
-                </div>
-                <hr />
-				<div class="wrap">
-                    <p><?php _e( 'Select if you want to enable user\'s birthday field at user profile page', 'birthdays-widget' ); ?></p>
-                    <input type="checkbox" name="birthdays_profile_page" value="1" 
-                        <?php if( $birthdays_settings[ 'profile_page' ] == TRUE ) echo 'checked="checked"'; ?> />
-                    <?php _e('User\'s birthday field in profile page', 'birthdays-widget' ); ?><br />
-                </div>
-                <div class="wrap">
-                    <p><?php _e( 'Select if you want to enable user\'s name and birthday fields at user registration form', 'birthdays-widget' ); ?></p>
-                    <input type="checkbox" name="birthdays_register_form" value="1" 
+                    <h3><?php _e( 'General Options', 'birthdays-widget' ); ?>:</h3>
+                    <p><?php _e( 'Write your custom "wish"', 'birthdays-widget' ); ?>:<br />
+                    <input type="text" size="35" name="birthdays_wish" value="<?php echo $birthdays_settings[ 'wish' ]; ?>" /></p>
+                    <p><?php _e( 'Name and Birthday fields at WordPress User Registration Form', 'birthdays-widget' ); ?>:<br />
+                    <input type="checkbox" name="birthdays_register_form" value="1" id="birthdays_register_form"
                         <?php if( $birthdays_settings[ 'register_form' ] == TRUE ) echo 'checked="checked"'; ?> />
-                    <?php _e('User\'s name and birthday field in registration form', 'birthdays-widget' ); ?><br />
-                </div>
-                <hr />
-                <div class="wrap">
-                    <p>
-                        <?php _e('Select which Wordpress User\'s meta value you like to be shown as name in widget.', 'birthdays-widget'); ?><br />
+                    <label for="birthdays_register_form"><?php _e( 'Fields in Registration Form', 'birthdays-widget' ); ?></label></p>
+                    <p><?php _e( 'Select which Wordpress User\'s meta value you like to be shown as name in widget', 'birthdays-widget'); ?>:<br />
                         <select name="birthdays_meta_field">
                             <?php $meta_keys = self::birthday_get_filtered_meta();
                                 foreach ( $meta_keys as $key ): ?>
-                                    <option value="<?php echo $key; ?>" <?php echo ($birthdays_settings[ 'meta_field' ] == $key) ? "selected=\"selected\"" : ''; ?> ><?php echo $key; ?></option>
+                                    <option value="<?php echo $key; ?>" <?php echo ($birthdays_settings[ 'meta_field' ] == $key) ? "selected=\"selected\"" : ''; ?> >
+                                        <?php echo $key; ?></option>
                             <?php endforeach; ?>
                         </select><br />
                         <span class="description">
-                            <?php _e('Careful! The meta you select must be present in every WP User you set a birthday, otherwise nothing will be displayed.', 'birthdays-widget'); ?>
+                            <?php _e( 'Careful! The meta you select must be present in every WP User you set a birthday, otherwise nothing will be displayed.', 'birthdays-widget'); ?>
                         </span>
                     </p>
-                </div>
-                <div class="wrap">
-                    <p><?php _e( 'Select if you want to draw Wordpress User\'s birthday from a metafield in User Profile', 'birthdays-widget' ); ?></p>
-                    <input type="checkbox" name="birthdays_date_from_profile" value="1" 
-                        <?php if( $birthdays_settings [ 'date_from_profile' ] == TRUE ) echo 'checked="checked"'; ?> />
-                    <?php _e('Draw Birthday Date from Wordpress Profile', 'birthdays-widget' ); ?><br />
-                    <p>
-                        <?php _e('Select which Wordpress User\'s meta value you like to be the user\'s birdthday date.', 'birthdays-widget'); ?><br />
-                        <select name="birthdays_date_meta_field">
-                            <?php $meta_keys = self::birthday_get_filtered_meta();
-                                foreach ( $meta_keys as $key ): ?>
-                                    <option value="<?php echo $key; ?>" <?php echo ($birthdays_settings[ 'date_meta_field' ] == $key) ? "selected=\"selected\"" : ''; ?> ><?php echo $key; ?></option>
-                            <?php endforeach; ?>
-                        </select><br />
-                        <span class="description">
-                            <?php _e('Careful! The meta you select must be present in every WP User you set a birthday, otherwise nothing will be displayed.', 'birthdays-widget'); ?>
-                        </span>
-                    </p>
-                </div>
-                <div class="wrap">
-                    <p><?php _e( 'Write your custom "wish"', 'birthdays-widget' ); ?></p>
-                    <input type="text" size="35" name="birthdays_wish" value="<?php echo $birthdays_settings[ 'wish' ]; ?>" />
                 </div>
                 <hr />
                 <div class="wrap">
+                    <h3><?php _e( 'WordPress User Options', 'birthdays-widget' ); ?>:</h3>
+                    <div class="opt_item <?php echo ($birthdays_settings[ 'user_data' ] == '0') ? 'opt_item_selected' : ''; ?>">
+                        <input type="radio" name="birthdays_user_data" value="0"
+                            <?php echo ($birthdays_settings[ 'user_data' ] == '0') ? "checked=\"checked\"" : ''; ?>/><br />
+                        <?php _e( 'Save birthday of WordPress Users in our table and show birthday field in WordPress Profile Page', 'birthdays-widget' ); ?>
+                    </div>
+                    <div class="opt_item <?php echo ($birthdays_settings[ 'user_data' ] == '1') ? 'opt_item_selected' : ''; ?>">
+                        <input type="radio" name="birthdays_user_data" value="1"
+                            <?php echo ($birthdays_settings[ 'user_data' ] == '1') ? "checked=\"checked\"" : ''; ?>/><br />
+                        <?php _e( 'Draw birthday of WordPress Users from the ', 'birthdays-widget' ); ?>
+                        <select name="birthdays_date_meta_field" <?php echo ($birthdays_settings[ 'user_data' ] == '1') ? '' : "disabled=\"disabled\""; ?>>
+                            <?php $meta_keys = self::birthday_get_filtered_meta();
+                                foreach ( $meta_keys as $key ): ?>
+                                    <option value="<?php echo $key; ?>" <?php echo ($birthdays_settings[ 'date_meta_field' ] == $key) ? "selected=\"selected\"" : ''; ?> >
+                                        <?php echo $key; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <?php _e( ' meta field of WordPress User Profile', 'birthdays-widget' ); ?>
+                    </div>
+                    <div class="opt_item <?php echo ($birthdays_settings[ 'user_data' ] == '2') ? 'opt_item_selected' : ''; ?>">
+                        <input type="radio" name="birthdays_user_data" value="2"
+                            <?php echo ($birthdays_settings[ 'user_data' ] == '2') ? "checked=\"checked\"" : ''; ?>/><br />
+                        <?php _e( 'Disabled birthday field for WordPress Users', 'birthdays-widget' ); ?>
+                    </div>
+                </div>
+                <hr />
+                <div class="wrap">
+                    <h3><?php _e( 'Widget Image Options', 'birthdays-widget' ); ?>:</h3>
                     <?php $widget_image = $birthdays_settings[ 'image_enabled' ]; ?>
                     <p><?php _e( 'Select the image you want for the birthdays widget. Leaving this field empty will revert to the default image.', 'birthdays-widget' ); ?></p>
-                    <input id="bw-image" type="text" size="55" name="birthdays_widget_image_url" value="<?php echo $birthdays_settings[ 'image_url' ]; ?>" 
+                    <input id="bw-image" type="text" size="50" name="birthdays_widget_image_url" value="<?php echo $birthdays_settings[ 'image_url' ]; ?>" 
                         <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> />
                     <input id="select-image" name="image" type="button" class="button-primary upload_image_button" value="<?php _e( 'Select Image', 'birthdays-widget' ); ?>" 
                         <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> />
@@ -180,18 +182,28 @@
                     <input id="disable-image" type="button" class="button-primary" value="
                         <?php echo ( $widget_image ) ? __( 'Disable Image', 'birthdays-widget' ) : __( 'Enable Image', 'birthdays-widget' ) ; ?>" />
                     <input id="disable-img" name="birthdays_enable_image" type="hidden" value="<?php echo $widget_image; ?>" />
-                    <p>
-                        <?php _e( 'Select the width of the widget\'s image', 'birthdays-widget' ); ?>
+                    <p><?php _e( 'Select the width of the widget\'s image', 'birthdays-widget' ); ?>
                         <input name="birthdays_widget_image_width" type="text" size="3" value="<?php echo $birthdays_settings[ 'image_width' ]; ?>" />
                     </p>
-                    <p><input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" /></p>
                 </div>
+                <hr />
+                <div class="wrap">
+                    <h3><?php _e( 'Access to Plugin Options', 'birthdays-widget' ); ?>:</h3>
+                    <p><?php _e( 'Here you can select which roles of your website can have access to page editing/viewing the birthday list.', 'birthdays-widget' ); ?></p>
+                    <?php foreach ( $supported_roles as $role ) : ?>
+                        <input type="checkbox" name="roles[]" value="<?php echo $role; ?>" 
+                            <?php if( in_array( $role, $current_roles ) ) echo 'checked="checked"'; ?> />
+                        <?php echo $role.'<br />';
+                    endforeach; ?>
+                    <input type="hidden" name="birthdays_save" value="1" />
+                </div>
+                <p><input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" /></p>
             </form>
             </div>
             <script type="text/javascript">
                 // Uploading files
                 var file_frame;              
-                jQuery('.upload_image_button').live('click', function( event ){
+                jQuery( '.upload_image_button' ).live( 'click', function( event ){
                     event.preventDefault();
                     // If the media frame already exists, reopen it.
                     if ( file_frame ) {
@@ -211,7 +223,7 @@
                         // We set multiple to false so only get one image from the uploader
                         attachment = file_frame.state().get('selection').first().toJSON();
                         // Do something with attachment.id and/or attachment.url here
-                        jQuery('#bw_image').val(attachment.url);
+                        jQuery( '#bw_image' ).val(attachment.url);
                     });
                     // Finally, open the modal
                     file_frame.open();
@@ -239,9 +251,23 @@
                         element.val( 'Enable Image' );
                     }
                   });
+
+                  jQuery( '.opt_item' ).click( function() {
+                    /* Unselect all other items */
+                    jQuery( '.opt_item' ).removeClass( 'opt_item_selected' );
+                    /* Handle the select element for birthday date meta field */
+                    var slc = jQuery( this ).find( 'select[name="birthdays_date_meta_field"]' );
+                    if ( slc.length == 0 )
+                        jQuery( 'select[name="birthdays_date_meta_field"]' ).prop( 'disabled', true );
+                    slc.prop( 'disabled', false );
+                    /* Make the item selected */
+                    jQuery( this ).addClass( 'opt_item_selected' );
+                    /* Select current radio button */
+                    var elm = jQuery( this ).find( 'input:first' );
+                    elm.prop( 'checked', true );
+                  });
             </script>
         <?php
-        echo "<pre>".var_dump($birthdays_settings)."</pre>";
         }
 
         public function birthday_get_filtered_meta( ) {
@@ -441,36 +467,35 @@
             if ( ! current_user_can( 'manage_options' ) && ! self::birthdays_user_edit() ) {
                 wp_die( __( 'You do not have sufficient permissions to access this page.', 'birthdays-widget' ) );
             }
-            if( isset( $_POST['birthdays_upload_file'] ) && $_POST['birthdays_upload_file'] == 1 ){
-                if( !isset( $_FILES['uploadedfile'] ) ){
-                    echo '<div id="message" class="error"><p>'. __( 'Select a file first!', 'birthdays-widget' ) .'</p></div>';
-                }else{
-                    
+            echo '<div class="wrap">
+                    <h2>Import Birthday List Page</h2>
+                    <p>' . __( 'Here you can upload a CSV file with your own data or from a plugin-export. (CSV must have format <name>,<date> where <name> a string and <date> as Y-m-D)', 'birthdays-widget' ) .'</p>
+                    <div class="wrap">
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            <label for="uploadedfile">'. __( 'File', 'birthdays-widget' ) .'</label> <input type="file" name="uploadedfile" id="uploadedfile" accept=".csv" />
+                            <input name="upload" type="submit" class="button-primary" value="'. __( 'Upload', 'birthdays-widget' ) .'" />
+                            <input type="hidden" name="birthdays_upload_file" value="1" />
+                        </form>';
+            if ( isset( $_POST['birthdays_upload_file'] ) && $_POST['birthdays_upload_file'] == 1 ) {
+                if ( isset( $_FILES['uploadedfile'] ) ) {
                     $target_path = dirname( __FILE__ )."/uploads/";
-                    
                     $target_path = $target_path . basename( $_FILES['uploadedfile']['name'] );
                     
                     if( move_uploaded_file( $_FILES['uploadedfile']['tmp_name'], $target_path ) ) {
-                        echo "The file ".  basename( $_FILES['uploadedfile']['name'] ) ." has been uploaded";
-                        
+                        echo "<p>The file " . basename( $_FILES['uploadedfile']['name'] ) ." has been uploaded. ";
                         $row = 0;
                         if( FALSE !== ( $handle = fopen( $target_path, "r" ) ) ) {
                             global $wpdb;
-                                
                             $table_name = $wpdb->prefix . "birthdays";
-                            
                             while( FALSE !== ( $data = fgetcsv( $handle, 1000, "," ) ) ) {
                                 if( 2 != count( $data ) ){
                                     echo 'Wrong csv format!<br/>';
                                     break;
                                 }
                                 $row++;
-                                
                                 $new_record['name'] = $data[0];
                                 $new_record['date'] = $data[1];
-                                
                                 //TODO maybe convert date format
-                                
                                 $wpdb->insert( 
                                             $table_name, 
                                             array( 
@@ -482,29 +507,18 @@
                                                 '%s' 
                                             ));
                             }
-                            
-                            echo $row.' records inserted!<br/>';
-                            fclose($handle);
+                            echo '<b>' . $row . '</b> records inserted!</p>';
+                            fclose( $handle );
                         }
-                        
-                        @unlink($target_path);
-                        
-                        echo '';
-                        
-                    } else{
+                        @unlink( $target_path );
+                    } else {
                         echo '<div id="message" class="error"><p>'. __( 'There was an error uploading the file, please try again!', 'birthdays-widget' ) .'</p></div>';
                     }
+                } else {
+                    echo '<div id="message" class="error"><p>'. __( 'Select a file first!', 'birthdays-widget' ) .'</p></div>';
                 }
             }
-            echo '<div class="wrap">
-                    <p>'. __( 'Here you can upload a CSV file with your own data or from a plugin-export. (CSV must have format <name>,<date> where <name> a string and <date> as Y-m-D)', 'birthdays-widget' ) .'</p>
-                    <div class="wrap">
-                        <form action="" method="POST" enctype="multipart/form-data">
-                            <label for="uploadedfile">'. __( 'File', 'birthdays-widget' ) .'</label> <input type="file" name="uploadedfile" id="uploadedfile" accept=".csv" />
-                            <input name="upload" type="submit" class="button-primary" value="'. __( 'Upload', 'birthdays-widget' ) .'" />
-                            <input type="hidden" name="birthdays_upload_file" value="1" />
-                        </form>
-                    </div>';
+            echo '</div>';
         }
         
         public function create_submenu_page_export() {
@@ -512,7 +526,8 @@
                 wp_die( __( 'You do not have sufficient permissions to access this page.', 'birthdays-widget' ) );
             }
             echo '<div class="wrap">
-                    <p>'. __( 'In order to download the export file press the button below', 'birthdays-widget' ) .'<br/>
+                    <h2>Export Birthday List Page</h2>
+                    <p>'. __( 'In order to download the export file press ', 'birthdays-widget' ) .'
                         <a href="'. admin_url( 'admin-ajax.php' ) .'?action=get_birthdays_export_file" target="_blank" class="button-primary" id="birthdays-export-button">'. __( 'Download', 'birthdays-widget' ) .'</a>
                     </p>
                 </div>';

@@ -4,7 +4,7 @@
     Plugin URI: https://wordpress.org/plugins/birthdays-widget/
     Description: Birthdays widget plugin produces a widget for your Wordpress website which displays a happy birthday image and wish to your clients/users.
     Author: lion2486, Sudavar
-    Version: 1.5.1
+    Version: 1.5.2
     Author URI: http://codescar.eu 
     Contributors: lion2486, Sudavar
     Tags: widget, birthdays, custom
@@ -22,7 +22,6 @@
     
     register_activation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'activate' ) );
     register_deactivation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'deactivate' ) );
-   //register_uninstall_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'uninstall' ) );
 
     if( is_admin() )
         $my_settings_page = new Birthdays_Widget_Settings();
@@ -195,7 +194,7 @@
 		add_action( 'edit_user_profile', 'birthdays_widget_usr_profile' );
 		add_action( 'show_user_profile', 'birthdays_widget_usr_profile' );
     }
-    
+
     function birthdays_extra_files() {
         wp_enqueue_style( 'birthdays-widget', plugins_url().'/birthdays-widget/birthdays-widget.css');
     }

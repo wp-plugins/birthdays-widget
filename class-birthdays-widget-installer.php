@@ -23,7 +23,7 @@
                 'register_form' => '0',
                 'profile_page' => '0',
                 'meta_field' => 'display_name',
-                'date_from_profile' => '0',
+                'user_data' => '2',
                 'date_meta_field' => '',
                 'image_url' => plugins_url( '/images/birthday_cake.png' , __FILE__ ),
                 'image_width' => '55%',
@@ -70,7 +70,7 @@
                     $new[ 'meta_field' ] = 'display_name';
                 $new[ 'date_from_profile' ] = get_option( 'birthdays_date_from_profile' );
                 if( $new[ 'date_from_profile' ] == false )
-                    $new[ 'date_from_profile' ] = '0';
+                    $new[ 'date_from_profile' ] = '2';
                 $new[ 'date_meta_field' ] = get_option( 'birthdays_date_meta_field' );
                 if( $new[ 'date_meta_field' ] == false )
                     $new[ 'date_meta_field' ] = '';
@@ -83,7 +83,7 @@
                     'register_form' => get_option( 'birthdays_register_form' ),
                     'profile_page' => get_option( 'birthdays_profile_page' ),
                     'meta_field' => $new[ 'meta_field' ],
-                    'date_from_profile' => $new[ 'date_from_profile' ],
+                    'user_data' => $new[ 'date_from_profile' ],
                     'date_meta_field' => $new[ 'date_meta_field' ],
                     'image_url' => get_option( 'birthdays_widget_image' ),
                     'image_width' => get_option( 'birthdays_widget_image_width' ),
