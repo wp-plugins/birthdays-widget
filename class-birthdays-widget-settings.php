@@ -223,7 +223,7 @@
                         // We set multiple to false so only get one image from the uploader
                         attachment = file_frame.state().get('selection').first().toJSON();
                         // Do something with attachment.id and/or attachment.url here
-                        jQuery( '#bw_image' ).val(attachment.url);
+                        jQuery( '#bw-image' ).val(attachment.url);
                     });
                     // Finally, open the modal
                     file_frame.open();
@@ -256,16 +256,21 @@
                     /* Unselect all other items */
                     jQuery( '.opt_item' ).removeClass( 'opt_item_selected' );
                     /* Handle the select element for birthday date meta field */
-                    var slc = jQuery( this ).find( 'select[name="birthdays_date_meta_field"]' );
+                    var slc = jQuery( this ).find( 'select[name="birthdays_date_meta_field"]' );                    
+                    /*
+                     * If the select element is not inside the current option item,
+                     * then disable the select item otherwise enable it
+                    */
                     if ( slc.length == 0 )
                         jQuery( 'select[name="birthdays_date_meta_field"]' ).prop( 'disabled', true );
-                    slc.prop( 'disabled', false );
+                    else 
+                        slc.prop( 'disabled', false );
                     /* Make the item selected */
                     jQuery( this ).addClass( 'opt_item_selected' );
                     /* Select current radio button */
                     var elm = jQuery( this ).find( 'input:first' );
                     elm.prop( 'checked', true );
-                  });
+                  } );
             </script>
         <?php
         }

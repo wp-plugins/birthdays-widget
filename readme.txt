@@ -3,13 +3,13 @@ Plugin Name: Birthdays Widget
 Plugin URI: http://wordpress.org/plugins/birthdays-widget/
 Description: Birthdays widget plugin produces a widget for your Wordpress website which displays a happy birthday image and wish to your clients/users.
 Author: lion2486, Sudavar
-Version: 1.5.2
+Version: 1.5.3
 Author URI: http://codescar.eu 
 Contributors: lion2486, Sudavar
 Tags: widget, birthdays, custom
 Requires at least: 3.0.1
 Tested up to: 4.0
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 Text Domain: birthdays-widget
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -45,6 +45,9 @@ This section describes how to install the plugin and get it working.
 3. Options Page
 
 == Changelog ==
+
+= 1.5.3 =
+* Small bugfix with widget image selected from the options page.
 
 = 1.5.2 =
 * Added the choice to Admin whether to: 1) Save Birthdays in our table or 2) Draw Birthday Date from a specified WP User meta field or 3) Disable Birthdays for WP Users
