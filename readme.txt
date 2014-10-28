@@ -1,33 +1,38 @@
 === Birthdays Widget ===
 Plugin Name: Birthdays Widget
 Plugin URI: http://wordpress.org/plugins/birthdays-widget/
-Description: Birthdays widget plugin produces a widget for your Wordpress website which displays a happy birthday image and wish to your clients/users.
+Description: Birthdays widget plugin produces a widget which displays a customizable happy birthday image and wish to your clients/users.
 Author: lion2486, Sudavar
-Version: 1.5.3
+Version: 1.5.4
 Author URI: http://codescar.eu 
 Contributors: lion2486, Sudavar
+Donate link: https://www.paypal.com/gr/cgi-bin/webscr?cmd=_flow&SESSION=Rxb14ltcz8y8NfgafCdykAi4liOMv6F4qTihJEStzyBstHV2Eube-Yz49g4&dispatch=5885d80a13c0db1f8e263663d3faee8d66f31424b43e9a70645c907a6cbd8fb4
 Tags: widget, birthdays, custom
 Requires at least: 3.0.1
 Tested up to: 4.0
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 Text Domain: birthdays-widget
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Birthdays widget plugin produces a widget for your Wordpress website which 
-displays a happy birthday image to your clients/users.
+Birthdays widget plugin produces a widget which displays a customizable happy birthday image and wish to your clients/users.
 
 == Description ==
 
-Birthdays Widget allows to add your custom birthday-list of any person you want and 
-display it in a widget only when it's necessary.
+Birthdays Widget allows to add your custom birthday-list and display a custom message in a widget only when it's necessary.
+WordPress Users can also have a birthdays field, or you can even draw their birthday date from another user metafield. 
 
-Some features:
+Features:
 
-* Integration with WordPress User Profile and Registration Form
-* Export to CSV file
-* Import/Restore from CSV
-* Greek & English Languages
+* **Integration with WordPress User Profile and Registration Form**
+* **Customizable message and image**
+* **Export to CSV file**
+* **Import/Restore from CSV**
+* **Greek & English Languages**
+
+Some use our plugin as an announcement tool, as you can modify the message and the image shown in widget.
+
+**Your ratings mean a lot to us. If you like our work please consider leaving a review.**
 
 == Installation ==
 
@@ -45,6 +50,11 @@ This section describes how to install the plugin and get it working.
 3. Options Page
 
 == Changelog ==
+
+= 1.5.4 =
+* Added shortcode [birthdays class="" img_width=""] which appears in WordPress editor (thanks to: http://wordpress.stackexchange.com/questions/72394/how-to-add-a-shortcode-button-to-the-tinymce-editor)
+* Corrected a problem with the comma (,) between the names of people having birthday
+* Javascript enabling datepicker, in separate file
 
 = 1.5.3 =
 * Small bugfix with widget image selected from the options page.

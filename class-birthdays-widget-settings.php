@@ -16,10 +16,10 @@
     
         public function sanitize( $input ) {
             $new_input = array( );
-            if( isset( $input['id_number'] ) )
+            if ( isset( $input['id_number'] ) )
                 $new_input['id_number'] = absint( $input['id_number'] );
     
-            if(isset($input['title']))
+            if (isset($input['title']))
                 $new_input['title'] = sanitize_text_field( $input['title'] );
     
             return $new_input;
@@ -48,7 +48,7 @@
             <h2><?php _e( 'Birthdays Widget Options ', 'birthdays-widget' ); ?></h2>
             <form method="POST">
             <?php
-                wp_enqueue_style( 'birthdays-widget', plugins_url().'/birthdays-widget/birthdays-widget.css');
+                wp_enqueue_style( 'birthdays-widget', plugins_url().'/birthdays-widget/birthdays-widget.css' );
                 wp_enqueue_media();
                 
                 $birthdays_settings = get_option( 'birthdays_settings' );
@@ -126,9 +126,9 @@
                     <input type="text" size="35" name="birthdays_wish" value="<?php echo $birthdays_settings[ 'wish' ]; ?>" /></p>
                     <p><?php _e( 'Name and Birthday fields at WordPress User Registration Form', 'birthdays-widget' ); ?>:<br />
                     <input type="checkbox" name="birthdays_register_form" value="1" id="birthdays_register_form"
-                        <?php if( $birthdays_settings[ 'register_form' ] == TRUE ) echo 'checked="checked"'; ?> />
+                        <?php if ( $birthdays_settings[ 'register_form' ] == TRUE ) echo 'checked="checked"'; ?> />
                     <label for="birthdays_register_form"><?php _e( 'Fields in Registration Form', 'birthdays-widget' ); ?></label></p>
-                    <p><?php _e( 'Select which Wordpress User\'s meta value you like to be shown as name in widget', 'birthdays-widget'); ?>:<br />
+                    <p><?php _e( 'Select which Wordpress User\'s meta value you like to be shown as name in widget', 'birthdays-widget' ); ?>:<br />
                         <select name="birthdays_meta_field">
                             <?php $meta_keys = self::birthday_get_filtered_meta();
                                 foreach ( $meta_keys as $key ): ?>
@@ -137,8 +137,14 @@
                             <?php endforeach; ?>
                         </select><br />
                         <span class="description">
-                            <?php _e( 'Careful! The meta you select must be present in every WP User you set a birthday, otherwise nothing will be displayed.', 'birthdays-widget'); ?>
+                            <?php _e( 'Careful! The meta you select must be present in every WP User you set a birthday, otherwise nothing will be displayed.', 'birthdays-widget' ); ?>
                         </span>
+                    </p>
+                    <p>
+                        <?php _e( '<b>Shortcode</b> is also available for use in posts or pages: ', 'birthdays-widget' ); ?>
+                        &nbsp;<span class="description">[birthdays class="your_class" img_width="desired_width"]</span><br />
+                        <?php _e( 'You can either add it your self, ', 'birthdays-widget' ); ?>
+                        <?php _e( 'or you can click on our birthday button.', 'birthdays-widget' ); ?>
                     </p>
                 </div>
                 <hr />
@@ -192,7 +198,7 @@
                     <p><?php _e( 'Here you can select which roles of your website can have access to page editing/viewing the birthday list.', 'birthdays-widget' ); ?></p>
                     <?php foreach ( $supported_roles as $role ) : ?>
                         <input type="checkbox" name="roles[]" value="<?php echo $role; ?>" 
-                            <?php if( in_array( $role, $current_roles ) ) echo 'checked="checked"'; ?> />
+                            <?php if ( in_array( $role, $current_roles ) ) echo 'checked="checked"'; ?> />
                         <?php echo $role.'<br />';
                     endforeach; ?>
                     <input type="hidden" name="birthdays_save" value="1" />
@@ -237,7 +243,7 @@
                   jQuery( '#disable-image' ).click( function() {
                     var element = jQuery( '#disable-image' );
                     var flag = jQuery( '#default-image' ).prop( 'disabled' );
-                    if( flag ) {
+                    if ( flag ) {
                         jQuery( '#default-image' ).prop( 'disabled', false );
                         jQuery( '#bw-image' ).prop( 'disabled', false );
                         jQuery( '#select-image' ).prop( 'disabled', false );
@@ -299,7 +305,7 @@
             $birthdays_settings = maybe_unserialize( $birthdays_settings );
             $current_roles = $birthdays_settings [ 'roles' ];
             foreach($current_user->roles as $role) {
-                if( in_array(ucfirst($role), $current_roles) )
+                if ( in_array(ucfirst($role), $current_roles) )
                     return true; 
             }
             return false;
@@ -322,39 +328,39 @@
                         '<a href="#birthday_name" class="add-new-h2">'. __( 'Bottom', 'birthdays-widget' ) .'</a></h2>';
             $table_name = $wpdb->prefix . 'birthdays';
                 
-            if( isset( $_POST['birthdays_add_new'] ) ){
-                if( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] )) {
+            if ( isset( $_POST['birthdays_add_new'] ) ){
+                if ( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] )) {
                     echo '<div id="message" class="error"><p>'. __( 'Please fill all the boxes!', 'birthdays-widget' ) .'</p></div>';
                 } else {
                     //add the new entry
                     $insert_query = "INSERT INTO $table_name (name, date) VALUES (%s, %s);";    
-                    if( $wpdb->query( $wpdb->prepare( $insert_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime($_POST['birthday_date'] ) ) ) ) == 1)
+                    if ( $wpdb->query( $wpdb->prepare( $insert_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime($_POST['birthday_date'] ) ) ) ) == 1)
                         echo '<div id="message" class="updated"><p>'. __( 'Your new record was added!', 'birthdays-widget' ) .'</p></div>';
                     else 
                         echo '<div id="message" class="error"><p>Query error</p></div>';
                 }
             }
             
-            if( isset( $_GET['action'] ) && !isset($_POST['birthdays_add_new']) ){
-                if( !isset( $_GET['id'] ) || empty( $_GET['id'] ) ){
+            if ( isset( $_GET['action'] ) && !isset($_POST['birthdays_add_new']) ){
+                if ( !isset( $_GET['id'] ) || empty( $_GET['id'] ) ){
                     //id is not set, some error must have occured
                     echo '<div id="message" class="error"><p>'. __( 'There was an error!', 'birthdays-widget' ) .'</p></div>';
                 } elseif ( $_GET['action'] == "delete" ) {
                     //delete the record
                     $delete_query = "DELETE FROM $table_name WHERE id = '%d' LIMIT 1;";
-                    if( $wpdb->query( $wpdb->prepare( $delete_query, $_GET['id'] ) ) == 1 )
+                    if ( $wpdb->query( $wpdb->prepare( $delete_query, $_GET['id'] ) ) == 1 )
                         echo '<div id="message" class="updated"><p>'. __( 'The record was deleted!', 'birthdays-widget' ) .'</p></div>';
                     else
                         echo '<div id="message" class="error"><p>Query error</p></div>';
-                }elseif( $_GET['action'] == "edit" ){
-                    if( isset( $_GET['do'] ) && $_GET['do'] == "save" && isset( $_POST['birthdays_edit'] ) ){
+                }elseif ( $_GET['action'] == "edit" ){
+                    if ( isset( $_GET['do'] ) && $_GET['do'] == "save" && isset( $_POST['birthdays_edit'] ) ){
                         //update the record
-                        if( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] ) ) {
+                        if ( !isset( $_POST['birthday_name'] ) || empty( $_POST['birthday_name'] ) || !isset( $_POST['birthday_date'] ) || empty( $_POST['birthday_date'] ) ) {
                             echo '<div id="message" class="error"><p>'. __( 'Please fill all the boxes!', 'birthdays-widget' ) .'</p></div>';
                             var_dump ( $_POST );
                         } else {
                             $update_query = "UPDATE $table_name SET name = '%s', date = '%s' WHERE id = '%d' LIMIT 1;";
-                            if( $wpdb->query( $wpdb->prepare( $update_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime( $_POST['birthday_date'] ) ), $_GET['id'] ) ) == 1)
+                            if ( $wpdb->query( $wpdb->prepare( $update_query, $_POST['birthday_name'], date( 'Y-m-d' , strtotime( $_POST['birthday_date'] ) ), $_GET['id'] ) ) == 1)
                                 echo '<div id="message" class="updated"><p>'. __( 'The record was updated!', 'birthdays-widget' ) .'</p></div>';
                         }
                     }
@@ -486,14 +492,14 @@
                     $target_path = dirname( __FILE__ )."/uploads/";
                     $target_path = $target_path . basename( $_FILES['uploadedfile']['name'] );
                     
-                    if( move_uploaded_file( $_FILES['uploadedfile']['tmp_name'], $target_path ) ) {
+                    if ( move_uploaded_file( $_FILES['uploadedfile']['tmp_name'], $target_path ) ) {
                         echo "<p>The file " . basename( $_FILES['uploadedfile']['name'] ) ." has been uploaded. ";
                         $row = 0;
-                        if( FALSE !== ( $handle = fopen( $target_path, "r" ) ) ) {
+                        if ( FALSE !== ( $handle = fopen( $target_path, "r" ) ) ) {
                             global $wpdb;
                             $table_name = $wpdb->prefix . "birthdays";
                             while( FALSE !== ( $data = fgetcsv( $handle, 1000, "," ) ) ) {
-                                if( 2 != count( $data ) ){
+                                if ( 2 != count( $data ) ){
                                     echo 'Wrong csv format!<br/>';
                                     break;
                                 }

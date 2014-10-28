@@ -2,9 +2,9 @@
 /*
     Plugin Name: Birthdays Widget
     Plugin URI: https://wordpress.org/plugins/birthdays-widget/
-    Description: Birthdays widget plugin produces a widget for your Wordpress website which displays a happy birthday image and wish to your clients/users.
+    Description: Birthdays widget plugin produces a widget which displays a customizable happy birthday image and wish to your clients/users.
     Author: lion2486, Sudavar
-    Version: 1.5.3
+    Version: 1.5.4
     Author URI: http://codescar.eu 
     Contributors: lion2486, Sudavar
     Tags: widget, birthdays, custom
@@ -23,7 +23,7 @@
     register_activation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'activate' ) );
     register_deactivation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'deactivate' ) );
 
-    if( is_admin() )
+    if ( is_admin() )
         $my_settings_page = new Birthdays_Widget_Settings();
 
     // register Birthdays_Widget widget
@@ -34,7 +34,7 @@
 
     function birthdays_widget_action_links($links, $file) {
         static $this_plugin;
-        if( !$this_plugin ) {
+        if ( !$this_plugin ) {
             $this_plugin = plugin_basename( __FILE__ );
         }
         if ($file == $this_plugin) {
@@ -56,6 +56,12 @@
     $birthdays_settings = get_option( 'birthdays_settings' );
     $birthdays_settings = maybe_unserialize( $birthdays_settings );
 
+    // Feature: User name and User birthday field in User registration form
+    // If option is on, enable that feature.
+    if ( $birthdays_settings[ 'register_form' ] == TRUE ) {
+        add_action('register_form','birthdays_widget_register_form');
+        add_filter('registration_errors', 'birthdays_widget_registration_errors', 10, 3);
+    }
     //1. Add a new form element...
     function birthdays_widget_register_form (){
         wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -68,18 +74,8 @@
                     value="<?php echo esc_attr(stripslashes($first_name)); ?>" /></label>
             <label for="birthday_date"><?php _e( 'User Birthday', 'birthdays-widget' ); ?></label>
                 <input  type="text" id="birthday_date" name="birthday_date" 
-                    value="<?php if( $date != '' ) echo date_i18n( 'd-m-Y', strtotime( $date ) ); ?>" />
-            <script type="text/javascript">
-                jQuery(document).ready(function(){
-                    jQuery("#birthday_date").datepicker({
-                        changeMonth: true,
-                        changeYear: true,
-                        maxDate: "+0D",
-                        "dateFormat" : "dd-mm-yy"
-                    });
-                    jQuery("#ui-datepicker-div").hide();
-                });
-            </script>
+                    value="<?php if ( $date != '' ) echo date_i18n( 'd-m-Y', strtotime( $date ) ); ?>" />
+            <?php wp_enqueue_script( 'birthdays-widget-script', plugins_url( 'date-picker.js', __FILE__ ), array( 'jquery' ) ); ?>
         </p> <?php
     }
 
@@ -96,11 +92,13 @@
             update_user_meta($user_id, 'birthday', $_POST['birthday_date']);
     }
 
-	//4. If option is on, enable that feature
-    if ( $birthdays_settings[ 'register_form' ] == TRUE ) {
-        add_action('register_form','birthdays_widget_register_form');
-        add_filter('registration_errors', 'birthdays_widget_registration_errors', 10, 3);
-    }
+    // Feature: User name and User birthday field in User profile in admin section
+    // If option is on, enable that feature.
+    if ( $birthdays_settings[ 'profile_page' ] == TRUE ) {
+		add_action( 'profile_update', 'birthdays_widget_update_profile' );
+		add_action( 'edit_user_profile', 'birthdays_widget_usr_profile' );
+		add_action( 'show_user_profile', 'birthdays_widget_usr_profile' );
+    }    
 
 	//1. Add new element to profile page, user birthday field
     function birthdays_widget_usr_profile() {
@@ -135,7 +133,7 @@
                 <tr>
                     <th><label for="birthday_date"><?php _e( 'User Birthday', 'birthdays-widget' ); ?></label></th>
                     <td><input type="text" size="10" id="birthday_date" name="birthday_date" 
-                        <?php if( isset( $date ) )
+                        <?php if ( isset( $date ) )
                                 echo 'value="' . date_i18n( 'd-m-Y', strtotime( $date ) ) . '" />';
                               else
                                 echo 'value="" />'; ?>
@@ -146,17 +144,7 @@
             echo '<input type="hidden" name="birthday_id" value="' . $id . '" />';
         echo '      </td> 
                 </tr></table>';
-        echo '<script type="text/javascript">
-                    jQuery(document).ready(function(){
-                        jQuery("#birthday_date").datepicker({
-                            changeMonth: true,
-                            changeYear: true,
-                            maxDate: "+0D",
-                            "dateFormat" : "dd-mm-yy"
-                        });
-                        jQuery("#ui-datepicker-div").hide();
-                    });
-              </script>';
+        wp_enqueue_script( 'birthdays-widget-script', plugins_url( 'date-picker.js', __FILE__ ), array( 'jquery' ) );
     }
 
 	//2. Validate and update field in WP user structure
@@ -176,26 +164,61 @@
         if ( !isset( $_POST[ 'birthday_id' ] ) ) {
             //add the new entry
             $insert_query = "INSERT INTO $table_name (name, date) VALUES (%s, %s);";
-            if( $wpdb->query( $wpdb->prepare( $insert_query, $birth_user, date( 'Y-m-d' , strtotime($value) ) ) ) != 1 )
+            if ( $wpdb->query( $wpdb->prepare( $insert_query, $birth_user, date( 'Y-m-d' , strtotime($value) ) ) ) != 1 )
                 echo '<div id="message" class="error"><p>Query error</p></div>';
             $birth_id = $wpdb->insert_id;
             update_user_meta( $user_id, 'birthday_id', $birth_id, '' );
         } else {
             //update the existing entry
             $update_query = "UPDATE $table_name SET date = %s, name = %s WHERE id = %d;";
-            if( $wpdb->query( $wpdb->prepare( $update_query, date( 'Y-m-d' , strtotime($value) ), $birth_user, $_POST[ 'birthday_id' ] ) ) != 1 )
+            if ( $wpdb->query( $wpdb->prepare( $update_query, date( 'Y-m-d' , strtotime($value) ), $birth_user, $_POST[ 'birthday_id' ] ) ) != 1 )
                 echo '<div id="message" class="error"><p>Query error</p></div>';
         }
-    }
-	
-	//3. If option is on, enable that feature
-    if ( $birthdays_settings[ 'profile_page' ] == TRUE ) {
-		add_action( 'profile_update', 'birthdays_widget_update_profile' );
-		add_action( 'edit_user_profile', 'birthdays_widget_usr_profile' );
-		add_action( 'show_user_profile', 'birthdays_widget_usr_profile' );
     }
 
     function birthdays_extra_files() {
         wp_enqueue_style( 'birthdays-widget', plugins_url().'/birthdays-widget/birthdays-widget.css');
     }
     add_action( 'wp_enqueue_scripts', 'birthdays_extra_files' );
+
+    // Feature: Shortcode for birthays in pages/posts
+    function birthdays_shortcode( $atts ) {
+        $attr = shortcode_atts( array(
+            'class' => '',
+            'img_width' => '0'
+        ), $atts );
+        $birthdays = birthdays_widget_check_for_birthdays();
+        if ( count( $birthdays ) >= 1 ) {
+            echo Birthdays_Widget::birthdays_code( $birthdays, $attr[ 'class' ], $attr[ 'img_width' ] );
+        }
+    }
+    add_shortcode( 'birthdays', 'birthdays_shortcode' );
+
+    // Feature: Add button for shortcode in WordPress editor
+    // (thanks to: http://wordpress.stackexchange.com/questions/72394/how-to-add-a-shortcode-button-to-the-tinymce-editor)
+    add_action('init', 'birthdays_shortcode_button_init');
+    function birthdays_shortcode_button_init() {
+
+          //Abort early if the user will never see TinyMCE
+          if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') && get_user_option('rich_editing') == 'true')
+               return;
+
+          //Add a callback to regiser our tinymce plugin   
+          add_filter("mce_external_plugins", "birthdays_register_tinymce_plugin"); 
+
+          // Add a callback to add our button to the TinyMCE toolbar
+          add_filter('mce_buttons', 'birthdays_add_tinymce_button');
+    }
+
+    //This callback registers our plug-in
+    function birthdays_register_tinymce_plugin($plugin_array) {
+        $plugin_array['birthdays_button'] = plugins_url().'/birthdays-widget/shortcode.js';
+        return $plugin_array;
+    }
+
+    //This callback adds our button to the toolbar
+    function birthdays_add_tinymce_button($buttons) {
+                //Add the button ID to the $button array
+        $buttons[] = "birthdays_button";
+        return $buttons;
+    }

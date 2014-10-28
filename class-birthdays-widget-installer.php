@@ -56,7 +56,7 @@
         }
 
         static function activate() {
-            if( ! current_user_can ( 'activate_plugins' ) )
+            if ( ! current_user_can ( 'activate_plugins' ) )
                 return "You cannot activate it";
 
             return Birthdays_Widget_Installer::install();
@@ -66,16 +66,16 @@
             if ( ! get_option( 'birthdays_settings' ) ) {
                 $new = array();
                 $new[ 'meta_field' ] = get_option( 'birthdays_meta_field' );
-                if( $new[ 'meta_field' ] == false )
+                if ( $new[ 'meta_field' ] == false )
                     $new[ 'meta_field' ] = 'display_name';
                 $new[ 'date_from_profile' ] = get_option( 'birthdays_date_from_profile' );
-                if( $new[ 'date_from_profile' ] == false )
+                if ( $new[ 'date_from_profile' ] == false )
                     $new[ 'date_from_profile' ] = '2';
                 $new[ 'date_meta_field' ] = get_option( 'birthdays_date_meta_field' );
-                if( $new[ 'date_meta_field' ] == false )
+                if ( $new[ 'date_meta_field' ] == false )
                     $new[ 'date_meta_field' ] = '';
                 $new[ 'wish' ] = get_option( 'birthdays_wish' );
-                if( $new[ 'wish' ] == false )
+                if ( $new[ 'wish' ] == false )
                     $new[ 'wish' ] = __( 'Happy Birthday', 'birthdays-widget' );
 
                 $birthdays_settings = array(
