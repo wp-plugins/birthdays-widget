@@ -55,6 +55,7 @@ This section describes how to install the plugin and get it working.
 * Added shortcode [birthdays class="" img_width=""] which appears in WordPress editor (thanks to: http://wordpress.stackexchange.com/questions/72394/how-to-add-a-shortcode-button-to-the-tinymce-editor)
 * Corrected a problem with the comma (,) between the names of people having birthday
 * Javascript enabling datepicker, in separate file
+* Fixed problem with duplicate $args[ 'before_widget' ], thanks to @blewis1510
 
 = 1.5.3 =
 * Small bugfix with widget image selected from the options page.
