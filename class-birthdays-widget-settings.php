@@ -48,7 +48,8 @@
             <h2><?php _e( 'Birthdays Widget Options ', 'birthdays-widget' ); ?></h2>
             <form method="POST">
             <?php
-                wp_enqueue_style( 'birthdays-widget', plugins_url().'/birthdays-widget/birthdays-widget.css' );
+                wp_enqueue_script( 'birthdays-date-picker' );
+                wp_enqueue_style ( 'birthdays-css' );
                 wp_enqueue_media();
                 
                 $birthdays_settings = get_option( 'birthdays_settings' );
@@ -184,7 +185,7 @@
                     <input id="select-image" name="image" type="button" class="button-primary upload_image_button" value="<?php _e( 'Select Image', 'birthdays-widget' ); ?>" 
                         <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> />
                     <input id="default-image" name="default-image" type="button" class="button-primary" value="<?php _e( 'Default', 'birthdays-widget' ); ?>"
-                        <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> />
+                        <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> data-default-image="<?php echo plugins_url( '/images/birthday_cake.png' , __FILE__ ); ?>" />
                     <input id="disable-image" type="button" class="button-primary" value="
                         <?php echo ( $widget_image ) ? __( 'Disable Image', 'birthdays-widget' ) : __( 'Enable Image', 'birthdays-widget' ) ; ?>" />
                     <input id="disable-img" name="birthdays_enable_image" type="hidden" value="<?php echo $widget_image; ?>" />
@@ -206,78 +207,6 @@
                 <p><input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" /></p>
             </form>
             </div>
-            <script type="text/javascript">
-                // Uploading files
-                var file_frame;              
-                jQuery( '.upload_image_button' ).live( 'click', function( event ){
-                    event.preventDefault();
-                    // If the media frame already exists, reopen it.
-                    if ( file_frame ) {
-                        file_frame.open();
-                        return;
-                    }
-                    // Create the media frame.
-                    file_frame = wp.media.frames.file_frame = wp.media({
-                        title: jQuery( this ).data( 'uploader_title' ),
-                        button: {
-                            text: jQuery( this ).data( 'uploader_button_text' ),
-                        },
-                        multiple: false  // Set to true to allow multiple files to be selected
-                    });
-                    // When an image is selected, run a callback.
-                    file_frame.on( 'select', function() {
-                        // We set multiple to false so only get one image from the uploader
-                        attachment = file_frame.state().get('selection').first().toJSON();
-                        // Do something with attachment.id and/or attachment.url here
-                        jQuery( '#bw-image' ).val(attachment.url);
-                    });
-                    // Finally, open the modal
-                    file_frame.open();
-                  });
-                  
-                  jQuery( '#default-image' ).click( function() {
-                    var deflt = '<?php echo plugins_url( '/images/birthday_cake.png' , __FILE__ ); ?>';
-                    jQuery( '#bw-image' ).val( deflt );
-                  });
-                  
-                  jQuery( '#disable-image' ).click( function() {
-                    var element = jQuery( '#disable-image' );
-                    var flag = jQuery( '#default-image' ).prop( 'disabled' );
-                    if ( flag ) {
-                        jQuery( '#default-image' ).prop( 'disabled', false );
-                        jQuery( '#bw-image' ).prop( 'disabled', false );
-                        jQuery( '#select-image' ).prop( 'disabled', false );
-                        jQuery( '#disable-img' ).val( '1' );
-                        element.val( 'Disable Image' );
-                    } else {
-                        jQuery( '#bw-image' ).prop( 'disabled', true );
-                        jQuery( '#default-image' ).prop( 'disabled', true );
-                        jQuery( '#select-image' ).prop( 'disabled', true );
-                        jQuery( '#disable-img' ).val( '0' );
-                        element.val( 'Enable Image' );
-                    }
-                  });
-
-                  jQuery( '.opt_item' ).click( function() {
-                    /* Unselect all other items */
-                    jQuery( '.opt_item' ).removeClass( 'opt_item_selected' );
-                    /* Handle the select element for birthday date meta field */
-                    var slc = jQuery( this ).find( 'select[name="birthdays_date_meta_field"]' );                    
-                    /*
-                     * If the select element is not inside the current option item,
-                     * then disable the select item otherwise enable it
-                    */
-                    if ( slc.length == 0 )
-                        jQuery( 'select[name="birthdays_date_meta_field"]' ).prop( 'disabled', true );
-                    else 
-                        slc.prop( 'disabled', false );
-                    /* Make the item selected */
-                    jQuery( this ).addClass( 'opt_item_selected' );
-                    /* Select current radio button */
-                    var elm = jQuery( this ).find( 'input:first' );
-                    elm.prop( 'checked', true );
-                  } );
-            </script>
         <?php
         }
 
@@ -314,9 +243,12 @@
         public function create_plugin_page() {
             global $wpdb;
             $setting_url = admin_url( 'admin.php' ) . '?page=birthdays-widget';
-            
+
             wp_enqueue_script( 'jquery-ui-datepicker' );
-            wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+            wp_enqueue_script( 'birthdays-table-js' );
+            wp_enqueue_script( 'birthdays-date-picker' );
+            wp_enqueue_style ( 'jquery-style' );
+            wp_enqueue_style ( 'birthdays-table-css' );
 
             if ( ! current_user_can( 'manage_options' ) && ! self::birthdays_user_edit() ) {
                 wp_die( __( 'You do not have sufficient permissions to access this page.', 'birthdays-widget' ) );
@@ -378,7 +310,7 @@
             $query = "SELECT * FROM $table_name;";
             $results = $wpdb->get_results( $query );
 
-            echo '<table class="widefat">
+            echo '<table class="widefat dataTable display" id="birthday_table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -387,14 +319,6 @@
                             <th>'. __( 'Action', 'birthdays-widget' ).'</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>ID</th>
-                            <th>'. __( 'Name', 'birthdays-widget' ).'</th>       
-                            <th>'. __( 'Date', 'birthdays-widget' ).'</th>
-                            <th>'. __( 'Action', 'birthdays-widget' ).'</th>
-                        </tr>
-                    </tfoot>
                     <tbody>';
 
             $birthdays_settings = get_option( 'birthdays_settings' );
@@ -402,28 +326,42 @@
             $meta_key = $birthdays_settings[ 'meta_field' ];
             
             $prefix = "cs_birth_widg_";
-            foreach( $results as $row ){
+            $flag_row = true;
+
+            foreach( $results as $row ) {
                 $wp_usr = strpos( $row->name, $prefix );
                 if ( $wp_usr !== false ) {
                     $birth_user = get_userdata( substr( $row->name, strlen( $prefix ) ) );
                     $row->name = $birth_user->{$meta_key};
                 }
-                echo '<tr>
-                        <td>'. $row->id .'</td>
+                echo '<tr>';
+                echo    '<td>'. $row->id .'</td>
                         <td>'. $row->name .'</td>
                         <td>'. date_i18n( get_option( 'date_format' ), strtotime( $row->date ) ) .'</td>
                         <td><a href="'. $setting_url .'&action=edit&id='. $row->id .'">'. __( 'Edit', 'birthdays-widget' ) .'</a> 
                             | <a class="delete_link" href="'. $setting_url .'&action=delete&id='. $row->id .'">'. __( 'Delete', 'birthdays-widget' ) .'</a>
                         </td>                   
                     </tr>';
+                if ( $flag_row )
+                    $flag_row = false;
+                else
+                    $flag_row = true;
             }
+            echo '</tbody>
+                </table>';
+            
+            echo '<table class="widefat">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>'. __( 'Name', 'birthdays-widget' ).'</th>       
+                            <th>'. __( 'Date', 'birthdays-widget' ).'</th>
+                            <th>'. __( 'Action', 'birthdays-widget' ).'</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
             $flag = isset( $birthday_edit );
             if ($flag) {
-                echo '<script type="text/javascript">
-                    jQuery(document).ready(function(){
-                        jQuery("#birthday_date").focus();
-                    });
-                  </script>';
                 echo '<tr><form method="POST" action="'. $setting_url .'&action=edit&id='. $_GET['id'] .'&do=save">
                       <td>'. __( 'Editing', 'birthdays-widget') .'</td>
                       <input type="hidden" name="birthdays_edit" value="1" />';
@@ -453,25 +391,12 @@
             echo ($flag) ? date_i18n( 'd-m-Y', strtotime( $result->date ) ) : '';
             echo '" id="station_url" name="station_url" /></td>
                     <td><input name="save" type="submit" class="button-primary" value="'. __( 'Save', 'birthdays-widget' ) .'" /></td>
-                    </form></tr>
-                    </tbody>
-                </table>
-                </div>
+                    </form></tr></tbody>
+                </table>';
+
+            echo '</div>
             </div>';
-            echo '<script type="text/javascript">
-                    jQuery(document).ready(function(){
-                        jQuery("#birthday_date").datepicker({
-                            changeMonth: true,
-                            changeYear: true,
-                            maxDate: "+0D",
-                            "dateFormat" : "dd-mm-yy"
-                        });
-                        jQuery("#ui-datepicker-div").hide();
-                        jQuery(".delete_link").click(function(){
-                            return confirm("'. __( 'Are you sure you want to delete this record?', 'birthdays-widget' ) .'");
-                        });
-                    });
-                  </script>';
+            
         }
 
         public function create_submenu_page_import() {

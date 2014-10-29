@@ -83,6 +83,7 @@ class Birthdays_Widget extends WP_Widget {
 
     public static function birthdays_code( $birthdays = NULL, $class = NULL, $img_width = 0 ) {
         ob_start();
+        wp_enqueue_style( 'birthdays-css' );
         $birthdays_settings = get_option( 'birthdays_settings' );
         $birthdays_settings = maybe_unserialize( $birthdays_settings );
         if ( $img_width != 0 )

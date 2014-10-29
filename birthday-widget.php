@@ -4,7 +4,7 @@
     Plugin URI: https://wordpress.org/plugins/birthdays-widget/
     Description: Birthdays widget plugin produces a widget which displays a customizable happy birthday image and wish to your clients/users.
     Author: lion2486, Sudavar
-    Version: 1.5.4
+    Version: 1.5.5
     Author URI: http://codescar.eu 
     Contributors: lion2486, Sudavar
     Tags: widget, birthdays, custom
@@ -31,6 +31,18 @@
         register_widget( 'Birthdays_Widget' );
     }
     add_action( 'widgets_init', 'register_birthdays_widget' );
+
+    // register our scirpts
+    function birthdays_extra_files() {
+        wp_register_script( 'birthdays-date-picker', plugins_url( 'js/date-picker.js', __FILE__ ), array( 'jquery' ) );
+        wp_register_script( 'birthdays-table-js', plugins_url( 'js/jquery.dataTables.min.js', __FILE__ ), array( 'jquery' ) );
+        wp_register_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+        wp_register_style( 'birthdays-table-css', plugins_url( 'css/jquery.dataTables.min.css', __FILE__ ) );
+        wp_register_style( 'birthdays-css', plugins_url( 'css/birthdays-widget.css', __FILE__ ) );
+    }
+    add_action( 'wp_enqueue_scripts', 'birthdays_extra_files' );
+    add_action( 'login_enqueue_scripts', 'birthdays_extra_files' );
+    add_action( 'admin_enqueue_scripts', 'birthdays_extra_files' );
 
     function birthdays_widget_action_links($links, $file) {
         static $this_plugin;
@@ -59,13 +71,14 @@
     // Feature: User name and User birthday field in User registration form
     // If option is on, enable that feature.
     if ( $birthdays_settings[ 'register_form' ] == TRUE ) {
-        add_action('register_form','birthdays_widget_register_form');
-        add_filter('registration_errors', 'birthdays_widget_registration_errors', 10, 3);
+        add_action( 'register_form', 'birthdays_widget_register_form' );
+        add_filter( 'registration_errors', 'birthdays_widget_registration_errors', 10, 3 );
     }
     //1. Add a new form element...
     function birthdays_widget_register_form (){
         wp_enqueue_script( 'jquery-ui-datepicker' );
         wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+        wp_enqueue_script( 'birthdays-date-picker' );
         $first_name = ( isset( $_POST['first_name'] ) ) ? $_POST['first_name']: '';
         $date = ( isset( $_POST['birthday_date'] ) ) ? $_POST['birthday_date']: ''; ?>
         <p>
@@ -75,7 +88,6 @@
             <label for="birthday_date"><?php _e( 'User Birthday', 'birthdays-widget' ); ?></label>
                 <input  type="text" id="birthday_date" name="birthday_date" 
                     value="<?php if ( $date != '' ) echo date_i18n( 'd-m-Y', strtotime( $date ) ); ?>" />
-            <?php wp_enqueue_script( 'birthdays-widget-script', plugins_url( 'date-picker.js', __FILE__ ), array( 'jquery' ) ); ?>
         </p> <?php
     }
 
@@ -104,7 +116,7 @@
     function birthdays_widget_usr_profile() {
         global $wpdb;
         wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+        wp_enqueue_style( 'jquery-style' );
 
         if ( isset($_GET['user_id'] ) )
             $user_id = $_GET['user_id'];
@@ -175,11 +187,6 @@
                 echo '<div id="message" class="error"><p>Query error</p></div>';
         }
     }
-
-    function birthdays_extra_files() {
-        wp_enqueue_style( 'birthdays-widget', plugins_url().'/birthdays-widget/birthdays-widget.css');
-    }
-    add_action( 'wp_enqueue_scripts', 'birthdays_extra_files' );
 
     // Feature: Shortcode for birthays in pages/posts
     function birthdays_shortcode( $atts ) {
