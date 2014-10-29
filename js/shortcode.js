@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
             ed.addButton('birthdays_button', {
                 title : 'Insert birthdays shortcode', 
                 cmd : 'birthdays_insert_shortcode', 
-                image: url + '/images/birthday_cake_icon.png'
+                image: url + '/../images/birthday_cake_icon.png'
             });
         },   
     });

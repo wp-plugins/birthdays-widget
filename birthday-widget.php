@@ -205,26 +205,25 @@
     // (thanks to: http://wordpress.stackexchange.com/questions/72394/how-to-add-a-shortcode-button-to-the-tinymce-editor)
     add_action('init', 'birthdays_shortcode_button_init');
     function birthdays_shortcode_button_init() {
-
           //Abort early if the user will never see TinyMCE
-          if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') && get_user_option('rich_editing') == 'true')
+          if ( ! current_user_can( 'edit_posts' ) && ! current_user_can( 'edit_pages' ) && get_user_option( 'rich_editing' ) == 'true' )
                return;
 
           //Add a callback to regiser our tinymce plugin   
-          add_filter("mce_external_plugins", "birthdays_register_tinymce_plugin"); 
+          add_filter( "mce_external_plugins", "birthdays_register_tinymce_plugin" );
 
           // Add a callback to add our button to the TinyMCE toolbar
-          add_filter('mce_buttons', 'birthdays_add_tinymce_button');
+          add_filter( 'mce_buttons', 'birthdays_add_tinymce_button' );
     }
 
     //This callback registers our plug-in
-    function birthdays_register_tinymce_plugin($plugin_array) {
-        $plugin_array['birthdays_button'] = plugins_url().'/birthdays-widget/shortcode.js';
+    function birthdays_register_tinymce_plugin( $plugin_array ) {
+        $plugin_array[ 'birthdays_button' ] = plugins_url() . '/birthdays-widget/js/shortcode.js';
         return $plugin_array;
     }
 
     //This callback adds our button to the toolbar
-    function birthdays_add_tinymce_button($buttons) {
+    function birthdays_add_tinymce_button( $buttons ) {
                 //Add the button ID to the $button array
         $buttons[] = "birthdays_button";
         return $buttons;
