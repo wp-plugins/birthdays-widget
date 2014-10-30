@@ -120,9 +120,12 @@ class Birthdays_Widget extends WP_Widget {
                         }
                     }
                     echo '<div class="birthday_element">';
-                    echo $row->name;
-                    if ( $flag )
-                        echo ', ';
+                        if ( $flag ) {
+                            echo ', ';
+                        } else {
+                            $flag = true;
+                        }
+                        echo $row->name;
                     echo '</div>';
                 } ?>
             </div>
