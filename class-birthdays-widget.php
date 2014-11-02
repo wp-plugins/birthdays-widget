@@ -120,7 +120,7 @@ class Birthdays_Widget extends WP_Widget {
                         }
                     }
                     echo '<div class="birthday_element">';
-                        if ( $flag ) {
+                        if ( $flag && $birthdays_settings[ 'comma' ] ) {
                             echo ', ';
                         } else {
                             $flag = true;

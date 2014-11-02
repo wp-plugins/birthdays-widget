@@ -23,6 +23,7 @@
                 'register_form' => '0',
                 'profile_page' => '0',
                 'meta_field' => 'display_name',
+                'comma' => '1',
                 'user_data' => '2',
                 'date_meta_field' => '',
                 'image_url' => plugins_url( '/images/birthday_cake.png' , __FILE__ ),
@@ -50,9 +51,7 @@
             global $wpdb;
             $table_name = $wpdb->prefix . "birthdays";
             $sql = "DROP TABLE IF EXISTS `$table_name`;" ;
-            $e = $wpdb->query( $sql );
-            die( var_dump( $e ) );
-
+            $wpdb->query( $sql );
         }
 
         static function activate() {
@@ -83,6 +82,7 @@
                     'register_form' => get_option( 'birthdays_register_form' ),
                     'profile_page' => get_option( 'birthdays_profile_page' ),
                     'meta_field' => $new[ 'meta_field' ],
+                    'comma' => '1',
                     'user_data' => $new[ 'date_from_profile' ],
                     'date_meta_field' => $new[ 'date_meta_field' ],
                     'image_url' => get_option( 'birthdays_widget_image' ),
@@ -105,6 +105,12 @@
                 delete_option( 'birthdays_widget_img' );
                 delete_option( 'birthdays_wish' );
                 delete_option( 'birthdays_widget_roles' );
+            }
+            $birthdays_settings = get_option( 'birthdays_settings' );
+            $birthdays_settings = maybe_unserialize( $birthdays_settings );
+            if ( ! isset( $birthdays_settings[ 'comma' ] ) ) {
+                $birthdays_settings[ 'comma' ] = 1;
+                update_option( 'birthdays_settings', $birthdays_settings );
             }
         }
     }

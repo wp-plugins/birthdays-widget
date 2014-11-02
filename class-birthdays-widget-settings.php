@@ -66,6 +66,11 @@
                     } else {
                         $birthdays_settings[ 'meta_field' ] = 'display_name';
                     }
+                    if ( isset( $_POST[ 'birthdays_comma' ] ) ) {
+                        $birthdays_settings[ 'comma' ] = 1;
+                    } else {
+                        $birthdays_settings[ 'comma' ] = 0;
+                    }
                     if ( isset( $_POST[ 'birthdays_date_meta_field' ] ) ) {
                         $birthdays_settings[ 'date_meta_field' ] = $_POST[ 'birthdays_date_meta_field' ];
                     } else {
@@ -139,6 +144,16 @@
                         </select><br />
                         <span class="description">
                             <?php _e( 'Careful! The meta you select must be present in every WP User you set a birthday, otherwise nothing will be displayed.', 'birthdays-widget' ); ?>
+                        </span>
+                    </p>
+                    <p><?php _e( 'Select if you want comma (,) to be displayed:', 'birthdays-widget' ); ?>:<br />
+                        <input type="checkbox" name="birthdays_comma" value="1" id="birthdays_comma"
+                            <?php if ( $birthdays_settings[ 'comma' ] == TRUE ) echo 'checked="checked"'; ?> />
+                        <label for="birthdays_comma"><?php _e( 'Display comma between names', 'birthdays-widget' ); ?></label>
+                        <br />
+                        <span class="description">
+                            <?php _e( 'If you want space between the names but no comma, consider adding a CSS rule to class ', 'birthdays-widget' ); ?>
+                            <b>birthday_element</b>
                         </span>
                     </p>
                     <p>

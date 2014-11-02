@@ -4,7 +4,7 @@
     Plugin URI: https://wordpress.org/plugins/birthdays-widget/
     Description: Birthdays widget plugin produces a widget which displays a customizable happy birthday image and wish to your clients/users.
     Author: lion2486, Sudavar
-    Version: 1.5.7
+    Version: 1.5.8
     Author URI: http://codescar.eu 
     Contributors: lion2486, Sudavar
     Tags: widget, birthdays, custom
@@ -77,8 +77,8 @@
     //1. Add a new form element...
     function birthdays_widget_register_form (){
         wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
         wp_enqueue_script( 'birthdays-date-picker' );
+        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
         $first_name = ( isset( $_POST['first_name'] ) ) ? $_POST['first_name']: '';
         $date = ( isset( $_POST['birthday_date'] ) ) ? $_POST['birthday_date']: ''; ?>
         <p>
@@ -116,6 +116,7 @@
     function birthdays_widget_usr_profile() {
         global $wpdb;
         wp_enqueue_script( 'jquery-ui-datepicker' );
+        wp_enqueue_script( 'birthdays-date-picker' );
         wp_enqueue_style( 'jquery-style' );
 
         if ( isset($_GET['user_id'] ) )
