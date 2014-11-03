@@ -1,20 +1,22 @@
-jQuery(document).ready(function(){
+jQuery( document ).ready( function() {
 
-    jQuery(".delete_link").click(function(){
-        return confirm("'. __( 'Are you sure you want to delete this record?', 'birthdays-widget' ) .'");
-    });
+    jQuery( '.delete_link' ).click( function() {
+        var tmp = jQuery( '#delete-msg' ).html();
+        return confirm( tmp );
+    } );
 
-    if ( jQuery('#birthday_date').length >= 1 ) {
-        jQuery("#birthday_date").datepicker({
+    if ( jQuery( '#birthday_date' ).length >= 1 ) {
+        jQuery( '#birthday_date' ).datepicker( {
             changeMonth: true,
             changeYear: true,
             maxDate: "+0D",
             "dateFormat" : "dd-mm-yy"
-        });
-        jQuery("#ui-datepicker-div").hide();
+        } );
+        jQuery( '#ui-datepicker-div' ).hide();
     }
-    if ( jQuery('#birthday_table').length >= 1 ) {
-        jQuery('#birthday_table').DataTable( {
+
+    if ( jQuery( '#birthday_table' ).length >= 1 ) {
+        jQuery( '#birthday_table' ).DataTable( {
             stateSave: true,
             "lengthMenu": [ 15, 30, 100 ],
             "columnDefs": [ { "orderable": false, "targets": 3 } ],
@@ -24,7 +26,7 @@ jQuery(document).ready(function(){
         } );
     }
     
-    if ( jQuery('#bw-image').length >= 1 ) {
+    if ( jQuery( '#bw-image' ).length >= 1 ) {
         // Uploading files
         var file_frame;
         jQuery( '.upload_image_button' ).live( 'click', function( event ){
@@ -96,4 +98,14 @@ jQuery(document).ready(function(){
             elm.prop( 'checked', true );
           } );
     }
+
+    jQuery( '.nav-tab-wrapper > a' ).click( function() {
+        jQuery( '.fade' ).hide();
+        jQuery( '.nav-tab-wrapper > a' ).removeClass( 'nav-tab-active' );
+        jQuery( this ).addClass( 'nav-tab-active' );
+        jQuery( '.table' ).addClass( 'ui-tabs-hide' );
+        var item_clicked = jQuery( this ).attr( 'href' );
+        jQuery( item_clicked ).removeClass( 'ui-tabs-hide' );
+        return false;
+    } );
 });

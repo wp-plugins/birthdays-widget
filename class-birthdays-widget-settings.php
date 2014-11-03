@@ -44,9 +44,10 @@
         }
         
         public function create_options_page() {
-            ?> <div class="wrap">
+        ?>
+        <div class="wrap">
+            <div id="icon-edit" class="icon32"></div>
             <h2><?php _e( 'Birthdays Widget Options ', 'birthdays-widget' ); ?></h2>
-            <form method="POST">
             <?php
                 wp_enqueue_script( 'birthdays-date-picker' );
                 wp_enqueue_style ( 'birthdays-css' );
@@ -55,8 +56,9 @@
                 $birthdays_settings = get_option( 'birthdays_settings' );
                 $birthdays_settings = maybe_unserialize( $birthdays_settings );
                 if ( isset( $_POST[ 'birthdays_save' ] ) ) {
+                    check_admin_referer( 'birthdays_form' );
                     $birthdays_settings[ 'roles' ] = $_POST['roles'];
-                    if ( isset( $_POST[ 'birthdays_register_form' ] ) ) {
+                    if ( isset( $_POST[ 'birthdays_register_form' ] ) && $_POST[ 'birthdays_register_form' ] != '0' ) {
                         $birthdays_settings[ 'register_form' ] = 1;
                     } else {
                         $birthdays_settings[ 'register_form' ] = 0;
@@ -66,7 +68,7 @@
                     } else {
                         $birthdays_settings[ 'meta_field' ] = 'display_name';
                     }
-                    if ( isset( $_POST[ 'birthdays_comma' ] ) ) {
+                    if ( isset( $_POST[ 'birthdays_comma' ] ) && $_POST[ 'birthdays_comma' ] != '0' ) {
                         $birthdays_settings[ 'comma' ] = 1;
                     } else {
                         $birthdays_settings[ 'comma' ] = 0;
@@ -119,80 +121,134 @@
                     }
                     $saved_values = maybe_serialize( $birthdays_settings );
                     update_option( 'birthdays_settings', $saved_values );
+                    ?><div class="updated fade">
+                        <p><strong><?php _e( 'Options successfully updated.', 'birthdays-widget' ); ?></strong></p>
+                    </div><?php
                 }
                 $current_roles = $birthdays_settings[ 'roles' ];
                 $sup_roles = get_editable_roles();
                 $supported_roles = array();
                 foreach ( $sup_roles as $role ) {
                     $supported_roles[] = $role[ 'name' ];
-                } ?>
-                <div class="wrap">
-                    <h3><?php _e( 'General Options', 'birthdays-widget' ); ?>:</h3>
-                    <p><?php _e( 'Write your custom "wish"', 'birthdays-widget' ); ?>:<br />
-                    <input type="text" size="35" name="birthdays_wish" value="<?php echo $birthdays_settings[ 'wish' ]; ?>" /></p>
-                    <p><?php _e( 'Name and Birthday fields at WordPress User Registration Form', 'birthdays-widget' ); ?>:<br />
-                    <input type="checkbox" name="birthdays_register_form" value="1" id="birthdays_register_form"
-                        <?php if ( $birthdays_settings[ 'register_form' ] == TRUE ) echo 'checked="checked"'; ?> />
-                    <label for="birthdays_register_form"><?php _e( 'Fields in Registration Form', 'birthdays-widget' ); ?></label></p>
-                    <p><?php _e( 'Select which Wordpress User\'s meta value you like to be shown as name in widget', 'birthdays-widget' ); ?>:<br />
-                        <select name="birthdays_meta_field">
-                            <?php $meta_keys = self::birthday_get_filtered_meta();
-                                foreach ( $meta_keys as $key ): ?>
-                                    <option value="<?php echo $key; ?>" <?php echo ($birthdays_settings[ 'meta_field' ] == $key) ? "selected=\"selected\"" : ''; ?> >
-                                        <?php echo $key; ?></option>
-                            <?php endforeach; ?>
-                        </select><br />
-                        <span class="description">
-                            <?php _e( 'Careful! The meta you select must be present in every WP User you set a birthday, otherwise nothing will be displayed.', 'birthdays-widget' ); ?>
-                        </span>
-                    </p>
-                    <p><?php _e( 'Select if you want comma (,) to be displayed:', 'birthdays-widget' ); ?>:<br />
-                        <input type="checkbox" name="birthdays_comma" value="1" id="birthdays_comma"
-                            <?php if ( $birthdays_settings[ 'comma' ] == TRUE ) echo 'checked="checked"'; ?> />
-                        <label for="birthdays_comma"><?php _e( 'Display comma between names', 'birthdays-widget' ); ?></label>
-                        <br />
-                        <span class="description">
-                            <?php _e( 'If you want space between the names but no comma, consider adding a CSS rule to class ', 'birthdays-widget' ); ?>
-                            <b>birthday_element</b>
-                        </span>
-                    </p>
-                    <p>
-                        <?php _e( '<b>Shortcode</b> is also available for use in posts or pages: ', 'birthdays-widget' ); ?>
-                        &nbsp;<span class="description">[birthdays class="your_class" img_width="desired_width"]</span><br />
-                        <?php _e( 'You can either add it your self, ', 'birthdays-widget' ); ?>
-                        <?php _e( 'or you can click on our birthday button.', 'birthdays-widget' ); ?>
-                    </p>
+                } 
+            ?>
+            <h2 class="nav-tab-wrapper">
+                <a href="#birthdays-tab-general" class="nav-tab nav-tab-active"><?php _e( 'General settings', 'vertical-scroll-recent-post' ); ?></a>
+                <a href="#birthdays-tab-wp-user" class="nav-tab"><?php _e( 'WordPress User', 'vertical-scroll-recent-post' ); ?></a>
+                <a href="#birthdays-tab-image" class="nav-tab"><?php _e( 'Image Settings', 'vertical-scroll-recent-post' ); ?></a>
+                <a href="#birthdays-tab-access" class="nav-tab"><?php _e( 'Access', 'vertical-scroll-recent-post' ); ?></a>
+            </h2>
+            <form name="birthdays_form" method="post" action="">
+                <div class="table" id="birthdays-tab-general">
+                    <table class="form-table">
+                        <tbody>
+                        <tr>
+                            <th><?php _e( 'Birthday "wish"', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Birthday "wish"', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="birthdays_wish">
+                                        <input type="text" size="35" name="birthdays_wish" value="<?php echo $birthdays_settings[ 'wish' ]; ?>" />
+                                        <br /><?php _e( 'Write your custom "wish"', 'birthdays-widget' ); ?>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?php _e( 'Fields in Registration Form', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Fields in Registration Form', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="birthdays_register_form">
+                                        <select name="birthdays_register_form" id="birthdays_register_form">
+                                            <option value='1' <?php if ( $birthdays_settings[ 'register_form' ] == 1 ) echo "selected='selected'"; ?> >Yes</option>
+                                            <option value='0' <?php if ( $birthdays_settings[ 'register_form' ] == 0 ) echo "selected='selected'"; ?> >No</option>
+                                        </select>
+                                        <br /><?php _e( 'Name and Birthday fields at WordPress User Registration Form', 'birthdays-widget' ); ?>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?php _e( 'Comma between names', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Comma between names', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="birthdays_comma">
+                                        <select name="birthdays_comma" id="birthdays_comma">
+                                            <option value='1' <?php if ( $birthdays_settings[ 'comma' ] == 1 ) echo "selected='selected'"; ?> >Yes</option>
+                                            <option value='0' <?php if ( $birthdays_settings[ 'comma' ] == 0 ) echo "selected='selected'"; ?> >No</option>
+                                        </select>
+                                        <br /><?php _e( 'Select if you want comma (,) to be displayed between the names in widget', 'birthdays-widget' ); ?>
+                                        <br /><span class="description">
+                                            <?php _e( 'If you want space between the names but no comma, consider adding a CSS rule to class ', 'birthdays-widget' ); ?>
+                                            <b>birthday_element</b>
+                                        </span>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <hr />
-                <div class="wrap">
-                    <h3><?php _e( 'WordPress User Options', 'birthdays-widget' ); ?>:</h3>
-                    <div class="opt_item <?php echo ($birthdays_settings[ 'user_data' ] == '0') ? 'opt_item_selected' : ''; ?>">
-                        <input type="radio" name="birthdays_user_data" value="0"
-                            <?php echo ($birthdays_settings[ 'user_data' ] == '0') ? "checked=\"checked\"" : ''; ?>/><br />
-                        <?php _e( 'Save birthday of WordPress Users in our table and show birthday field in WordPress Profile Page', 'birthdays-widget' ); ?>
-                    </div>
-                    <div class="opt_item <?php echo ($birthdays_settings[ 'user_data' ] == '1') ? 'opt_item_selected' : ''; ?>">
-                        <input type="radio" name="birthdays_user_data" value="1"
-                            <?php echo ($birthdays_settings[ 'user_data' ] == '1') ? "checked=\"checked\"" : ''; ?>/><br />
-                        <?php _e( 'Draw birthday of WordPress Users from the ', 'birthdays-widget' ); ?>
-                        <select name="birthdays_date_meta_field" <?php echo ($birthdays_settings[ 'user_data' ] == '1') ? '' : "disabled=\"disabled\""; ?>>
-                            <?php $meta_keys = self::birthday_get_filtered_meta();
-                                foreach ( $meta_keys as $key ): ?>
-                                    <option value="<?php echo $key; ?>" <?php echo ($birthdays_settings[ 'date_meta_field' ] == $key) ? "selected=\"selected\"" : ''; ?> >
-                                        <?php echo $key; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <?php _e( ' meta field of WordPress User Profile', 'birthdays-widget' ); ?>
-                    </div>
-                    <div class="opt_item <?php echo ($birthdays_settings[ 'user_data' ] == '2') ? 'opt_item_selected' : ''; ?>">
-                        <input type="radio" name="birthdays_user_data" value="2"
-                            <?php echo ($birthdays_settings[ 'user_data' ] == '2') ? "checked=\"checked\"" : ''; ?>/><br />
-                        <?php _e( 'Disabled birthday field for WordPress Users', 'birthdays-widget' ); ?>
-                    </div>
+
+                <div class="table ui-tabs-hide" id="birthdays-tab-wp-user">
+                    <table class="form-table">
+                        <tbody>
+                        <tr>
+                            <th><?php _e( 'Birthday for WordPress Users', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <div class="opt_item <?php echo ($birthdays_settings[ 'user_data' ] == '0') ? 'opt_item_selected' : ''; ?>">
+                                    <input type="radio" name="birthdays_user_data" value="0"
+                                        <?php echo ($birthdays_settings[ 'user_data' ] == '0') ? "checked=\"checked\"" : ''; ?>/><br />
+                                    <?php _e( 'Save birthday of WordPress Users in our table and show birthday field in WordPress Profile Page', 'birthdays-widget' ); ?>
+                                </div>
+                                <div class="opt_item <?php echo ($birthdays_settings[ 'user_data' ] == '1') ? 'opt_item_selected' : ''; ?>">
+                                    <input type="radio" name="birthdays_user_data" value="1"
+                                        <?php echo ($birthdays_settings[ 'user_data' ] == '1') ? "checked=\"checked\"" : ''; ?>/><br />
+                                    <?php _e( 'Draw birthday of WordPress Users from the ', 'birthdays-widget' ); ?>
+                                    <select name="birthdays_date_meta_field" <?php echo ($birthdays_settings[ 'user_data' ] == '1') ? '' : "disabled=\"disabled\""; ?>>
+                                        <?php $meta_keys = self::birthday_get_filtered_meta();
+                                            foreach ( $meta_keys as $key ): ?>
+                                                <option value="<?php echo $key; ?>" <?php echo ($birthdays_settings[ 'date_meta_field' ] == $key) ? "selected=\"selected\"" : ''; ?> >
+                                                    <?php echo $key; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <?php _e( ' meta field of WordPress User Profile', 'birthdays-widget' ); ?>
+                                </div>
+                                <div class="opt_item <?php echo ($birthdays_settings[ 'user_data' ] == '2') ? 'opt_item_selected' : ''; ?>">
+                                    <input type="radio" name="birthdays_user_data" value="2"
+                                        <?php echo ($birthdays_settings[ 'user_data' ] == '2') ? "checked=\"checked\"" : ''; ?>/><br />
+                                    <?php _e( 'Disabled birthday field for WordPress Users', 'birthdays-widget' ); ?>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?php _e( 'Meta value as name', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Meta value as name', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="birthdays_meta_field">
+                                        <select name="birthdays_meta_field">
+                                            <?php $meta_keys = self::birthday_get_filtered_meta();
+                                                foreach ( $meta_keys as $key ): ?>
+                                                    <option value="<?php echo $key; ?>" <?php echo ($birthdays_settings[ 'meta_field' ] == $key) ? "selected=\"selected\"" : ''; ?> >
+                                                        <?php echo $key; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <br /><?php _e( 'Select which Wordpress User\'s meta value you like to be shown as name in widget', 'birthdays-widget' ); ?>
+                                        <br /><span class="description">
+                                            <?php _e( 'Careful! The meta you select must be present in every WP User you set a birthday, otherwise nothing will be displayed.', 'birthdays-widget' ); ?>
+                                        </span>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <hr />
-                <div class="wrap">
-                    <h3><?php _e( 'Widget Image Options', 'birthdays-widget' ); ?>:</h3>
+
+                <div class="table ui-tabs-hide" id="birthdays-tab-image">
                     <?php $widget_image = $birthdays_settings[ 'image_enabled' ]; ?>
                     <p><?php _e( 'Select the image you want for the birthdays widget. Leaving this field empty will revert to the default image.', 'birthdays-widget' ); ?></p>
                     <input id="bw-image" type="text" size="50" name="birthdays_widget_image_url" value="<?php echo $birthdays_settings[ 'image_url' ]; ?>" 
@@ -208,9 +264,8 @@
                         <input name="birthdays_widget_image_width" type="text" size="3" value="<?php echo $birthdays_settings[ 'image_width' ]; ?>" />
                     </p>
                 </div>
-                <hr />
-                <div class="wrap">
-                    <h3><?php _e( 'Access to Plugin Options', 'birthdays-widget' ); ?>:</h3>
+
+                <div class="table ui-tabs-hide" id="birthdays-tab-access">
                     <p><?php _e( 'Here you can select which roles of your website can have access to page editing/viewing the birthday list.', 'birthdays-widget' ); ?></p>
                     <?php foreach ( $supported_roles as $role ) : ?>
                         <input type="checkbox" name="roles[]" value="<?php echo $role; ?>" 
@@ -219,10 +274,18 @@
                     endforeach; ?>
                     <input type="hidden" name="birthdays_save" value="1" />
                 </div>
+
                 <p><input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" /></p>
-            </form>
-            </div>
-        <?php
+                <?php wp_nonce_field( 'birthdays_form' ); ?>
+            </form>               
+            <hr />
+            <p>
+                <?php _e( '<b>Shortcode</b> is also available for use in posts or pages: ', 'birthdays-widget' ); ?>
+                &nbsp;<span class="description">[birthdays class="your_class" img_width="desired_width"]</span><br />
+                <?php _e( 'You can either add it your self, ', 'birthdays-widget' ); ?>
+                <?php _e( 'or you can click on our birthday button.', 'birthdays-widget' ); ?>
+            </p>
+        </div><?php
         }
 
         public function birthday_get_filtered_meta( ) {
@@ -407,11 +470,11 @@
             echo '" id="station_url" name="station_url" /></td>
                     <td><input name="save" type="submit" class="button-primary" value="'. __( 'Save', 'birthdays-widget' ) .'" /></td>
                     </form></tr></tbody>
-                </table>';
+                </table>'; ?>
 
-            echo '</div>
-            </div>';
-            
+                </div>
+            </div>
+            <div id="delete-msg" class="hidden"><?php _e( 'Are you sure you want to delete this record?', 'birthdays-widget' ); ?></div> <?php
         }
 
         public function create_submenu_page_import() {
