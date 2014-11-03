@@ -50,6 +50,8 @@ This section describes how to install the plugin and get it working.
 3. Options Page
 
 == Changelog ==
+= 1.5.8 =
+* Option to disable comma (,) between the names.
 
 = 1.5.7 =
 * Small bugfix with comma (,) not showing correctly, thanks to [dlm80](https://wordpress.org/support/profile/dlm80)
