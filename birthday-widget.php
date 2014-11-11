@@ -21,7 +21,8 @@
     require_once dirname( __FILE__ ) . '/birthdays-widget-ajax-callback.php';   
     
     register_activation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'activate' ) );
-    register_deactivation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'deactivate' ) );
+    register_deactivation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'deactivate_multisite' ) );
+    add_action( 'wpmu_new_blog', array( 'Birthdays_Widget_Installer', 'new_blog' ), 10, 6);
 
     if ( is_admin() )
         $my_settings_page = new Birthdays_Widget_Settings();

@@ -1,7 +1,7 @@
 <?php
     class Birthdays_Widget_Installer{
         
-        static function install() {
+        static public function install() {
             global $wpdb;
             
             //create the new table
@@ -37,7 +37,28 @@
             return;
         }
 
-        static function unistall() {
+        public static function deactivate_multisite() {
+        	global $wpdb;
+        	
+        	if ( function_exists( 'is_multisite' ) && is_multisite( ) ) {
+        		// check if it is a network activation - if so, run the activation function for each blog id
+        		if ( $networkwide ) {
+        			$old_blog = $wpdb->blogid;
+        			// Get all blog ids
+        			$blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+        			foreach ( $blogids as $blog_id ) {
+        				switch_to_blog( $blog_id );
+        				self::deactivate();
+        			}
+        			switch_to_blog( $old_blog );
+        			return;
+        		}
+        	}
+        	
+        	self::deactivate();
+        }
+        
+        static public function unistall() {
             //delete plugin's options
             delete_option( 'birthdays_settings' );
 
@@ -55,13 +76,30 @@
         }
 
         static function activate() {
+        	global $wpdb;
+        	
             if ( ! current_user_can ( 'activate_plugins' ) )
                 return "You cannot activate it";
+            
+            if ( function_exists( 'is_multisite' ) && is_multisite( ) ) {
+            	// check if it is a network activation - if so, run the activation function for each blog id
+            	if ( $networkwide ) {
+            		$old_blog = $wpdb->blogid;
+            		// Get all blog ids
+            		$blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+            		foreach ( $blogids as $blog_id ) {
+            			switch_to_blog( $blog_id );
+            			self::install();
+            		}
+            		switch_to_blog( $old_blog );
+            		return;
+            	}
+            }
 
-            return Birthdays_Widget_Installer::install();
+            return self::install();
         }
         
-        static function deactivate() {
+        static public function deactivate() {
             if ( ! get_option( 'birthdays_settings' ) ) {
                 $new = array();
                 $new[ 'meta_field' ] = get_option( 'birthdays_meta_field' );
@@ -113,4 +151,18 @@
                 update_option( 'birthdays_settings', $birthdays_settings );
             }
         }
+        
+        
+        
+        public static function new_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+        	global $wpdb;
+        
+        	if ( is_plugin_active_for_network( 'birthdays-widget/birthday-widget.php' ) ) {
+        		$old_blog = $wpdb->blogid;
+        		switch_to_blog( $blog_id );
+        		self::install();
+        		switch_to_blog( $old_blog );
+        	}
+        }
     }
+    
