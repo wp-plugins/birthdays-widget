@@ -37,7 +37,7 @@
             return;
         }
 
-        public static function deactivate_multisite() {
+        public static function deactivate_multisite( $networkwide ) {
         	global $wpdb;
         	
         	if ( function_exists( 'is_multisite' ) && is_multisite( ) ) {
@@ -51,11 +51,33 @@
         				self::deactivate();
         			}
         			switch_to_blog( $old_blog );
-        			return;
+        			
         		}
         	}
         	
         	self::deactivate();
+        }
+        
+        public static function unistall_multisite( $networkwide ) {
+        	global $wpdb;
+        	 
+        	if ( function_exists( 'is_multisite' ) && is_multisite( ) ) {
+        		// check if it is a network activation - if so, run the activation function for each blog id
+        	//	if ( $networkwide ) {
+        	//	if it's multisite you can't just unistall from one blog!
+        			$old_blog = $wpdb->blogid;
+        			// Get all blog ids
+        			$blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+        			foreach ( $blogids as $blog_id ) {
+        				switch_to_blog( $blog_id );
+        				self::unistall();
+        	//		}
+        			switch_to_blog( $old_blog );
+        			 
+        		}
+        	}
+        	 
+        	self::unistall();
         }
         
         static public function unistall() {
@@ -75,7 +97,7 @@
             $wpdb->query( $sql );
         }
 
-        static function activate() {
+        static public function activate( $networkwide ) {
         	global $wpdb;
         	
             if ( ! current_user_can ( 'activate_plugins' ) )
@@ -92,7 +114,7 @@
             			self::install();
             		}
             		switch_to_blog( $old_blog );
-            		return;
+            		
             	}
             }
 
@@ -131,6 +153,7 @@
                     );
                 $birthdays_settings = maybe_serialize( $birthdays_settings );
                 add_option( 'birthdays_settings', $birthdays_settings );
+                //TODO why do we add settings on deactivate?? to delete them below??
                 
                 delete_option( 'Birthdays_Widget_Installed' );
                 delete_option( 'birthdays_meta_field' );

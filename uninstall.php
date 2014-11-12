@@ -3,7 +3,8 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) )
 	die();
 
-Birthdays_Widget_Installer::deactivate_multisite();
+require_once( 'birthday-widget.php' );
+Birthdays_Widget_Installer::unistall_multisite( $networkwide );
 
 /* //drop a custom db table
 global $wpdb;
