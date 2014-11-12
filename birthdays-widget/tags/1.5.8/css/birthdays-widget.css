@@ -1,0 +1,42 @@
+.birthdays-widget {
+    text-align: center;
+}
+
+.birthdays-widget img {
+    display: block;
+}
+
+.birthday-wish {
+    color: red; 
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.birthday_element {
+    display: inline;
+}
+
+.opt_item {
+    display: inline-block;
+    width: 30%;
+    text-align: center;
+    margin: 0 0.5%;
+    padding: 0.5%;
+    vertical-align: top;
+    line-height: 2;
+    border-radius: 8px;
+    min-height: 80px;
+}
+
+.opt_item:hover {
+    cursor: pointer;
+}
+
+.opt_item_selected {
+    background-color: grey;
+    color: white;
+}
+
+select {
+    width: 120px;
+}
