@@ -4,7 +4,7 @@
     Plugin URI: https://wordpress.org/plugins/birthdays-widget/
     Description: Birthdays widget plugin produces a widget which displays a customizable happy birthday image and wish to your clients/users.
     Author: lion2486, Sudavar
-    Version: 1.6.1
+    Version: 1.6.3
     Author URI: http://codescar.eu 
     Contributors: lion2486, Sudavar
     Tags: widget, birthdays, custom
@@ -15,6 +15,7 @@
     License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+    define( 'VERSION', '1.6.3' );
     require_once dirname( __FILE__ ) . '/class-birthdays-widget.php';
     require_once dirname( __FILE__ ) . '/class-birthdays-widget-installer.php';
     require_once dirname( __FILE__ ) . '/class-birthdays-widget-settings.php';  
@@ -22,7 +23,7 @@
     
     register_activation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'activate' ) );
     register_deactivation_hook( __FILE__ , array( 'Birthdays_Widget_Installer', 'deactivate_multisite' ) );
-    add_action( 'wpmu_new_blog', array( 'Birthdays_Widget_Installer', 'new_blog' ), 10, 6);
+    add_action( 'wpmu_new_blog', array( 'Birthdays_Widget_Installer', 'new_blog' ), 10, 6 );
 
     if ( is_admin() )
         $my_settings_page = new Birthdays_Widget_Settings();
@@ -35,9 +36,15 @@
 
     // register our scirpts
     function birthdays_extra_files() {
-        wp_register_script( 'birthdays-date-picker', plugins_url( 'js/date-picker.js', __FILE__ ), array( 'jquery' ) );
+        wp_register_script( 'birthdays-script', plugins_url( 'js/script.js', __FILE__ ), array( 'jquery' ) );
+        wp_register_script( 'birthdays-cal', plugins_url( 'js/cal.js', __FILE__ ), array( 'jquery' ) );
+        wp_register_script( 'birthdays-calendar-js', plugins_url( 'js/bic_calendar.min.js', __FILE__ ), array( 'jquery' ) );
+        wp_register_script( 'birthdays-bootstrap-js', plugins_url( 'js/bootstrap.min.js', __FILE__ ), array( 'jquery' ) );
+
         wp_register_script( 'birthdays-table-js', plugins_url( 'js/jquery.dataTables.min.js', __FILE__ ), array( 'jquery' ) );
         wp_register_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+        wp_register_style( 'birthdays-calendar-css', plugins_url( 'css/bic_calendar.css', __FILE__ ) );
+        wp_register_style( 'birthdays-bootstrap-css', plugins_url( 'css/bootstrap.min.css', __FILE__ ) );
         wp_register_style( 'birthdays-table-css', plugins_url( 'css/jquery.dataTables.min.css', __FILE__ ) );
         wp_register_style( 'birthdays-css', plugins_url( 'css/birthdays-widget.css', __FILE__ ) );
     }
@@ -50,7 +57,7 @@
         if ( !$this_plugin ) {
             $this_plugin = plugin_basename( __FILE__ );
         }
-        if ($file == $this_plugin) {
+        if ( $file == $this_plugin ) {
             // The "page" query string value must be equal to the slug
             // of the Settings admin page we defined earlier, which in
             // this case equals "myplugin-settings".
@@ -64,7 +71,7 @@
     function birthdays_widget_load_languages() {
         load_plugin_textdomain( 'birthdays-widget', false, basename( dirname( __FILE__ ) ) . '/languages' );
     }
-    add_action('plugins_loaded', 'birthdays_widget_load_languages');
+    add_action( 'plugins_loaded', 'birthdays_widget_load_languages' );
 
     $birthdays_settings = get_option( 'birthdays_settings' );
     $birthdays_settings = maybe_unserialize( $birthdays_settings );
@@ -78,8 +85,8 @@
     //1. Add a new form element...
     function birthdays_widget_register_form (){
         wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_script( 'birthdays-date-picker' );
-        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+        wp_enqueue_script( 'birthdays-script' );
+        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css' );
         $first_name = ( isset( $_POST['first_name'] ) ) ? $_POST['first_name']: '';
         $date = ( isset( $_POST['birthday_date'] ) ) ? $_POST['birthday_date']: ''; ?>
         <p>
@@ -100,9 +107,9 @@
     //3. Finally, save our extra registration user meta.
     function birthdays_widget_user_register ($user_id) {
         if ( isset( $_POST['first_name'] ) )
-            update_user_meta($user_id, 'first_name', $_POST['first_name']);
+            update_user_meta( $user_id, 'first_name', $_POST['first_name'] );
         if ( isset( $_POST['birthday_date'] ) )
-            update_user_meta($user_id, 'birthday', $_POST['birthday_date']);
+            update_user_meta( $user_id, 'birthday', $_POST['birthday_date'] );
     }
 
     // Feature: User name and User birthday field in User profile in admin section
@@ -117,7 +124,7 @@
     function birthdays_widget_usr_profile() {
         global $wpdb;
         wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_script( 'birthdays-date-picker' );
+        wp_enqueue_script( 'birthdays-script' );
         wp_enqueue_style( 'jquery-style' );
 
         if ( isset($_GET['user_id'] ) )
@@ -147,10 +154,11 @@
                 <tr>
                     <th><label for="birthday_date"><?php _e( 'User Birthday', 'birthdays-widget' ); ?></label></th>
                     <td><input type="text" size="10" id="birthday_date" name="birthday_date" 
-                        <?php if ( isset( $date ) )
+                        <?php if ( isset( $date ) ) {
                                 echo 'value="' . date_i18n( 'd-m-Y', strtotime( $date ) ) . '" />';
-                              else
-                                echo 'value="" />'; ?>
+                              } else {
+                                echo 'value="" />'; 
+                        } ?>
                         <br /><span class="description"><?php _e( 'Please enter user\'s birthday requested by birthdays widget', 'birthdays-widget' ); ?></span>
 						<input type="hidden" name="birthday_usr_id" value="<?php echo $user_id; ?>" />
         <?php 
@@ -190,15 +198,30 @@
         }
     }
 
-    // Feature: Shortcode for birthays in pages/posts
+    // Feature: Shortcode for birthdays in pages/posts
     function birthdays_shortcode( $atts ) {
         $attr = shortcode_atts( array(
             'class' => '',
-            'img_width' => '0'
+            'img_width' => '0',
+            'template' => '0'
         ), $atts );
-        $birthdays = birthdays_widget_check_for_birthdays();
+        if ( $attr[ 'template' ] == 'default' ) {
+            $attr[ 'template' ] = 0;
+        } else if ( $attr[ 'template' ] == 'list' ) {
+            $attr[ 'template' ] = 1;
+        } else if ( $attr[ 'template' ] == 'calendar' ) {
+            $attr[ 'template' ] = 2;
+        } else {
+            $attr[ 'template' ] = 0;
+        }
+        $instance = array( 'class' => $attr[ 'class' ], 'img_width' => $attr[ 'img_width' ], 'template' => $attr[ 'template' ] );
+        if ( $attr[ 'template' ] == 2 ) {
+            $birthdays = birthdays_widget_check_for_birthdays( true );
+        } else {
+            $birthdays = birthdays_widget_check_for_birthdays();
+        }
         if ( count( $birthdays ) >= 1 ) {
-            echo Birthdays_Widget::birthdays_code( $birthdays, $attr[ 'class' ], $attr[ 'img_width' ] );
+            return Birthdays_Widget::birthdays_code( $instance, $birthdays );
         }
     }
     add_shortcode( 'birthdays', 'birthdays_shortcode' );
@@ -226,7 +249,20 @@
 
     //This callback adds our button to the toolbar
     function birthdays_add_tinymce_button( $buttons ) {
-                //Add the button ID to the $button array
+        //Add the button ID to the $button array
         $buttons[] = "birthdays_button";
         return $buttons;
     }
+
+    //Check if there is a need to update
+    function update_birthdays_widget() {
+        $birthdays_settings = get_option( 'birthdays_settings' );
+        $birthdays_settings = maybe_unserialize( $birthdays_settings );
+
+        if ( !isset( $birthdays_settings[ 'version' ] ) || ( $birthdays_settings[ 'version' ] != VERSION ) ) {
+            Birthdays_Widget_Installer::install();
+            $birthdays_settings = get_option( 'birthdays_settings' );
+            $birthdays_settings = maybe_unserialize( $birthdays_settings );
+        }
+    }
+    add_action( 'plugins_loaded', 'update_birthdays_widget' );

@@ -19,8 +19,8 @@ jQuery(document).ready(function($) {
 
             // Register buttons - trigger above command when clicked
             ed.addButton('birthdays_button', {
-                title : 'Insert birthdays shortcode', 
-                cmd : 'birthdays_insert_shortcode', 
+                title : 'Insert birthdays shortcode, [birthdays class="" img_width="" template=""]',
+                cmd : 'birthdays_insert_shortcode',
                 image: url + '/../images/birthday_cake_icon.png'
             });
         },   

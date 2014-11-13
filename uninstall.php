@@ -3,10 +3,7 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) )
 	die();
 
-require_once( 'birthday-widget.php' );
-Birthdays_Widget_Installer::unistall_multisite( $networkwide );
-
-/* //drop a custom db table
+//drop a custom db table
 global $wpdb;
 $table_name = $wpdb->prefix . "birthdays";
 $wpdb->query( "DROP TABLE IF EXISTS `$table_name`;" );
@@ -18,5 +15,5 @@ delete_option( 'birthdays_settings' );
 $users = get_users( array( 'fields' => 'id' ) );
 foreach ( $users as $id ) {
     delete_user_meta( $id, 'birthday_id' );
-} */
+}
 ?>
