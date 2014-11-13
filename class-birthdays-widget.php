@@ -102,11 +102,7 @@ class Birthdays_Widget extends WP_Widget {
                 $tmp_size = $birthdays_settings[ 'image_width' ];
                 if ( is_numeric( $birthdays_settings[ 'image_url' ] ) ) {
                     $default_image_src = wp_get_attachment_image_src( $birthdays_settings[ 'image_url' ], 'medium' );
-                    if ( $default_image_src == false ) {
-                        $default_image_src = $default_image_src[ 0 ];
-                    } else {
-                        $default_image_src = $birthdays_settings[ 'image_url' ];
-                    }
+                    $default_image_src = $default_image_src[ 0 ];
                 } else {
                     $default_image_src = $birthdays_settings[ 'image_url' ];
                 }
@@ -127,10 +123,11 @@ class Birthdays_Widget extends WP_Widget {
                 //Check if this is record represents a WordPress user
                 $wp_usr = strpos( $row->name, $prefix );
                 if ( $instance[ 'template' ] == 2 ) {
-                    $row->image = wp_get_attachment_image_src( $row->image, array( 150, 150 ) )[ 0 ];
+                    $row->image = wp_get_attachment_image_src( $row->image, array( 150, 150 ) );
                 } else {
-                    $row->image = wp_get_attachment_image_src( $row->image, 'medium' )[ 0 ];
+                    $row->image = wp_get_attachment_image_src( $row->image, 'medium' );
                 }
+                $row->image = $row->image[ 0 ];
                 if ( $wp_usr !== false ) {
                     //If birthdays are disabled for WP Users, or birthday date is drown from WP Profile, skip the record
                     if ( ( $birthdays_settings[ 'profile_page' ] == 0 && $birthdays_settings[ 'date_from_profile' ] == 0 ) || $birthdays_settings[ 'date_from_profile' ] ) {
@@ -154,7 +151,8 @@ class Birthdays_Widget extends WP_Widget {
                 //If user has no image, set the default
                 if ( !isset( $row->image ) || empty( $row->image ) ) {
                     if ( is_numeric( $birthdays_settings[ 'image_url' ] ) && $instance[ 'template' ] == 2 ) {
-                        $row->image = wp_get_attachment_image_src( $birthdays_settings[ 'image_url' ] )[ 0 ];
+                        $row->image = wp_get_attachment_image_src( $birthdays_settings[ 'image_url' ] );
+                        $row->image = $row->image[ 0 ];
                     } else {
                         $row->image = $default_image_src;
                     }
