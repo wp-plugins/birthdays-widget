@@ -479,14 +479,17 @@
                                     $row->image = self::get_avatar_url( $birth_user->user_email, 256 );
                                     $image_name = $birth_user->{$meta_key};
                                 } else {
-                                    $row->image = wp_get_attachment_image_src( $row->image, 'full' )[ 0 ];
+                                    $row->image = wp_get_attachment_image_src( $row->image, 'full' );
+                                    $row->image = $row->image[ 0 ];
                                     $image_name = explode( '/', $row->image );
                                     $image_name = $image_name[ count( $image_name ) - 1 ];
                                 }
                             } else {
-                                $row->image = wp_get_attachment_image_src( $row->image, 'full' )[ 0 ];
+                                $row->image = wp_get_attachment_image_src( $row->image, 'full' );
+                                $row->image = $row->image[ 0 ];
                                 $image_name = explode( '/', $row->image );
-                                $image_name = $image_name[ count( $image_name ) - 1 ];                            }
+                                $image_name = $image_name[ count( $image_name ) - 1 ];                            
+                            }
                             echo '<tr>
                                     <td>' . $row->id . '</td>
                                     <td>' . $row->name . '</td>
