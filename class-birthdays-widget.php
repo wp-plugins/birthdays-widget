@@ -101,7 +101,12 @@ class Birthdays_Widget extends WP_Widget {
             if ( $birthdays_settings[ 'image_enabled' ] ) {
                 $tmp_size = $birthdays_settings[ 'image_width' ];
                 if ( is_numeric( $birthdays_settings[ 'image_url' ] ) ) {
-                    $default_image_src = wp_get_attachment_image_src( $birthdays_settings[ 'image_url' ], 'medium' )[ 0 ];
+                    $default_image_src = wp_get_attachment_image_src( $birthdays_settings[ 'image_url' ], 'medium' );
+                    if ( $default_image_src == false ) {
+                        $default_image_src = $default_image_src[ 0 ];
+                    } else {
+                        $default_image_src = $birthdays_settings[ 'image_url' ];
+                    }
                 } else {
                     $default_image_src = $birthdays_settings[ 'image_url' ];
                 }
