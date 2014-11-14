@@ -7,7 +7,7 @@
     Version: 1.6.4
     Author URI: http://codescar.eu 
     Contributors: lion2486, Sudavar
-    Tags: widget, birthdays, custom
+    Tags: widget, birthdays, custom birthday list, WordPress User birthday, birthday calendar
     Requires at least: 3.0.1
     Tested up to: 4.0
     Text Domain: birthdays-widget
@@ -15,7 +15,7 @@
     License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-    define( 'VERSION', '1.6.4' );
+    define( 'BW', '1.6.4' );
     require_once dirname( __FILE__ ) . '/class-birthdays-widget.php';
     require_once dirname( __FILE__ ) . '/class-birthdays-widget-installer.php';
     require_once dirname( __FILE__ ) . '/class-birthdays-widget-settings.php';  
@@ -36,17 +36,17 @@
 
     // register our scirpts
     function birthdays_extra_files() {
-        wp_register_script( 'birthdays-script', plugins_url( 'js/script.js', __FILE__ ), array( 'jquery' ) );
-        wp_register_script( 'birthdays-cal', plugins_url( 'js/cal.js', __FILE__ ), array( 'jquery' ) );
-        wp_register_script( 'birthdays-calendar-js', plugins_url( 'js/bic_calendar.min.js', __FILE__ ), array( 'jquery' ) );
-        wp_register_script( 'birthdays-bootstrap-js', plugins_url( 'js/bootstrap.min.js', __FILE__ ), array( 'jquery' ) );
+        wp_register_script( 'birthdays-script', plugins_url( 'js/script.js', __FILE__ ), array( 'jquery' ), BW );
+        wp_register_script( 'birthdays-cal', plugins_url( 'js/cal.js', __FILE__ ), array( 'jquery' ), BW );
+        wp_register_script( 'birthdays-calendar-js', plugins_url( 'js/bic_calendar.min.js', __FILE__ ), array( 'jquery' ), BW );
+        wp_register_script( 'birthdays-bootstrap-js', plugins_url( 'js/bootstrap.min.js', __FILE__ ), array( 'jquery' ), BW );
+        wp_register_script( 'birthdays-table-js', plugins_url( 'js/jquery.dataTables.min.js', __FILE__ ), array( 'jquery' ), BW );
 
-        wp_register_script( 'birthdays-table-js', plugins_url( 'js/jquery.dataTables.min.js', __FILE__ ), array( 'jquery' ) );
-        wp_register_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
-        wp_register_style( 'birthdays-calendar-css', plugins_url( 'css/bic_calendar.css', __FILE__ ) );
-        wp_register_style( 'birthdays-bootstrap-css', plugins_url( 'css/bootstrap.min.css', __FILE__ ) );
-        wp_register_style( 'birthdays-table-css', plugins_url( 'css/jquery.dataTables.min.css', __FILE__ ) );
-        wp_register_style( 'birthdays-css', plugins_url( 'css/birthdays-widget.css', __FILE__ ) );
+        wp_register_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css', array(), BW );
+        wp_register_style( 'birthdays-calendar-css', plugins_url( 'css/bic_calendar.css', __FILE__ ), array(), BW );
+        wp_register_style( 'birthdays-bootstrap-css', plugins_url( 'css/bootstrap.min.css', __FILE__ ), array(), BW );
+        wp_register_style( 'birthdays-table-css', plugins_url( 'css/jquery.dataTables.min.css', __FILE__ ), array(), BW );
+        wp_register_style( 'birthdays-css', plugins_url( 'css/birthdays-widget.css', __FILE__ ), array(), BW );
     }
     add_action( 'wp_enqueue_scripts', 'birthdays_extra_files' );
     add_action( 'login_enqueue_scripts', 'birthdays_extra_files' );
@@ -259,7 +259,7 @@
         $birthdays_settings = get_option( 'birthdays_settings' );
         $birthdays_settings = maybe_unserialize( $birthdays_settings );
 
-        if ( !isset( $birthdays_settings[ 'version' ] ) || ( $birthdays_settings[ 'version' ] != VERSION ) ) {
+        if ( !isset( $birthdays_settings[ 'version' ] ) || ( $birthdays_settings[ 'version' ] != BW ) ) {
             Birthdays_Widget_Installer::install();
             $birthdays_settings = get_option( 'birthdays_settings' );
             $birthdays_settings = maybe_unserialize( $birthdays_settings );
