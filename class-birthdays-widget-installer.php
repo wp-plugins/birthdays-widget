@@ -36,13 +36,13 @@
                 );
             //if the plugin was installed, do not lose previous settings
             if ( !( $tmp = get_option( 'birthdays_settings' ) ) ) {
-                $birthdays_settings[ 'version' ] = VERSION;
+                $birthdays_settings[ 'version' ] = BW;
                 $birthdays_settings = maybe_serialize( $birthdays_settings );
                 add_option( 'birthdays_settings', $birthdays_settings );
             } else {
                 $old_birthdays_settings = maybe_unserialize( $tmp );
                 $birthdays_settings = array_merge( $birthdays_settings, $old_birthdays_settings );
-                $birthdays_settings[ 'version' ] = VERSION;
+                $birthdays_settings[ 'version' ] = BW;
                 $birthdays_settings = maybe_serialize( $birthdays_settings );
                 update_option( 'birthdays_settings', $birthdays_settings );
             }
