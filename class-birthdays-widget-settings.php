@@ -55,8 +55,7 @@
                 
                 $birthdays_settings = get_option( 'birthdays_settings' );
                 $birthdays_settings = maybe_unserialize( $birthdays_settings );
-                if ( isset( $_POST[ 'birthdays_save' ] ) ) {
-                    check_admin_referer( 'birthdays_form' );
+                if ( isset( $_POST[ 'birthdays_save' ] ) && check_admin_referer( 'birthdays_form' ) ) {
                     $birthdays_settings[ 'roles' ] = $_POST[ 'roles'];
                     if ( isset( $_POST[ 'birthdays_register_form' ] ) && $_POST[ 'birthdays_register_form' ] != '0' ) {
                         $birthdays_settings[ 'register_form' ] = 1;
@@ -64,7 +63,7 @@
                         $birthdays_settings[ 'register_form' ] = 0;
                     }
                     if ( isset( $_POST[ 'birthdays_meta_field' ] ) ) {
-                        $birthdays_settings[ 'meta_field' ] = $_POST[ 'birthdays_meta_field' ];
+                        $birthdays_settings[ 'meta_field' ] = wp_strip_all_tags( $_POST[ 'birthdays_meta_field' ] );
                     } else {
                         $birthdays_settings[ 'meta_field' ] = 'display_name';
                     }
@@ -105,17 +104,17 @@
                         $birthdays_settings [ 'date_from_profile' ] = 0;
                     }
                     if ( isset( $_POST[ 'birthdays_widget_image_width' ] ) && !empty( $_POST[ 'birthdays_widget_image_width' ] ) ) {
-                        $birthdays_settings[ 'image_width' ] = $_POST[ 'birthdays_widget_image_width' ];
+                        $birthdays_settings[ 'image_width' ] = wp_strip_all_tags( $_POST[ 'birthdays_widget_image_width' ] );
                     } else {
                         $birthdays_settings[ 'image_width' ] = '55%';
                     }
                     if ( isset( $_POST[ 'birthdays_list_image_width' ] ) && !empty( $_POST[ 'birthdays_list_image_width' ] ) ) {
-                        $birthdays_settings[ 'list_image_width' ] = $_POST[ 'birthdays_list_image_width' ];
+                        $birthdays_settings[ 'list_image_width' ] = wp_strip_all_tags( $_POST[ 'birthdays_list_image_width' ] );
                     } else {
                         $birthdays_settings[ 'list_image_width' ] = '20%';
                     }
                     if ( isset( $_POST[ 'birthdays_widget_image_url' ] ) && !empty( $_POST[ 'birthdays_widget_image_url' ] ) ) {
-                        $birthdays_settings[ 'image_url' ] = $_POST[ 'birthdays_widget_image_url' ];
+                        $birthdays_settings[ 'image_url' ] = wp_strip_all_tags( $_POST[ 'birthdays_widget_image_url' ] );
                     } else {
                         $birthdays_settings[ 'image_url' ] = plugins_url( '/images/birthday_cake.png' , __FILE__ );
                     }
@@ -125,7 +124,7 @@
                         $birthdays_settings[ 'image_enabled' ] = 0;
                     }
                     if ( isset( $_POST[ 'birthdays_wish' ] ) && !empty( $_POST[ 'birthdays_wish' ] ) ) {
-                        $birthdays_settings[ 'wish' ] = $_POST[ 'birthdays_wish' ];
+                        $birthdays_settings[ 'wish' ] = wp_strip_all_tags( $_POST[ 'birthdays_wish' ] );
                     } else {
                         $birthdays_settings[ 'wish' ] = __( 'Happy Birthday', 'birthdays-widget' );
                     }
@@ -329,7 +328,7 @@
             </form>               
             <hr />
             <p>
-                <span class="description alignright"><?php echo __( 'Plugin Version ', 'birthdays-widget' ) . VERSION; ?></span>
+                <span class="description alignright"><?php echo __( 'Plugin Version ', 'birthdays-widget' ) . BW; ?></span>
                 <?php _e( '<b>Shortcode</b> is also available for use in posts or pages: ', 'birthdays-widget' ); ?>
                 &nbsp;<span class="description">[birthdays class="your_class" img_width="desired_width" template="default | list | calendar"]</span><br />
                 <?php _e( 'You can either add it your self, ', 'birthdays-widget' ); ?>
@@ -563,8 +562,8 @@
                             if ( $birthdays_settings[ 'wp_user_gravatar' ] && $wp_usr !== false ) {
                                 $image_input = "<input type=\"text\" name=\"birthday_image\" value=\"Gravatar\" disabled=\"disabled\" />";
                             } else {
-                                $image_input = "<input type=\"text\" name=\"birthday_image\" id=\"bw-image\" class=\"upload_image_button\" 
-                                            value=\"" . $result->image . "\" size=\"8\" />";
+                                $image_input = "<input name=\"image\" type=\"button\" class=\"button-primary upload_image_button\" value=\"Add\">".
+                                    "<input type=\"text\" name=\"birthday_image\" id=\"bw-image\" class=\"upload_image_button\" value=\"" . $result->image . "\" size=\"8\" />";
                             }
                         } else {
                             $name_input = '<input type="text" name="birthday_name" id="birthday_name" value="" />';
@@ -603,10 +602,8 @@
             } ?>
             <div class="wrap">
                 <h2><?php _e( 'Import Birthday List Page', 'birthdays-widget' ); ?></h2>
-                <p>
-                    <?php _e( 'Here you can upload a CSV file with your own data or from a plugin-export.', 'birthdays-widget' ); ?><br />
-                    <?php _e( 'CSV must have format &lt;name&gt;,&lt;date&gt; where &lt;name&gt; a string and &lt;date&gt; as Y-m-D', 'birthdays-widget' ); ?>
-                </p>
+                <p><?php _e( 'Here you can upload a CSV file with your own data or from a plugin-export.', 'birthdays-widget' ); ?><br />
+                <?php _e( 'CSV must have format &lt;name&gt;,&lt;date&gt; where &lt;name&gt; a string and &lt;date&gt; as Y-m-D', 'birthdays-widget' ); ?></p>
                 <div class="wrap">
                     <form action="" method="POST" enctype="multipart/form-data">
                         <label for="uploadedfile"><?php _e( 'File', 'birthdays-widget' ); ?></label>

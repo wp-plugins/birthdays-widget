@@ -1,10 +1,8 @@
 jQuery( document ).ready( function() {
-
     jQuery( '.delete_link' ).click( function() {
         var tmp = jQuery( '#delete-msg' ).html();
         return confirm( tmp );
     } );
-
     if ( jQuery( '#birthday_date' ).length >= 1 ) {
         jQuery( '#birthday_date' ).datepicker( {
             changeMonth: true,
@@ -14,7 +12,6 @@ jQuery( document ).ready( function() {
         } );
         jQuery( '#ui-datepicker-div' ).hide();
     }
-
     if ( jQuery( '#birthday_table' ).length >= 1 ) {
         jQuery( '#birthday_table' ).DataTable( {
             stateSave: true,
@@ -24,7 +21,6 @@ jQuery( document ).ready( function() {
             "processing": true,
             "deferRender": true
         } );
-
         jQuery( document ).tooltip( {
             items: ".list-image",
             content: function() {
@@ -46,7 +42,7 @@ jQuery( document ).ready( function() {
     if ( jQuery( '#bw-image' ).length >= 1 ) {
         // Uploading files
         var file_frame;
-        jQuery( '.upload_image_button' ).live( 'click', function( event ){
+        jQuery( '.upload_image_button' ).live( 'click', function( event ) {
             event.preventDefault();
             // If the media frame already exists, reopen it.
             if ( file_frame ) {
@@ -70,14 +66,12 @@ jQuery( document ).ready( function() {
             });
             // Finally, open the modal
             file_frame.open();
-          } );
-          
-          jQuery( '#default-image' ).click( function() {
+        } );
+        jQuery( '#default-image' ).click( function() {
             var deflt = jQuery( '#default-image' ).attr( 'data-default-image' );
             jQuery( '#bw-image' ).val( deflt );
-          } );
-          
-          jQuery( '#disable-image' ).click( function() {
+        } );
+        jQuery( '#disable-image' ).click( function() {
             var element = jQuery( '#disable-image' );
             var flag = jQuery( '#default-image' ).prop( 'disabled' );
             if ( flag ) {
@@ -93,9 +87,8 @@ jQuery( document ).ready( function() {
                 jQuery( '#disable-img' ).val( '0' );
                 element.val( 'Enable Image' );
             }
-          } );
+        } );
     }
-
     jQuery( '#wp_users_export' ).click( function() {
         var elem = jQuery( '#birthdays-export-button' );
         
@@ -105,7 +98,6 @@ jQuery( document ).ready( function() {
             elem.attr( 'href', elem.attr( 'data-orig-link' ) );
         }
     } );
-
     jQuery( '.opt_item' ).click( function() {
         /* Unselect all other items */
         jQuery( '.opt_item' ).removeClass( 'opt_item_selected' );
@@ -124,8 +116,7 @@ jQuery( document ).ready( function() {
         /* Select current radio button */
         var elm = jQuery( this ).find( 'input:first' );
         elm.prop( 'checked', true );
-      } );
-
+    } );
     jQuery( '.nav-tab-wrapper > a' ).click( function() {
         jQuery( '.fade' ).hide();
         jQuery( '.nav-tab-wrapper > a' ).removeClass( 'nav-tab-active' );
@@ -135,5 +126,4 @@ jQuery( document ).ready( function() {
         jQuery( item_clicked ).removeClass( 'ui-tabs-hide' );
         return false;
     } );
-
-});
+} );
