@@ -4,7 +4,7 @@
     Plugin URI: https://wordpress.org/plugins/birthdays-widget/
     Description: Birthdays widget plugin produces a widget which displays a customizable happy birthday image and wish to your clients/users.
     Author: lion2486, Sudavar
-    Version: 1.6.5
+    Version: 1.6.6
     Author URI: http://codescar.eu 
     Contributors: lion2486, Sudavar
     Tags: widget, birthdays, custom birthday list, WordPress User birthday, birthday calendar

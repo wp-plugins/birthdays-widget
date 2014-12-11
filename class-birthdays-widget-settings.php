@@ -9,7 +9,7 @@
     
         public function add_plugin_page() {
             add_menu_page( 'Birthdays Widget', 'Birthdays', 'read', 'birthdays-widget', array( &$this, 'create_plugin_page' ) );
-            add_submenu_page( 'birthdays-widget', 'Options', 'Options', 'manage_options', 'birthdays-widget-options', array( &$this, 'create_options_page' ) );
+            add_submenu_page( 'birthdays-widget', 'Options', 'Options', 'read', 'birthdays-widget-options', array( &$this, 'create_options_page' ) );
             add_submenu_page( 'birthdays-widget', 'Import', 'Import', 'read', 'birthdays-widget-import', array( &$this, 'create_submenu_page_import' ) );
             add_submenu_page( 'birthdays-widget', 'Export', 'Export', 'read', 'birthdays-widget-export', array( &$this, 'create_submenu_page_export' ) );
         }
@@ -44,7 +44,9 @@
         }
         
         public function create_options_page() {
-        ?>
+            if ( ! current_user_can( 'manage_options' ) && ! self::birthdays_user_edit() ) {
+                wp_die( __( 'You do not have sufficient permissions to access this page.', 'birthdays-widget' ) );
+            } ?>
         <div class="wrap">
             <div id="icon-edit" class="icon32"></div>
             <h2><?php _e( 'Birthdays Widget Options ', 'birthdays-widget' ); ?></h2>
@@ -337,7 +339,7 @@
         </div><?php
         }
 
-        public function birthday_get_filtered_meta( ) {
+        public function birthday_get_filtered_meta() {
             global $wpdb;
             $select = "SELECT distinct $wpdb->usermeta.meta_key FROM $wpdb->usermeta";
             $tmp = $wpdb->get_results( $select );
@@ -355,7 +357,7 @@
             return $meta_keys;
         }
 
-        public function birthdays_user_edit(){
+        public function birthdays_user_edit() {
             $current_user = wp_get_current_user();
             $birthdays_settings = get_option( 'birthdays_settings' );
             $birthdays_settings = maybe_unserialize( $birthdays_settings );
@@ -387,9 +389,9 @@
             echo '<div class="wrap">
                     <h2><div id="icon-options-general" class="icon32"></div>'.__( 'Birthdays Widget - List of Birthdays', 'birthdays-widget' ).
                         '<a href="#birthday_name" class="add-new-h2">'. __( 'Add New', 'birthdays-widget' ) .'</a>'.
-                        '<a href="#birthday_name" class="add-new-h2">'. __( 'Bottom', 'birthdays-widget' ) .'</a></h2>';
+                        '<a href="' . $setting_url . '&birthdays_delete_all=1" class="add-new-h2 delete_link">'. __( 'Delete All', 'birthdays-widget' ) .'</a></h2>';
 
-            if ( isset( $_POST[ 'birthdays_add_new' ] ) ) {
+            if ( isset( $_POST[ 'birthdays_add_new' ] ) && check_admin_referer( 'birthdays_add_form' ) ) {
                 if ( !isset( $_POST[ 'birthday_name' ] ) || empty( $_POST[ 'birthday_name' ] ) || !isset( $_POST[ 'birthday_date' ] ) || empty( $_POST[ 'birthday_date' ] )) {
                     ?><div id="message" class="error"><p><?php _e( 'Please fill all the boxes!', 'birthdays-widget' ); ?></p></div><?php
                 } else {
@@ -404,9 +406,17 @@
                 }
             }
 
-            if ( isset( $_GET[ 'action' ] ) && !isset($_POST[ 'birthdays_add_new']) ) {
+			if ( isset( $_GET[ 'birthdays_delete_all' ] ) ) {
+                //drop a custom db table
+				global $wpdb;
+				$table_name = $wpdb->prefix . "birthdays";
+				$sql = "TRUNCATE TABLE `$table_name`;" ;
+				$wpdb->query( $sql );
+            }
+
+            if ( isset( $_GET[ 'action' ] ) && !isset( $_POST[ 'birthdays_add_new'] ) ) {
                 if ( !isset( $_GET[ 'id' ] ) || empty( $_GET[ 'id' ] ) ) {
-                    //id is not set, some error must have occured
+                    //id is not set, some error must have occurred
                     ?><div id="message" class="error"><p><?php _e( 'There was an error!', 'birthdays-widget' ); ?></p></div><?php
                 } elseif ( $_GET[ 'action' ] == "delete" ) {
                     //delete the record
@@ -585,6 +595,7 @@
                             </td>
                             <td>
                                 <input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" />
+                                <?php wp_nonce_field( 'birthdays_add_form' ); ?>
                             </td>
                         </form></tr>
                     </tbody>
@@ -624,23 +635,26 @@
                             global $wpdb;
                             $table_name = $wpdb->prefix . "birthdays";
                             while( FALSE !== ( $data = fgetcsv( $handle, 1000, "," ) ) ) {
-                                if ( 2 != count( $data ) ) {
+                                if ( count( $data ) > 4 ) {
                                     _e( 'Wrong CSV format!<br />', 'birthdays-widget' );
                                     break;
                                 }
                                 $row++;
                                 $new_record[ 'name' ] = $data[ 0 ];
                                 $new_record[ 'date' ] = $data[ 1 ];
+                                $new_record[ 'email' ] = $data[ 2 ];
                                 //TODO maybe convert date format
                                 $wpdb->insert( 
                                             $table_name, 
                                             array( 
                                                 'name' => $new_record[ 'name'], 
-                                                'date' => $new_record[ 'date' ] 
+                                                'date' => $new_record[ 'date' ],
+                                                'email' => $new_record[ 'email' ]
                                             ), 
                                             array( 
                                                 '%s', 
-                                                '%s' 
+                                                '%s',
+                                                '%s'
                                             ));
                             }
                             fclose( $handle );

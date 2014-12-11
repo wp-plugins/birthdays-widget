@@ -4,7 +4,7 @@
         static function install() {
             global $wpdb;
             $table_name = $wpdb->prefix . "birthdays"; 
-            //dbDelta is responsible to alter the table if neccessary
+            //dbDelta is responsible to alter the table if necessary
             $sql = "CREATE TABLE `$table_name` (
                       id int(11) NOT NULL AUTO_INCREMENT,
                       name text NOT NULL,
