@@ -381,7 +381,7 @@
             wp_enqueue_style ( 'birthdays-table-css' );
             wp_enqueue_style ( 'birthdays-css' );
 
-            if ( ! current_user_can( 'manage_options' ) && ! self::birthdays_user_edit() ) {
+            if ( ! self::birthdays_user_edit() ) {
                 wp_die( __( 'You do not have sufficient permissions to access this page.', 'birthdays-widget' ) );
             }
 
@@ -579,7 +579,8 @@
                             $name_input = '<input type="text" name="birthday_name" id="birthday_name" value="" />';
                             $date_input = '<input type="text" name="birthday_date" id="birthday_date" value="" />';
                             $email_input = '<input type="email" name="birthday_email" value="" />';
-                            $image_input = '<input type="text" name="birthday_image" id="bw-image" class="upload_image_button" size="8" value="" />';
+                            $image_input = "<input name=\"image\" type=\"button\" class=\"button-primary upload_image_button\" value=\"Add\">".
+                                            '<input type="text" name="birthday_image" id="bw-image" class="upload_image_button" size="8" value="" />';
                         } ?>
                             <td>
                                 <?php echo $name_input; ?>
@@ -608,7 +609,7 @@
         }
 
         public function create_submenu_page_import() {
-            if ( ! current_user_can( 'manage_options' ) && ! self::birthdays_user_edit() ) {
+            if ( ! self::birthdays_user_edit() ) {
                 wp_die( __( 'You do not have sufficient permissions to access this page.', 'birthdays-widget' ) );
             } ?>
             <div class="wrap">
@@ -672,7 +673,7 @@
         }
         
         public function create_submenu_page_export() {
-            if ( ! current_user_can( 'manage_options' ) && ! self::birthdays_user_edit() ) {
+            if ( ! self::birthdays_user_edit() ) {
                 wp_die( __( 'You do not have sufficient permissions to access this page.', 'birthdays-widget' ) );
             }
             wp_enqueue_script( 'birthdays-script' );
