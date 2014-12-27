@@ -1,118 +1,381 @@
-# Copyright (C) 2013 
+# Copyright (C) 2014 
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/birthdays-widget\n"
-"POT-Creation-Date: 2013-11-28 13:52:11+00:00\n"
+"POT-Creation-Date: 2014-12-26 22:08:09+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2013-11-28 15:55+0200\n"
+"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"X-Generator: Poedit 1.5.7\n"
 
-#: birthday-widget.php:47
+#: birthday-widget.php:64 class-birthdays-widget.php:66
 msgid "Settings"
-msgstr "Ρυθμίσεις"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:55
-msgid "You do not have sufficient permissions to access this page."
-msgstr "Δεν έχεις δικαιώματα πρόσβασης σε αυτήν τη σελίδα."
+#: birthday-widget.php:93
+msgid "First Name"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:59
-msgid "Birthdays Widget Settings"
-msgstr "Ρυθμίσεις για το πρόσθετο Birthdays Widget"
+#: birthday-widget.php:96 birthday-widget.php:155
+msgid "User Birthday"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:60
-msgid "Add New"
-msgstr "Προσθήκη"
+#: birthday-widget.php:162
+msgid "Please enter user's birthday requested by birthdays widget"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:66
-#: class-birthdays-widget-settings.php:95
-msgid "Please fill all the boxes!"
-msgstr "Παρακαλώ συμπληρώστε όλα τα πεδία!"
-
-#: class-birthdays-widget-settings.php:71
-msgid "Your new record was added!"
-msgstr "Η εγγραφή προστέθηκε!"
-
-#: class-birthdays-widget-settings.php:79
-msgid "There was an error!"
-msgstr "Υπήρξε κάποιο σφάλμα!"
-
-#: class-birthdays-widget-settings.php:86
-msgid "The record was deleted!"
-msgstr "Η Εγγραφή διαγράφηκε!"
-
-#: class-birthdays-widget-settings.php:100
-msgid "The recoed was updated!"
-msgstr "Η Εγγραφή ενημερώθηκε!"
-
-#: class-birthdays-widget-settings.php:110
-#: class-birthdays-widget-settings.php:130
-#: class-birthdays-widget-settings.php:138
-#: class-birthdays-widget-settings.php:163
-msgid "Name"
-msgstr "Όνομα"
-
-#: class-birthdays-widget-settings.php:111
+#: class-birthdays-widget-installer.php:34
+#: class-birthdays-widget-installer.php:90
 #: class-birthdays-widget-settings.php:131
-#: class-birthdays-widget-settings.php:139
-#: class-birthdays-widget-settings.php:164
+msgid "Happy Birthday"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:48
+#: class-birthdays-widget-settings.php:385
+#: class-birthdays-widget-settings.php:613
+#: class-birthdays-widget-settings.php:677
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: class-birthdays-widget-settings.php:52
+msgid "Birthdays Widget Options "
+msgstr ""
+
+#: class-birthdays-widget-settings.php:136
+msgid "Options successfully updated."
+msgstr ""
+
+#: class-birthdays-widget-settings.php:147
+msgid "General settings"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:148
+msgid "WordPress User"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:149
+msgid "Image Settings"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:150
+msgid "Access"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:157
+#: class-birthdays-widget-settings.php:160
+msgid "Birthday \"wish\""
+msgstr ""
+
+#: class-birthdays-widget-settings.php:163
+msgid "Write your custom \"wish\""
+msgstr ""
+
+#: class-birthdays-widget-settings.php:169
+#: class-birthdays-widget-settings.php:172
+msgid "Fields in Registration Form"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:178
+msgid "Name and Birthday fields at WordPress User Registration Form"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:184
+#: class-birthdays-widget-settings.php:187
+msgid "Comma between names"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:193
+msgid ""
+"Select if you want comma (,) to be displayed between the names in widget"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:195
+msgid ""
+"If you want space between the names but no comma, consider adding a CSS rule "
+"to class "
+msgstr ""
+
+#: class-birthdays-widget-settings.php:210
+msgid "Birthday for WordPress Users"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:215
+msgid ""
+"Save birthday of WordPress Users in our table and show birthday field in "
+"WordPress Profile Page"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:220
+msgid "Draw birthday of WordPress Users from the "
+msgstr ""
+
+#: class-birthdays-widget-settings.php:228
+msgid " meta field of WordPress User Profile"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:233
+msgid "Disabled birthday field for WordPress Users"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:238
+#: class-birthdays-widget-settings.php:241
+msgid "Meta value as name"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:250
+msgid ""
+"Select which Wordpress User's meta value you like to be shown as name in "
+"widget"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:252
+msgid ""
+"Careful! The meta you select must be present in every WP User you set a "
+"birthday, otherwise nothing will be displayed."
+msgstr ""
+
+#: class-birthdays-widget-settings.php:259
+#: class-birthdays-widget-settings.php:262
+msgid "Gravatar's profile image"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:269
+msgid ""
+"If disabled images for WordPress Users will be handled with WordPress Media "
+"Manager."
+msgstr ""
+
+#: class-birthdays-widget-settings.php:284
+msgid "Select the image you want for the birthdays widget"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:288
+msgid "Select Image"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:290
+msgid "Default"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:293
+msgid "Disable Image"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:293
+msgid "Enable Image"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:296
+msgid "Leaving this field empty will revert to the default image."
+msgstr ""
+
+#: class-birthdays-widget-settings.php:301
+msgid "Set the width"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:304
+msgid "Set the width of "
+msgstr ""
+
+#: class-birthdays-widget-settings.php:306
+msgid "Widget's image"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:308
+msgid "Images in list template"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:319
+msgid ""
+"Here you can select which roles of your website can have access to page "
+"editing/viewing the birthday list."
+msgstr ""
+
+#: class-birthdays-widget-settings.php:328
+#: class-birthdays-widget-settings.php:598
+msgid "Save"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:333
+msgid "Plugin Version "
+msgstr ""
+
+#: class-birthdays-widget-settings.php:334
+msgid "<b>Shortcode</b> is also available for use in posts or pages: "
+msgstr ""
+
+#: class-birthdays-widget-settings.php:336
+msgid "You can either add it your self, "
+msgstr ""
+
+#: class-birthdays-widget-settings.php:337
+msgid "or you can click on our birthday button."
+msgstr ""
+
+#: class-birthdays-widget-settings.php:390
+msgid "Birthdays Widget - List of Birthdays"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:391
+msgid "Add New"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:392
+msgid "Delete All"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:396
+#: class-birthdays-widget-settings.php:432
+msgid "Please fill all the boxes!"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:402
+msgid "Your new record was added!"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:404
+msgid "Query error"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:420
+msgid "There was an error!"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:425
+msgid "The record was deleted!"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:439
+msgid "The record was updated!"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:459
+#: class-birthdays-widget-settings.php:527
+msgid "Name"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:460
+#: class-birthdays-widget-settings.php:528
 msgid "Date"
-msgstr "Ημερομηνία"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:112
-msgid "Update"
-msgstr "Ενημέρωση"
+#: class-birthdays-widget-settings.php:461
+#: class-birthdays-widget-settings.php:529
+msgid "Email"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:120
-msgid "All birthdays currenlty are"
-msgstr "Όλα τα γενέθλια αυτή τη στιγμή είναι"
+#: class-birthdays-widget-settings.php:462
+#: class-birthdays-widget-settings.php:530
+msgid "Image"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:132
-#: class-birthdays-widget-settings.php:140
+#: class-birthdays-widget-settings.php:463
+#: class-birthdays-widget-settings.php:531
 msgid "Action"
-msgstr "Ενέργεια"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:151
+#: class-birthdays-widget-settings.php:512
 msgid "Edit"
-msgstr "Επεξεργασία"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:151
+#: class-birthdays-widget-settings.php:513
 msgid "Delete"
-msgstr "Διαγραφή"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:165
-msgid "Add"
-msgstr "Προσθήκη"
+#: class-birthdays-widget-settings.php:539
+msgid "Editing"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:179
+#: class-birthdays-widget-settings.php:543
+msgid "New"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:607
 msgid "Are you sure you want to delete this record?"
-msgstr "Είσαι σίγουρος ότι θέλεις να διαγράψεις την εγγραφή;"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:199
-msgid "In order to download the export file press the button below"
-msgstr "Για να κατεβάσεις το αρχείο εξαγωγής πάτα το παρακάτω κουμπί"
+#: class-birthdays-widget-settings.php:616
+msgid "Import Birthday List Page"
+msgstr ""
 
-#: class-birthdays-widget-settings.php:200
+#: class-birthdays-widget-settings.php:617
+msgid ""
+"Here you can upload a CSV file with your own data or from a plugin-export."
+msgstr ""
+
+#: class-birthdays-widget-settings.php:618
+msgid ""
+"CSV must have format &lt;name&gt;,&lt;date&gt; where &lt;name&gt; a string "
+"and &lt;date&gt; as Y-m-D"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:621
+#: class-birthdays-widget-settings.php:633
+msgid "File"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:623
+msgid "Upload"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:633
+msgid " has been uploaded. "
+msgstr ""
+
+#: class-birthdays-widget-settings.php:640
+msgid "Wrong CSV format!<br />"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:662
+msgid " records inserted!"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:666
+msgid "There was an error uploading the file, please try again!"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:669
+msgid "Select a file first!"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:681
+msgid "Export Birthday List Page"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:682
+msgid "Export WordPress Users"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:683
+msgid "In order to download the export file press "
+msgstr ""
+
+#: class-birthdays-widget-settings.php:686
 msgid "Download"
-msgstr "Κατέβασμα"
+msgstr ""
 
 #: class-birthdays-widget.php:13
 msgid "Birthdays Widget"
-msgstr "Birthdays Widget"
+msgstr ""
 
 #: class-birthdays-widget.php:14
 msgid "Happy birthday widget"
-msgstr "Happy birthday widget"
+msgstr ""
 
-#: class-birthdays-widget.php:49
-msgid "Happy Birthday"
-msgstr "Χρόνια Πολλά"
+#: class-birthdays-widget.php:68
+msgid "Title"
+msgstr ""
 
-#: class-birthdays-widget.php:70
-msgid "Template:"
-msgstr "Template:"
+#: class-birthdays-widget.php:74
+msgid "Template"
+msgstr ""
+
+#: class-birthdays-widget.php:186
+msgid ""
+"Only one calendar template is available per page. Please check your widget "
+"and shortcode options."
+msgstr ""
