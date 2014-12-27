@@ -15,7 +15,7 @@
     License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-    define( 'BW', '1.6.5' );
+    define( 'BW', '1.6.7' );
     require_once dirname( __FILE__ ) . '/class-birthdays-widget.php';
     require_once dirname( __FILE__ ) . '/class-birthdays-widget-installer.php';
     require_once dirname( __FILE__ ) . '/class-birthdays-widget-settings.php';  
