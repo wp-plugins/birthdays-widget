@@ -74,6 +74,11 @@
                     } else {
                         $birthdays_settings[ 'comma' ] = 0;
                     }
+                    if ( isset( $_POST[ 'birthdays_user_age' ] ) && $_POST[ 'birthdays_user_age' ] != '0' ) {
+                        $birthdays_settings[ 'user_age' ] = 1;
+                    } else {
+                        $birthdays_settings[ 'user_age' ] = 0;
+                    }
                     if ( isset( $_POST[ 'birthdays_date_meta_field' ] ) ) {
                         $birthdays_settings[ 'date_meta_field' ] = $_POST[ 'birthdays_date_meta_field' ];
                     } else {
@@ -92,7 +97,7 @@
                             $birthdays_settings [ 'date_from_profile' ] = 0;
                             //TODO Maybe add a function to delete all WP User Birthdays saved in our table
                         } elseif ( $_POST[ 'birthdays_user_data' ] == 1 ) {
-                            /* Birthdays of WP Users are beign drawn from a WP User meta field specified by the user */
+                            /* Birthdays of WP Users are being drawn from a WP User meta field specified by the user */
                             $birthdays_settings[ 'profile_page' ] = 0;
                             $birthdays_settings [ 'date_from_profile' ] = 1;
                         } else {
@@ -125,10 +130,40 @@
                     } else {
                         $birthdays_settings[ 'image_enabled' ] = 0;
                     }
+                    if ( isset( $_POST[ 'birthdays_user_image_url' ] ) && !empty( $_POST[ 'birthdays_user_image_url' ] ) ) {
+                        $birthdays_settings[ 'user_image_url' ] = wp_strip_all_tags( $_POST[ 'birthdays_user_image_url' ] );
+                    } else {
+                        $birthdays_settings[ 'user_image_url' ] = plugins_url( '/images/default_user.png' , __FILE__ );
+                    }
+                    if ( isset( $_POST[ 'birthdays_enable_user_image' ] ) && !empty( $_POST[ 'birthdays_enable_user_image' ] ) ) {
+                        $birthdays_settings[ 'user_image_enabled' ] = 1;
+                    } else {
+                        $birthdays_settings[ 'user_image_enabled' ] = 0;
+                    }
                     if ( isset( $_POST[ 'birthdays_wish' ] ) && !empty( $_POST[ 'birthdays_wish' ] ) ) {
                         $birthdays_settings[ 'wish' ] = wp_strip_all_tags( $_POST[ 'birthdays_wish' ] );
                     } else {
                         $birthdays_settings[ 'wish' ] = __( 'Happy Birthday', 'birthdays-widget' );
+                    }
+                    if ( isset( $_POST[ 'color_current_day' ] ) && !empty( $_POST[ 'color_current_day' ] ) ) {
+                        $birthdays_settings[ 'color_current_day' ] = wp_strip_all_tags( $_POST[ 'color_current_day' ] );
+                    } else {
+                        $birthdays_settings[ 'color_current_day' ] = '#FF8000';
+                    }
+                    if ( isset( $_POST[ 'color_one' ] ) && !empty( $_POST[ 'color_one' ] ) ) {
+                        $birthdays_settings[ 'color_one' ] = wp_strip_all_tags( $_POST[ 'color_one' ] );
+                    } else {
+                        $birthdays_settings[ 'color_one' ] = '#2277cc';
+                    }
+                    if ( isset( $_POST[ 'color_two' ] ) && !empty( $_POST[ 'color_two' ] ) ) {
+                        $birthdays_settings[ 'color_two' ] = wp_strip_all_tags( $_POST[ 'color_two' ] );
+                    } else {
+                        $birthdays_settings[ 'color_two' ] = '#cc7722';
+                    }
+                    if ( isset( $_POST[ 'second_color' ] ) && !empty( $_POST[ 'second_color' ] ) ) {
+                        $birthdays_settings[ 'second_color' ] = 1;
+                    } else {
+                        $birthdays_settings[ 'second_color' ] = 0;
                     }
                     $saved_values = maybe_serialize( $birthdays_settings );
                     update_option( 'birthdays_settings', $saved_values );
@@ -141,13 +176,16 @@
                 $supported_roles = array();
                 foreach ( $sup_roles as $role ) {
                     $supported_roles[] = $role[ 'name' ];
-                } 
+                }
+                wp_enqueue_style( 'wp-color-picker' );
+                wp_enqueue_script( 'wp-color-picker' );
             ?>
             <h2 class="nav-tab-wrapper">
-                <a href="#birthdays-tab-general" class="nav-tab nav-tab-active"><?php _e( 'General settings', 'vertical-scroll-recent-post' ); ?></a>
-                <a href="#birthdays-tab-wp-user" class="nav-tab"><?php _e( 'WordPress User', 'vertical-scroll-recent-post' ); ?></a>
-                <a href="#birthdays-tab-image" class="nav-tab"><?php _e( 'Image Settings', 'vertical-scroll-recent-post' ); ?></a>
-                <a href="#birthdays-tab-access" class="nav-tab"><?php _e( 'Access', 'vertical-scroll-recent-post' ); ?></a>
+                <a href="#birthdays-tab-general" class="nav-tab nav-tab-active"><?php _e( 'General settings', 'birthdays-widget' ); ?></a>
+                <a href="#birthdays-tab-wp-user" class="nav-tab"><?php _e( 'WordPress User', 'birthdays-widget' ); ?></a>
+                <a href="#birthdays-tab-image" class="nav-tab"><?php _e( 'Image Settings', 'birthdays-widget' ); ?></a>
+                <a href="#birthdays-tab-access" class="nav-tab"><?php _e( 'Access', 'birthdays-widget' ); ?></a>
+                <a href="#birthdays-tab-calendar" class="nav-tab"><?php _e( 'Calendar', 'birthdays-widget' ); ?></a>
             </h2>
             <form name="birthdays_form" method="post" action="">
                 <div class="table" id="birthdays-tab-general">
@@ -195,6 +233,21 @@
                                             <?php _e( 'If you want space between the names but no comma, consider adding a CSS rule to class ', 'birthdays-widget' ); ?>
                                             <b>birthday_element</b>
                                         </span>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?php _e( 'Show User\'s age', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Show User\'s age', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="birthdays_user_age">
+                                        <select name="birthdays_user_age" id="birthdays_user_age">
+                                            <option value='1' <?php if ( $birthdays_settings[ 'user_age' ] == 1 ) echo "selected='selected'"; ?> >Yes</option>
+                                            <option value='0' <?php if ( $birthdays_settings[ 'user_age' ] == 0 ) echo "selected='selected'"; ?> >No</option>
+                                        </select>
+                                        <br /><?php _e( 'Select if you want age of Users to be displayed', 'birthdays-widget' ); ?>
                                     </label>
                                 </fieldset>
                             </td>
@@ -277,24 +330,68 @@
                 </div>
 
                 <div class="table ui-tabs-hide" id="birthdays-tab-image">
-                    <?php $widget_image = $birthdays_settings[ 'image_enabled' ]; ?>
+                    <?php 
+                        $widget_image = $birthdays_settings[ 'image_enabled' ]; 
+                        $user_image = $birthdays_settings[ 'user_image_enabled' ];
+                        if ( is_numeric( $birthdays_settings[ 'image_url' ] ) ) {
+                            $default_image_src = wp_get_attachment_image_src( $birthdays_settings[ 'image_url' ], 'medium' );
+                            $default_image_src = $default_image_src[ 0 ];
+                        } else {
+                            $default_image_src = $birthdays_settings[ 'image_url' ];
+                        }
+                        if ( is_numeric( $birthdays_settings[ 'user_image_url' ] ) ) {
+                            $default_user_image_src = wp_get_attachment_image_src( $birthdays_settings[ 'user_image_url' ], 'medium' );
+                            $default_user_image_src = $default_user_image_src[ 0 ];
+                        } else {
+                            $default_user_image_src = $birthdays_settings[ 'user_image_url' ];
+                        }
+                    ?>
                     <table class="form-table">
                         <tbody>
                         <tr>
-                            <th><?php _e( 'Select the image you want for the birthdays widget', 'birthdays-widget' ); ?></th>
+                            <th><?php _e( 'Select the image displayed on top of widget', 'birthdays-widget' ); ?></th>
                             <td>
-                                <input id="bw-image" type="text" size="20" name="birthdays_widget_image_url" value="<?php echo $birthdays_settings[ 'image_url' ]; ?>" 
-                                    <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> />
-                                <input id="select-image" name="image" type="button" class="button-primary upload_image_button" value="<?php _e( 'Select Image', 'birthdays-widget' ); ?>" 
-                                    <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> />
-                                <input id="default-image" name="default-image" type="button" class="button-primary" value="<?php _e( 'Default', 'birthdays-widget' ); ?>"
-                                    <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> data-default-image="<?php echo plugins_url( '/images/birthday_cake.png' , __FILE__ ); ?>" />
-                                <input id="disable-image" type="button" class="button-primary" value="
-                                    <?php echo ( $widget_image ) ? __( 'Disable Image', 'birthdays-widget' ) : __( 'Enable Image', 'birthdays-widget' ) ; ?>" />
-                                <input id="disable-img" name="birthdays_enable_image" type="hidden" value="<?php echo $widget_image; ?>" />
-                                <br /><span class="description">
-                                    <?php _e( 'Leaving this field empty will revert to the default image.', 'birthdays-widget' ); ?>
-                                </span>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Select the image displayed on top of widget', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="birthdays_widget_image_url">
+                                        <img id="birthdays_widget_image_preview" class="birthday_admin_image" src="<?php echo $default_image_src; ?>" alt="Default Widget Image" />
+                                        <input id="birthdays_widget_image" class="bw-image" type="hidden" size="20" name="birthdays_widget_image_url" value="<?php echo $birthdays_settings[ 'image_url' ]; ?>" 
+                                            <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> />
+                                        <input name="image" type="button" class="button-primary upload_image_button select-image" value="<?php _e( 'Select Image', 'birthdays-widget' ); ?>" 
+                                            <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> data-url-input="birthdays_widget_image" />
+                                        <input name="default-image" type="button" class="button-primary default-image" value="<?php _e( 'Default', 'birthdays-widget' ); ?>"
+                                            <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> data-default-image="<?php echo plugins_url( '/images/birthday_cake.png' , __FILE__ ); ?>" data-url-input="birthdays_widget_image" />
+                                        <input type="button" class="button-primary disable-image" value="
+                                            <?php echo ( $widget_image ) ? __( 'Disable Image', 'birthdays-widget' ) : __( 'Enable Image', 'birthdays-widget' ) ; ?>" />
+                                        <input class="disable-img" name="birthdays_enable_image" type="hidden" value="<?php echo $widget_image; ?>" />
+                                        <br /><span class="description">
+                                            <?php _e( 'Leaving this field empty will revert to the default image.', 'birthdays-widget' ); ?>
+                                        </span>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?php _e( 'Select default User image', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Select default User image', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="birthdays_user_image_url">
+                                        <img id="birthdays_user_image_preview" src="<?php echo $default_user_image_src; ?>" alt="Default User Image" class="birthday_admin_image" />
+                                        <input id="birthdays_user_image" class="bw-image" type="hidden" size="20" name="birthdays_user_image_url" value="<?php echo $birthdays_settings[ 'user_image_url' ]; ?>" 
+                                            <?php echo ( $user_image ) ? '' : 'disabled="disabled"' ; ?> />
+                                        <input name="image" type="button" class="button-primary upload_image_button select-image" value="<?php _e( 'Select Image', 'birthdays-widget' ); ?>" 
+                                            <?php echo ( $user_image ) ? '' : 'disabled="disabled"' ; ?> data-url-input="birthdays_user_image" />
+                                        <input name="default-image" type="button" class="button-primary default-image" value="<?php _e( 'Default', 'birthdays-widget' ); ?>"
+                                            <?php echo ( $user_image ) ? '' : 'disabled="disabled"' ; ?> data-default-image="<?php echo plugins_url( '/images/default_user.png' , __FILE__ ); ?>" data-url-input="birthdays_user_image" />
+                                        <input type="button" class="button-primary disable-image" value="
+                                            <?php echo ( $user_image ) ? __( 'Disable Image', 'birthdays-widget' ) : __( 'Enable Image', 'birthdays-widget' ) ; ?>" />
+                                        <input class="disable-img" name="birthdays_enable_user_image" type="hidden" value="<?php echo $user_image; ?>" />
+                                        <br /><span class="description">
+                                            <?php _e( 'Leaving this field empty will revert to the default image.', 'birthdays-widget' ); ?>
+                                        </span>
+                                    </label>
+                                </fieldset>
                             </td>
                         </tr>
                         <tr>
@@ -324,7 +421,71 @@
                     endforeach; ?>
                     <input type="hidden" name="birthdays_save" value="1" />
                 </div>
-
+                
+                <div class="table ui-tabs-hide" id="birthdays-tab-calendar">
+                    <table class="form-table">
+                        <tbody>
+                        <tr>
+                            <th><?php _e( 'Current Day Color', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Colour for birthdays in Calendar Widget', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="color_current_day">
+                                        <input name="color_current_day" type="text" value="<?php echo $birthdays_settings[ 'color_current_day' ]; ?>" class="color_field" 
+                                            data-default-color="#FF8000" />
+                                        <br /><?php _e( 'Select the color of current day in Calendar view of widget', 'birthdays-widget' ); ?>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?php _e( 'Calendar Color #1', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Calendar Color #1', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="color_one">
+                                        <input name="color_one" type="text" value="<?php echo $birthdays_settings[ 'color_one' ]; ?>" class="color_field" 
+                                            data-default-color="#2277cc" />
+                                        <br /><?php _e( 'Select the color of days marked with birthdays in Calendar view of widget', 'birthdays-widget' ); ?>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        <?php $sec_color = $birthdays_settings[ 'second_color' ]; ?>
+                        <tr>
+                            <th><?php _e( 'Second Color', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Second Color', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="second_color">
+                                        <select name="second_color" id="second_color">
+                                            <option value='1' <?php if ( $sec_color == 1 ) echo "selected='selected'"; ?> >Yes</option>
+                                            <option value='0' <?php if ( $sec_color == 0 ) echo "selected='selected'"; ?> >No</option>
+                                        </select>
+                                        <br /><?php _e( 'Select if you want the colors of days marked with birthdays to change', 'birthdays-widget' ); ?>
+                                        <br /><span class="description">
+                                            <?php _e( 'If you have consecutive days with birthdays and don\'t want the same color', 'birthdays-widget' ); ?>
+                                        </span>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        <tr <?php echo 'class="birthdays_hidden ' . ( ( !$sec_color ) ? 'hidden "' : ' "' ); ?> >
+                            <th><?php _e( 'Calendar Color #2', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Calendar Color #2', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="color_two">
+                                        <input name="color_two" type="text" value="<?php echo $birthdays_settings[ 'color_two' ]; ?>" class="color_field" 
+                                            data-default-color="#cc7722" id="color_two" />
+                                        <br /><?php _e( 'Select the second color to be displayed for consecutive days', 'birthdays-widget' ); ?>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <p><input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" /></p>
                 <?php wp_nonce_field( 'birthdays_form' ); ?>
             </form>               
@@ -501,12 +662,12 @@
                             }
                             echo '<tr>
                                     <td>' . $row->id . '</td>
-                                    <td>' . $row->name . '</td>
+                                    <td class="birthday_name">' . $row->name . '</td>
                                     <td>' . date_i18n( get_option( 'date_format' ), strtotime( $row->date ) ) . '</td>
                                     <td>' . $row->email . '</td>
                                     <td';
                             if ( $row->image ) {
-                                echo ' class="list-image"><a href="' . $row->image . '" target="_blank">' . $image_name . '</a';
+                                echo ' class="list-image birthday_name"><a href="' . $row->image . '" target="_blank">' . $image_name . '</a';
                             }
                             echo '></td>
                                     <td><a href="'. $setting_url .'&action=edit&id='. $row->id .'">'. __( 'Edit', 'birthdays-widget' ) .'</a> 
@@ -616,6 +777,7 @@
                 <h2><?php _e( 'Import Birthday List Page', 'birthdays-widget' ); ?></h2>
                 <p><?php _e( 'Here you can upload a CSV file with your own data or from a plugin-export.', 'birthdays-widget' ); ?><br />
                 <?php _e( 'CSV must have format &lt;name&gt;,&lt;date&gt; where &lt;name&gt; a string and &lt;date&gt; as Y-m-D', 'birthdays-widget' ); ?></p>
+                <span class="description"><?php _e( 'Make sure that the imported file is encoded in UTF-8.', 'birthdays-widget' ); ?></span>
                 <div class="wrap">
                     <form action="" method="POST" enctype="multipart/form-data">
                         <label for="uploadedfile"><?php _e( 'File', 'birthdays-widget' ); ?></label>
@@ -690,8 +852,12 @@
         }
 
         static function get_avatar_url( $id_or_email, $size ) {
-            $avatar = get_avatar( $id_or_email , $size );
-            preg_match( "/src='(.*?)'/i", $avatar, $matches );
-            return $matches[ 1 ];
+            $avatar = get_avatar( $id_or_email , $size, 'birthdays_def' );
+            preg_match( "/src=[\"'](.*?)[\"']/i", $avatar, $matches );
+            $str = substr( $matches[ 0 ], 5 );
+            $pos = strpos( $str, "d=birthdays_def" );
+            if( $pos != 0 )
+                $str = substr( $str, 0, $pos - 1 );
+            return $str;
         }
     }

@@ -39,13 +39,14 @@ jQuery( document ).ready( function() {
         } );
     }
     
-    if ( jQuery( '#bw-image' ).length >= 1 ) {
+    if ( jQuery( '.bw-image' ).length >= 1 ) {
         // Uploading files
         var file_frame;
         jQuery( '.upload_image_button' ).live( 'click', function( event ) {
             event.preventDefault();
             // If the media frame already exists, reopen it.
             if ( file_frame ) {
+                file_frame.url_input = jQuery( this ).attr( 'data-input' );
                 file_frame.open();
                 return;
             }
@@ -57,38 +58,51 @@ jQuery( document ).ready( function() {
                 },
                 multiple: false  // Set to true to allow multiple files to be selected
             });
+            file_frame.url_input = jQuery( this ).attr( 'data-url-input' );
             // When an image is selected, run a callback.
             file_frame.on( 'select', function() {
                 // We set multiple to false so only get one image from the uploader
                 attachment = file_frame.state().get('selection').first().toJSON();
                 // Do something with attachment.id and/or attachment.url here
-                jQuery( '#bw-image' ).val(attachment.id);
+                jQuery( '#'+file_frame.url_input ).val( attachment.id );
+                jQuery( '#'+file_frame.url_input+'_preview' ).attr( 'src', attachment.url );
             });
             // Finally, open the modal
             file_frame.open();
         } );
-        jQuery( '#default-image' ).click( function() {
-            var deflt = jQuery( '#default-image' ).attr( 'data-default-image' );
-            jQuery( '#bw-image' ).val( deflt );
+        jQuery( '.default-image' ).click( function() {
+            var deflt = jQuery( this ).attr( 'data-default-image' );
+            var url_input = jQuery( this ).attr( 'data-url-input' );
+            jQuery( '#'+url_input ).val( deflt );
+            jQuery( '#'+url_input+'_preview' ).attr( 'src', deflt );
+            //jQuery( this ).siblings( '.bw-image' ).val(  );
         } );
-        jQuery( '#disable-image' ).click( function() {
-            var element = jQuery( '#disable-image' );
-            var flag = jQuery( '#default-image' ).prop( 'disabled' );
+        jQuery( '.disable-image' ).click( function() {
+            var element = jQuery( this );
+            var flag = jQuery( this ).siblings( '.default-image' ).prop( 'disabled' );
             if ( flag ) {
-                jQuery( '#default-image' ).prop( 'disabled', false );
-                jQuery( '#bw-image' ).prop( 'disabled', false );
-                jQuery( '#select-image' ).prop( 'disabled', false );
-                jQuery( '#disable-img' ).val( '1' );
+                jQuery( this ).siblings( '.default-image' ).prop( 'disabled', false );
+                jQuery( this ).siblings( '.bw-image' ).prop( 'disabled', false );
+                jQuery( this ).siblings( '.select-image' ).prop( 'disabled', false );
+                jQuery( this ).siblings( '.disable-img' ).val( '1' );
                 element.val( 'Disable Image' );
             } else {
-                jQuery( '#bw-image' ).prop( 'disabled', true );
-                jQuery( '#default-image' ).prop( 'disabled', true );
-                jQuery( '#select-image' ).prop( 'disabled', true );
-                jQuery( '#disable-img' ).val( '0' );
+                jQuery( this ).siblings( '.bw-image' ).prop( 'disabled', true );
+                jQuery( this ).siblings( '.default-image' ).prop( 'disabled', true );
+                jQuery( this ).siblings( '.select-image' ).prop( 'disabled', true );
+                jQuery( this ).siblings( '.disable-img' ).val( '0' );
                 element.val( 'Enable Image' );
             }
         } );
     }
+    if ( jQuery( '.color_field' ).length >=1 ) {
+        jQuery( document ).ready( function($) {
+            $( '.color_field' ).wpColorPicker();
+        } );
+    }
+    jQuery( '#second_color' ).change( function() {
+        jQuery( '.birthdays_hidden' ).toggleClass( 'hidden' );
+    } );
     jQuery( '#wp_users_export' ).click( function() {
         var elem = jQuery( '#birthdays-export-button' );
         
@@ -126,4 +140,28 @@ jQuery( document ).ready( function() {
         jQuery( item_clicked ).removeClass( 'ui-tabs-hide' );
         return false;
     } );
+
+    if ( jQuery( '.birthdays-widget' ).length >= 1 ) {
+        jQuery( document ).tooltip( {
+            items: ".birthday_element",
+            content: function() {
+                var element = jQuery( 'a', this );
+                if ( element.length >= 1 ) {
+                    var str = '<img src="'+element.attr( 'href' )+'" alt="User\'s Image" style="width: 200px;" />';
+                    if ( element.attr( 'data-age' ) )
+                        str += '<br /><span class="birthday_age" >'+element.attr( 'data-age' )+'</span>';
+                    return str;
+                }
+            },
+            show: {
+                effect: "slideDown",
+                delay: 250
+            },
+            open: function (event, ui) {
+                ui.tooltip.addClass( 'birthday-list-tooltip' );
+            }
+        } );
+    }
 } );
+
+

@@ -4,7 +4,7 @@
     Plugin URI: https://wordpress.org/plugins/birthdays-widget/
     Description: Birthdays widget plugin produces a widget which displays a customizable happy birthday image and wish to your clients/users.
     Author: lion2486, Sudavar
-    Version: 1.6.7
+    Version: 1.6.8
     Author URI: http://codescar.eu 
     Contributors: lion2486, Sudavar
     Tags: widget, birthdays, custom birthday list, WordPress User birthday, birthday calendar
@@ -15,7 +15,7 @@
     License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-    define( 'BW', '1.6.7' );
+    define( 'BW', '1.6.8' );
     require_once dirname( __FILE__ ) . '/class-birthdays-widget.php';
     require_once dirname( __FILE__ ) . '/class-birthdays-widget-installer.php';
     require_once dirname( __FILE__ ) . '/class-birthdays-widget-settings.php';  
@@ -34,7 +34,7 @@
     }
     add_action( 'widgets_init', 'register_birthdays_widget' );
 
-    // register our scirpts
+    // register our scripts
     function birthdays_extra_files() {
         wp_register_script( 'birthdays-script', plugins_url( 'js/script.js', __FILE__ ), array( 'jquery' ), BW );
         wp_register_script( 'birthdays-cal', plugins_url( 'js/cal.js', __FILE__ ), array( 'jquery' ), BW );
@@ -118,6 +118,7 @@
 		add_action( 'profile_update', 'birthdays_widget_update_profile' );
 		add_action( 'edit_user_profile', 'birthdays_widget_usr_profile' );
 		add_action( 'show_user_profile', 'birthdays_widget_usr_profile' );
+        add_action( 'delete_user', 'birthdays_delete_user' );
     }    
 
 	//1. Add new element to profile page, user birthday field
@@ -196,6 +197,17 @@
             if ( $wpdb->query( $wpdb->prepare( $update_query, date( 'Y-m-d' , strtotime($value) ), $birth_user, $_POST[ 'birthday_id' ] ) ) != 1 )
                 echo '<div id="message" class="error"><p>Query error</p></div>';
         }
+    }
+    
+    //3. Remove WP user from our table upon delete of user
+    function birthdays_delete_user( $user_id ) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'birthdays';
+
+        $user_birthday_id = get_user_meta( $user_id, 'birthday_id' );
+        $delete_query = "DELETE FROM $table_name WHERE id = %d;";
+        if ( $wpdb->query( $wpdb->prepare( $delete_query, $user_birthday_id ) ) != 1 )
+            echo '<div id="message" class="error"><p>Query error</p></div>';
     }
 
     // Feature: Shortcode for birthdays in pages/posts

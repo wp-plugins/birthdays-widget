@@ -13,7 +13,18 @@
 }
 
 .birthday_element {
-    display: inline;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.birthday_name {
+    text-transform: capitalize;
+}
+
+.birthday_age {
+	font-style: italic;
+	font-size: smaller;
+    text-transform: none;
 }
 
 .opt_item {
@@ -54,7 +65,7 @@ ul.birthday_list > li {
     margin: 5% 0;
 }
 
-#bw-image {
+.bw-image {
     direction: rtl;
 }
 
@@ -72,9 +83,16 @@ ul.birthday_list > li {
     max-width: 210px;
     text-align: center;
     padding: 10px 10px 5px 10px;
+	background-color: white;
 }
 
-.birthdays_center{
+.birthday_center{
     text-align: center;
     margin: 3% 0 0 0;
+}
+
+.birthday_admin_image {
+    max-width: 30%;
+    display: block;
+    margin: 1% 0;
 }

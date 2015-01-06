@@ -31,7 +31,14 @@
                 'image_width' => '55%',
                 'list_image_width' => '20%',
                 'image_enabled' => '1',
+                'user_image_url' => plugins_url( '/images/default_user.png' , __FILE__ ),
+                'user_image_enabled' => '0',
+                'user_age' => '0',
                 'wish' => __( 'Happy Birthday', 'birthdays-widget' ),
+                'color_current_day' => '#FF8000',
+                'color_one' => '#2277cc',
+                'second_color' => '0',
+                'color_two' => '#cc7722',
                 'roles' => array( 'Administrator' => 'Administrator' )
                 );
             //if the plugin was installed, do not lose previous settings
