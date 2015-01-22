@@ -158,7 +158,7 @@ class Birthdays_Widget extends WP_Widget {
                     }
                 }
                 //If user has no image, set the default
-                if ( !isset( $row->image ) || empty( $row->image ) ) {
+                if ( ( !isset( $row->image ) || empty( $row->image ) ) && $birthdays_settings[ 'user_image_enabled' ] ) {
                     $row->image = $default_user_image_src;
                 }
                 array_push( $filtered, $row );

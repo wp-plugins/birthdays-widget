@@ -210,8 +210,8 @@
                                     <legend class="screen-reader-text"><span><?php _e( 'Fields in Registration Form', 'birthdays-widget' ); ?></span></legend>
                                     <label for="birthdays_register_form">
                                         <select name="birthdays_register_form" id="birthdays_register_form">
-                                            <option value='1' <?php if ( $birthdays_settings[ 'register_form' ] == 1 ) echo "selected='selected'"; ?> >Yes</option>
-                                            <option value='0' <?php if ( $birthdays_settings[ 'register_form' ] == 0 ) echo "selected='selected'"; ?> >No</option>
+                                            <option value='1' <?php if ( $birthdays_settings[ 'register_form' ] == 1 ) echo "selected='selected'"; ?> ><?php _e( 'Yes' , 'birthdays-widget' ); ?></option>
+                                            <option value='0' <?php if ( $birthdays_settings[ 'register_form' ] == 0 ) echo "selected='selected'"; ?> ><?php _e( 'No' , 'birthdays-widget' ); ?></option>
                                         </select>
                                         <br /><?php _e( 'Name and Birthday fields at WordPress User Registration Form', 'birthdays-widget' ); ?>
                                     </label>
@@ -225,8 +225,8 @@
                                     <legend class="screen-reader-text"><span><?php _e( 'Comma between names', 'birthdays-widget' ); ?></span></legend>
                                     <label for="birthdays_comma">
                                         <select name="birthdays_comma" id="birthdays_comma">
-                                            <option value='1' <?php if ( $birthdays_settings[ 'comma' ] == 1 ) echo "selected='selected'"; ?> >Yes</option>
-                                            <option value='0' <?php if ( $birthdays_settings[ 'comma' ] == 0 ) echo "selected='selected'"; ?> >No</option>
+                                            <option value='1' <?php if ( $birthdays_settings[ 'comma' ] == 1 ) echo "selected='selected'"; ?> ><?php _e( 'Yes' , 'birthdays-widget' ); ?></option>
+                                            <option value='0' <?php if ( $birthdays_settings[ 'comma' ] == 0 ) echo "selected='selected'"; ?> ><?php _e( 'No' , 'birthdays-widget' ); ?></option>
                                         </select>
                                         <br /><?php _e( 'Select if you want comma (,) to be displayed between the names in widget', 'birthdays-widget' ); ?>
                                         <br /><span class="description">
@@ -244,8 +244,8 @@
                                     <legend class="screen-reader-text"><span><?php _e( 'Show User\'s age', 'birthdays-widget' ); ?></span></legend>
                                     <label for="birthdays_user_age">
                                         <select name="birthdays_user_age" id="birthdays_user_age">
-                                            <option value='1' <?php if ( $birthdays_settings[ 'user_age' ] == 1 ) echo "selected='selected'"; ?> >Yes</option>
-                                            <option value='0' <?php if ( $birthdays_settings[ 'user_age' ] == 0 ) echo "selected='selected'"; ?> >No</option>
+                                            <option value='1' <?php if ( $birthdays_settings[ 'user_age' ] == 1 ) echo "selected='selected'"; ?> ><?php _e( 'Yes' , 'birthdays-widget' ); ?></option>
+                                            <option value='0' <?php if ( $birthdays_settings[ 'user_age' ] == 0 ) echo "selected='selected'"; ?> ><?php _e( 'No' , 'birthdays-widget' ); ?></option>
                                         </select>
                                         <br /><?php _e( 'Select if you want age of Users to be displayed', 'birthdays-widget' ); ?>
                                     </label>
@@ -315,8 +315,8 @@
                                     <legend class="screen-reader-text"><span><?php _e( 'Gravatar\'s profile image', 'birthdays-widget' ); ?></span></legend>
                                     <label for="wp_user_gravatar">
                                         <select name="wp_user_gravatar">
-                                            <option value="1" <?php echo ( $birthdays_settings[ 'wp_user_gravatar' ] == 1 ) ? "selected=\"selected\"" : ''; ?> >Enabled</option>
-                                            <option value="0" <?php echo ( $birthdays_settings[ 'wp_user_gravatar' ] == 0 ) ? "selected=\"selected\"" : ''; ?> >Disabled</option>
+                                            <option value="1" <?php echo ( $birthdays_settings[ 'wp_user_gravatar' ] == 1 ) ? "selected=\"selected\"" : ''; ?> ><?php _e( 'Enabled' , 'birthdays-widget' ); ?></option>
+                                            <option value="0" <?php echo ( $birthdays_settings[ 'wp_user_gravatar' ] == 0 ) ? "selected=\"selected\"" : ''; ?> ><?php _e( 'Disabled' , 'birthdays-widget' ); ?></option>
                                         </select>
                                         <br /><span class="description">
                                             <?php _e( 'If disabled images for WordPress Users will be handled with WordPress Media Manager.', 'birthdays-widget' ); ?>
@@ -345,7 +345,11 @@
                         } else {
                             $default_user_image_src = $birthdays_settings[ 'user_image_url' ];
                         }
+                        $disabled_txt = __( 'Disabled', 'birthdays-widget' );
+                        $enabled_txt = __( 'Enabled', 'birthdays-widget' );
                     ?>
+                    <span class="hidden" id="disabled_txt" ><?php echo $disabled_txt; ?></span>
+                    <span class="hidden" id="enabled_txt" ><?php echo $enabled_txt; ?></span>
                     <table class="form-table">
                         <tbody>
                         <tr>
@@ -362,7 +366,7 @@
                                         <input name="default-image" type="button" class="button-primary default-image" value="<?php _e( 'Default', 'birthdays-widget' ); ?>"
                                             <?php echo ( $widget_image ) ? '' : 'disabled="disabled"' ; ?> data-default-image="<?php echo plugins_url( '/images/birthday_cake.png' , __FILE__ ); ?>" data-url-input="birthdays_widget_image" />
                                         <input type="button" class="button-primary disable-image" value="
-                                            <?php echo ( $widget_image ) ? __( 'Disable Image', 'birthdays-widget' ) : __( 'Enable Image', 'birthdays-widget' ) ; ?>" />
+                                            <?php echo ( $widget_image ) ? $disabled_txt : $enabled_txt ; ?>" />
                                         <input class="disable-img" name="birthdays_enable_image" type="hidden" value="<?php echo $widget_image; ?>" />
                                         <br /><span class="description">
                                             <?php _e( 'Leaving this field empty will revert to the default image.', 'birthdays-widget' ); ?>
@@ -385,7 +389,7 @@
                                         <input name="default-image" type="button" class="button-primary default-image" value="<?php _e( 'Default', 'birthdays-widget' ); ?>"
                                             <?php echo ( $user_image ) ? '' : 'disabled="disabled"' ; ?> data-default-image="<?php echo plugins_url( '/images/default_user.png' , __FILE__ ); ?>" data-url-input="birthdays_user_image" />
                                         <input type="button" class="button-primary disable-image" value="
-                                            <?php echo ( $user_image ) ? __( 'Disable Image', 'birthdays-widget' ) : __( 'Enable Image', 'birthdays-widget' ) ; ?>" />
+                                            <?php echo ( $user_image ) ? $disabled_txt : $enabled_txt ; ?>" />
                                         <input class="disable-img" name="birthdays_enable_user_image" type="hidden" value="<?php echo $user_image; ?>" />
                                         <br /><span class="description">
                                             <?php _e( 'Leaving this field empty will revert to the default image.', 'birthdays-widget' ); ?>
@@ -459,8 +463,8 @@
                                     <legend class="screen-reader-text"><span><?php _e( 'Second Color', 'birthdays-widget' ); ?></span></legend>
                                     <label for="second_color">
                                         <select name="second_color" id="second_color">
-                                            <option value='1' <?php if ( $sec_color == 1 ) echo "selected='selected'"; ?> >Yes</option>
-                                            <option value='0' <?php if ( $sec_color == 0 ) echo "selected='selected'"; ?> >No</option>
+                                            <option value='1' <?php if ( $sec_color == 1 ) echo "selected='selected'"; ?> ><?php _e( 'Yes' , 'birthdays-widget' ); ?></option>
+                                            <option value='0' <?php if ( $sec_color == 0 ) echo "selected='selected'"; ?> ><?php _e( 'No' , 'birthdays-widget' ); ?></option>
                                         </select>
                                         <br /><?php _e( 'Select if you want the colors of days marked with birthdays to change', 'birthdays-widget' ); ?>
                                         <br /><span class="description">
@@ -733,15 +737,23 @@
                             if ( $birthdays_settings[ 'wp_user_gravatar' ] && $wp_usr !== false ) {
                                 $image_input = "<input type=\"text\" name=\"birthday_image\" value=\"Gravatar\" disabled=\"disabled\" />";
                             } else {
-                                $image_input = "<input name=\"image\" type=\"button\" class=\"button-primary upload_image_button\" value=\"Add\">".
-                                    "<input type=\"text\" name=\"birthday_image\" id=\"bw-image\" class=\"upload_image_button\" value=\"" . $result->image . "\" size=\"8\" />";
+                                if ( is_numeric( $result->image ) ) {
+                                    $img = wp_get_attachment_image_src( $result->image, 'medium' );
+                                    $img = $img[ 0 ];
+                                } else {
+                                    $img = $birthdays_settings[ 'user_image_url' ];
+                                }                                
+                                $image_input = '<img id="birthdays_user_image_preview" class="birthday_admin_edit_image" src="' . $img . '" alt="User Image" />'.
+                                    '<input name="image" type="button" class="button-primary upload_image_button" value="' . __( 'Add', 'birthdays-widget' ) . '" data-url-input="birthdays_user_image" >'.
+                                    '<input type="hidden" name="birthday_image" id="birthdays_user_image" class="upload_image_button bw-image" value="' . $result->image . '" />';
                             }
                         } else {
                             $name_input = '<input type="text" name="birthday_name" id="birthday_name" value="" />';
                             $date_input = '<input type="text" name="birthday_date" id="birthday_date" value="" />';
                             $email_input = '<input type="email" name="birthday_email" value="" />';
-                            $image_input = "<input name=\"image\" type=\"button\" class=\"button-primary upload_image_button\" value=\"Add\">".
-                                            '<input type="text" name="birthday_image" id="bw-image" class="upload_image_button" size="8" value="" />';
+                            $image_input = '<img id="birthdays_user_image_preview" class="birthday_admin_edit_image" src="' . $birthdays_settings[ 'user_image_url' ] . '" alt="User Image" />'.
+                                           '<input name="image" type="button" class="button-primary upload_image_button" value="' . __( 'Add', 'birthdays-widget' ) . '" data-url-input="birthdays_user_image" >'.
+                                           '<input type="hidden" id="birthdays_user_image" name="birthday_image" class="upload_image_button bw-image" value="" />';
                         } ?>
                             <td>
                                 <?php echo $name_input; ?>

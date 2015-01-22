@@ -80,22 +80,24 @@ jQuery( document ).ready( function() {
         jQuery( '.disable-image' ).click( function() {
             var element = jQuery( this );
             var flag = jQuery( this ).siblings( '.default-image' ).prop( 'disabled' );
+            var disabled = jQuery( '#disabled_txt' ).html();
+            var enabled = jQuery( '#enabled_txt' ).html();
             if ( flag ) {
                 jQuery( this ).siblings( '.default-image' ).prop( 'disabled', false );
                 jQuery( this ).siblings( '.bw-image' ).prop( 'disabled', false );
                 jQuery( this ).siblings( '.select-image' ).prop( 'disabled', false );
                 jQuery( this ).siblings( '.disable-img' ).val( '1' );
-                element.val( 'Disable Image' );
+                element.val( disabled );
             } else {
                 jQuery( this ).siblings( '.bw-image' ).prop( 'disabled', true );
                 jQuery( this ).siblings( '.default-image' ).prop( 'disabled', true );
                 jQuery( this ).siblings( '.select-image' ).prop( 'disabled', true );
                 jQuery( this ).siblings( '.disable-img' ).val( '0' );
-                element.val( 'Enable Image' );
+                element.val( enabled );
             }
         } );
     }
-    if ( jQuery( '.color_field' ).length >=1 ) {
+    if ( jQuery( '.color_field' ).length >= 1 ) {
         jQuery( document ).ready( function($) {
             $( '.color_field' ).wpColorPicker();
         } );

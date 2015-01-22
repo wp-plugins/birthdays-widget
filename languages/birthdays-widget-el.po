@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Birthdays Widget WordPress\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-06 12:49+0000\n"
-"PO-Revision-Date: 2015-01-06 13:00+0000\n"
+"PO-Revision-Date: 2015-01-21 22:22+0000\n"
 "Last-Translator: Yury Kherimyan\n"
 "Language-Team: Sudavar\n"
 "Language: Greek\n"
@@ -101,6 +101,10 @@ msgstr "Τίτλος"
 msgid "Upload"
 msgstr "Μεταφόρτωση"
 
+#: loco:54c01ab414d725cb1c8b4570
+msgid "Add"
+msgstr "Προσθήκη"
+
 #: class-birthdays-widget-settings.php:391 loco:54abd9d314d7255e5c8b45a3
 msgid "Add New"
 msgstr "Προσθήκη "
@@ -178,6 +182,10 @@ msgstr "Διαγραφή Όλων"
 msgid "Disable Image"
 msgstr "Απενεργοποίηση Εικόνας"
 
+#: loco:54c01ace14d725611c8b456f
+msgid "Disabled"
+msgstr "Απενεργοποίηση"
+
 #: class-birthdays-widget-settings.php:233 loco:54abd9d314d7255e5c8b4581
 msgid "Disabled birthday field for WordPress Users"
 msgstr "Απενεργοποίηση γενεθλίων για τους WordPress Χρήστες"
@@ -189,6 +197,10 @@ msgstr "Για τα γενέθλια των WordPress Χρηστών, χρήση
 #: class-birthdays-widget-settings.php:293 loco:54abd9d314d7255e5c8b458b
 msgid "Enable Image"
 msgstr "Ενεργοποίηση Εικόνας"
+
+#: loco:54c01acb14d725cb1c8b4572
+msgid "Enabled"
+msgstr "Ενεργοποίηση"
 
 #: class-birthdays-widget-settings.php:681 loco:54abd9d314d7255e5c8b45c0
 msgid "Export Birthday List Page"
@@ -300,6 +312,10 @@ msgstr "Τιμή ειδικού πεδίου για όνομα Χρήστη"
 #: class-birthdays-widget-settings.php:178 loco:54abd9d314d7255e5c8b4577
 msgid "Name and Birthday fields at WordPress User Registration Form"
 msgstr "Όνομα και Ημερομηνία Γενεθλίων Χρήστη στη Φόρμα Εγγραφής Χρήστη"
+
+#: loco:54c01ad514d725a21c8b456d
+msgid "No"
+msgstr "Όχι"
 
 #: class-birthdays-widget.php:186 loco:54abd9d314d7255e5c8b45c9
 msgid ""
@@ -446,7 +462,7 @@ msgstr "Γενέθλια Χρήστη"
 
 #: class-birthdays-widget-settings.php:306 loco:54abd9d314d7255e5c8b4590
 msgid "Widget's image"
-msgstr "εικόνας του Widget"
+msgstr "Εικόνας του Widget"
 
 #: class-birthdays-widget-settings.php:148 loco:54abd9d314d7255e5c8b4570
 msgid "WordPress User"
@@ -464,6 +480,10 @@ msgstr "Λάθος μορφοποίηση του αρχείου CSV<br />"
 #: class-birthdays-widget.php:267 loco:54abd9d314d7255e5c8b45c8
 msgid "years old"
 msgstr "χρονών"
+
+#: loco:54c01ad214d725821c8b456c
+msgid "Yes"
+msgstr "Ναι"
 
 #: class-birthdays-widget-settings.php:336 loco:54abd9d314d7255e5c8b45a0
 msgid "You can either add it your self, "

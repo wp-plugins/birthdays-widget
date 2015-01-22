@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Birthdays Widget WordPress\n"
 "Report-Msgid-Bugs-To: Yury Kherimyan\n"
-"POT-Creation-Date: 2015-01-06 13:02+0000\n"
+"POT-Creation-Date: 2015-01-21 22:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -102,6 +102,10 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
+#: loco:54c01ab414d725cb1c8b4570
+msgid "Add"
+msgstr ""
+
 #: class-birthdays-widget-settings.php:391 loco:54abd9d314d7255e5c8b45a3
 msgid "Add New"
 msgstr ""
@@ -174,6 +178,10 @@ msgstr ""
 msgid "Disable Image"
 msgstr ""
 
+#: loco:54c01ace14d725611c8b456f
+msgid "Disabled"
+msgstr ""
+
 #: class-birthdays-widget-settings.php:233 loco:54abd9d314d7255e5c8b4581
 msgid "Disabled birthday field for WordPress Users"
 msgstr ""
@@ -184,6 +192,10 @@ msgstr ""
 
 #: class-birthdays-widget-settings.php:293 loco:54abd9d314d7255e5c8b458b
 msgid "Enable Image"
+msgstr ""
+
+#: loco:54c01acb14d725cb1c8b4572
+msgid "Enabled"
 msgstr ""
 
 #: class-birthdays-widget-settings.php:681 loco:54abd9d314d7255e5c8b45c0
@@ -287,6 +299,10 @@ msgstr ""
 
 #: class-birthdays-widget-settings.php:178 loco:54abd9d314d7255e5c8b4577
 msgid "Name and Birthday fields at WordPress User Registration Form"
+msgstr ""
+
+#: loco:54c01ad514d725a21c8b456d
+msgid "No"
 msgstr ""
 
 #: class-birthdays-widget.php:186 loco:54abd9d314d7255e5c8b45c9
@@ -443,6 +459,10 @@ msgstr ""
 #: class-birthdays-widget.php:183 class-birthdays-widget.php:195
 #: class-birthdays-widget.php:267 loco:54abd9d314d7255e5c8b45c8
 msgid "years old"
+msgstr ""
+
+#: loco:54c01ad214d725821c8b456c
+msgid "Yes"
 msgstr ""
 
 #: class-birthdays-widget-settings.php:336 loco:54abd9d314d7255e5c8b45a0
