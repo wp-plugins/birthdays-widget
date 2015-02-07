@@ -74,10 +74,10 @@ class Birthdays_Widget extends WP_Widget {
                 <span><?php _e( 'Template', 'birthdays-widget' ); ?></span>
                 <select id="<?php echo $this->get_field_id( 'template' ); ?>" 
                         name="<?php echo $this->get_field_name( 'template' ); ?>">
-                    <option value="0" <?php if ( $instance[ 'template' ] == 0 ) echo "selected='selected'"; ?>>Default</option>
-                    <option value="1" <?php if ( $instance[ 'template' ] == 1 ) echo "selected='selected'"; ?>>List</option>
-                    <option value="2" <?php if ( $instance[ 'template' ] == 2 ) echo "selected='selected'"; ?>>Calendar</option>
-                    <option value="3" <?php if ( $instance[ 'template' ] == 3 ) echo "selected='selected'"; ?>>Upcoming</option>
+                    <option value="0" <?php if ( $instance[ 'template' ] == 0 ) echo "selected='selected'"; ?>><?php _e( 'Default', 'birthdays-widget' ); ?></option>
+                    <option value="1" <?php if ( $instance[ 'template' ] == 1 ) echo "selected='selected'"; ?>><?php _e( 'List', 'birthdays-widget' ); ?></option>
+                    <option value="2" <?php if ( $instance[ 'template' ] == 2 ) echo "selected='selected'"; ?>><?php _e( 'Calendar', 'birthdays-widget' ); ?></option>
+                    <option value="3" <?php if ( $instance[ 'template' ] == 3 ) echo "selected='selected'"; ?>><?php _e( 'Upcoming', 'birthdays-widget' ); ?></option>
                 </select>
             </label>
         </fieldset></p>

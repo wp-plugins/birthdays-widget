@@ -8,10 +8,10 @@
         }
     
         public function add_plugin_page() {
-            add_menu_page( 'Birthdays Widget', 'Birthdays', 'read', 'birthdays-widget', array( &$this, 'create_plugin_page' ) );
-            add_submenu_page( 'birthdays-widget', 'Options', 'Options', 'read', 'birthdays-widget-options', array( &$this, 'create_options_page' ) );
-            add_submenu_page( 'birthdays-widget', 'Import', 'Import', 'read', 'birthdays-widget-import', array( &$this, 'create_submenu_page_import' ) );
-            add_submenu_page( 'birthdays-widget', 'Export', 'Export', 'read', 'birthdays-widget-export', array( &$this, 'create_submenu_page_export' ) );
+            add_menu_page( 'Birthdays Widget', __( 'Birthdays', 'birthdays-widget' ), 'read', 'birthdays-widget', array( &$this, 'create_plugin_page' ) );
+            add_submenu_page( 'birthdays-widget', __( 'Options', 'birthdays-widget' ), __( 'Options', 'birthdays-widget' ), 'read', 'birthdays-widget-options', array( &$this, 'create_options_page' ) );
+            add_submenu_page( 'birthdays-widget', __( 'Import', 'birthdays-widget' ), __( 'Import', 'birthdays-widget' ), 'read', 'birthdays-widget-import', array( &$this, 'create_submenu_page_import' ) );
+            add_submenu_page( 'birthdays-widget', __( 'Export', 'birthdays-widget' ), __( 'Export', 'birthdays-widget' ), 'read', 'birthdays-widget-export', array( &$this, 'create_submenu_page_export' ) );
         }
     
         public function sanitize( $input ) {
