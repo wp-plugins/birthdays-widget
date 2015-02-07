@@ -2,9 +2,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Birthdays Widget WordPress\n"
+"Project-Id-Version: WordPress Related Translations\n"
 "Report-Msgid-Bugs-To: Yury Kherimyan\n"
-"POT-Creation-Date: 2015-01-21 22:22+0000\n"
+"POT-Creation-Date: 2015-02-07 19:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -16,466 +16,549 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Loco https://localise.biz\n"
 "X-Loco-Source-Locale: en_US\n"
-"X-Loco-Project-Id: 4857\n"
+"X-Loco-Project-Id: 5341\n"
+"X-Loco-Tagged: Birthdays Widget Plugin\n"
 "X-Loco-Api-Version: 1.0.8"
 
-#: class-birthdays-widget-settings.php:150 loco:54abd9d314d7255e5c8b4572
+#: class-birthdays-widget-settings.php:210 loco:54d11fa214d725d25b8b4567
 msgid "Access"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:463
-#: class-birthdays-widget-settings.php:531 loco:54abd9d314d7255e5c8b45af
+#: class-birthdays-widget-settings.php:704
+#: class-birthdays-widget-settings.php:772 loco:54d11fa214d725d25b8b4568
 msgid "Action"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:188 loco:54abd9d314d7255e5c8b4573
-msgid "Calendar"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:460
-#: class-birthdays-widget-settings.php:528 loco:54abd9d314d7255e5c8b45ac
-msgid "Date"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:290 loco:54abd9d314d7255e5c8b4589
-msgid "Default"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:513 loco:54abd9d314d7255e5c8b45b1
-msgid "Delete"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:686 loco:54abd9d314d7255e5c8b45c3
-msgid "Download"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:512 loco:54abd9d314d7255e5c8b45b0
-msgid "Edit"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:539 loco:54abd9d314d7255e5c8b45b2
-msgid "Editing"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:461
-#: class-birthdays-widget-settings.php:529 loco:54abd9d314d7255e5c8b45ad
-msgid "Email"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:621
-#: class-birthdays-widget-settings.php:633 loco:54abd9d314d7255e5c8b45b9
-msgid "File"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:462
-#: class-birthdays-widget-settings.php:530 loco:54abd9d314d7255e5c8b45ae
-msgid "Image"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:459
-#: class-birthdays-widget-settings.php:527 loco:54abd9d314d7255e5c8b45ab
-msgid "Name"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:543 loco:54abd9d314d7255e5c8b45b3
-msgid "New"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:328
-#: class-birthdays-widget-settings.php:598 loco:54abd9d314d7255e5c8b459d
-msgid "Save"
-msgstr ""
-
-#: birthday-widget.php:64 class-birthdays-widget.php:66 loco:#: 54abd9d314d7255e5c8b4567
-msgid "Settings"
-msgstr ""
-
-#: class-birthdays-widget.php:74 loco:54abd9d314d7255e5c8b45c7
-msgid "Template"
-msgstr ""
-
-#: class-birthdays-widget.php:68 loco:54abd9d314d7255e5c8b45c6
-msgid "Title"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:623 loco:54abd9d314d7255e5c8b45ba
-msgid "Upload"
-msgstr ""
-
-#: loco:54c01ab414d725cb1c8b4570
+#: loco:54d11fa214d725d25b8b4576
 msgid "Add"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:391 loco:54abd9d314d7255e5c8b45a3
+#: class-birthdays-widget-settings.php:11 loco:54d6608214d725f90a8b4567
+msgid "Birthdays"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:211 class-birthdays-widget.php:79 loco:#: 54d11fa214d725d25b8b4569
+msgid "Calendar"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:701
+#: class-birthdays-widget-settings.php:769 loco:54d11fa214d725d25b8b456a
+msgid "Date"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:754 loco:54d11fa214d725d25b8b456b
+msgid "Delete"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:343
+#: class-birthdays-widget-settings.php:372 loco:54d11fa214d725d25b8b4587
+msgid "Disabled"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:936 loco:54d11fa214d725d25b8b456c
+msgid "Download"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:780 loco:54d11fa214d725d25b8b456d
+msgid "Editing"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:702
+#: class-birthdays-widget-settings.php:770 loco:54d11fa214d725d25b8b456e
+msgid "Email"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:342
+#: class-birthdays-widget-settings.php:373 loco:54d11fa214d725d25b8b458b
+msgid "Enabled"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:14 loco:54d6608214d725f90a8b4569
+msgid "Export"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:871
+#: class-birthdays-widget-settings.php:883 loco:54d11fa214d725d25b8b456f
+msgid "File"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:703
+#: class-birthdays-widget-settings.php:771 loco:54d11fa214d725d25b8b4570
+msgid "Image"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:13 loco:54d6608214d725f90a8b4568
+msgid "Import"
+msgstr ""
+
+#: class-birthdays-widget.php:78 loco:54d6608214d725f90a8b456a
+msgid "List"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:522
+#: class-birthdays-widget-settings.php:525 loco:54d65b3714d725c2098b4568
+msgid "Mode"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:700
+#: class-birthdays-widget-settings.php:768 loco:54d11fa214d725d25b8b4571
+msgid "Name"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:784 loco:54d11fa214d725d25b8b4572
+msgid "New"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:569
+#: class-birthdays-widget-settings.php:847 loco:54d11fa214d725d25b8b4573
+msgid "Save"
+msgstr ""
+
+#: class-birthdays-widget.php:74 loco:54d11fa214d725d25b8b4574
+msgid "Template"
+msgstr ""
+
+#: class-birthdays-widget.php:68 loco:54d11fa214d725d25b8b4575
+msgid "Title"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:212 class-birthdays-widget.php:80 loco:#: 54d65b3714d725c2098b4567
+msgid "Upcoming"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:632 loco:54d11fa214d725d25b8b4577
 msgid "Add New"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:607 loco:54abd9d314d7255e5c8b45b4
+#: class-birthdays-widget-settings.php:856 loco:54d11fa214d725d25b8b4578
 msgid "Are you sure you want to delete this record?"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:210 loco:54abd9d314d7255e5c8b457d
+#: class-birthdays-widget-settings.php:287 loco:54d11fa214d725d25b8b4579
 msgid "Birthday for WordPress Users"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:157
-#: class-birthdays-widget-settings.php:160 loco:54abd9d314d7255e5c8b4574
+#: class-birthdays-widget-settings.php:219
+#: class-birthdays-widget-settings.php:222 loco:54d11fa214d725d25b8b457a
 msgid "Birthday \"wish\""
 msgstr ""
 
-#: class-birthdays-widget.php:13 loco:54abd9d314d7255e5c8b45c4
+#. Plugin Name of the plugin/theme
+#: class-birthdays-widget.php:13 loco:54d11fa214d725d25b8b457b
 msgid "Birthdays Widget"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:390 loco:54abd9d314d7255e5c8b45a2
+#: class-birthdays-widget-settings.php:631 loco:54d11fa214d725d25b8b457c
 msgid "Birthdays Widget - List of Birthdays"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:52 loco:54abd9d314d7255e5c8b456d
+#: class-birthdays-widget-settings.php:52 loco:54d11fa214d725d25b8b457d
 msgid "Birthdays Widget Options "
 msgstr ""
 
-#: class-birthdays-widget-settings.php:442
-#: class-birthdays-widget-settings.php:445 loco:54abd9d314d7255e5c8b4596
+#. Description of the plugin/theme
+#: loco:54d65b3714d725c2098b4572
+msgid ""
+"Birthdays widget plugin produces a widget which displays a customizable happy "
+"birthday image and wish to your clients/users."
+msgstr ""
+
+#: class-birthdays-widget-settings.php:470
+#: class-birthdays-widget-settings.php:473 loco:54d11fa214d725d25b8b457e
 msgid "Calendar Color #1"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:474
-#: class-birthdays-widget-settings.php:477 loco:54abd9d314d7255e5c8b459b
+#: class-birthdays-widget-settings.php:502
+#: class-birthdays-widget-settings.php:505 loco:54d11fa214d725d25b8b457f
 msgid "Calendar Color #2"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:252 loco:54abd9d314d7255e5c8b4584
+#: class-birthdays-widget-settings.php:329 loco:54d11fa214d725d25b8b4580
 msgid ""
 "Careful! The meta you select must be present in every WP User you set a "
 "birthday, otherwise nothing will be displayed."
 msgstr ""
 
-#: class-birthdays-widget-settings.php:432 loco:54abd9d314d7255e5c8b4594
+#: class-birthdays-widget-settings.php:460 loco:54d11fa214d725d25b8b4581
 msgid "Colour for birthdays in Calendar Widget"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:184
-#: class-birthdays-widget-settings.php:187 loco:54abd9d314d7255e5c8b4578
+#: class-birthdays-widget-settings.php:246
+#: class-birthdays-widget-settings.php:249 loco:54d11fa214d725d25b8b4582
 msgid "Comma between names"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:618 loco:54abd9d314d7255e5c8b45b7
+#: class-birthdays-widget-settings.php:528
+#: class-birthdays-widget-settings.php:554
+#: class-birthdays-widget-settings.php:557 loco:54d65b3714d725c2098b4569
+msgid "Consecutive days"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:867 loco:54d11fa214d725d25b8b4583
 msgid ""
 "CSV must have format &lt;name&gt;,&lt;date&gt; where &lt;name&gt; a string "
 "and &lt;date&gt; as Y-m-D"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:429 loco:54abd9d314d7255e5c8b4593
+#: class-birthdays-widget-settings.php:457 loco:54d11fa214d725d25b8b4584
 msgid "Current Day Color"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:392 loco:54abd9d314d7255e5c8b45a4
+#: class-birthdays-widget-settings.php:529
+#: class-birthdays-widget-settings.php:541
+#: class-birthdays-widget-settings.php:544 loco:54d65b3714d725c2098b456a
+msgid "Days with birthdays"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:534 loco:54d65b3714d725c2098b456d
+msgid ""
+"Days with birthdays could be 1rst February, 3rd March, 15th March ... etc, "
+"based on the birthdays in your list"
+msgstr ""
+
+#: loco:54d665d014d72518058b4570
+msgid "Default"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:633 loco:54d11fa214d725d25b8b4585
 msgid "Delete All"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:293 loco:54abd9d314d7255e5c8b458a
+#: class-birthdays-widget-settings.php:293 loco:54d11fa214d725d25b8b4586
 msgid "Disable Image"
 msgstr ""
 
-#: loco:54c01ace14d725611c8b456f
-msgid "Disabled"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:233 loco:54abd9d314d7255e5c8b4581
+#: class-birthdays-widget-settings.php:310 loco:54d11fa214d725d25b8b4588
 msgid "Disabled birthday field for WordPress Users"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:220 loco:54abd9d314d7255e5c8b457f
+#: class-birthdays-widget-settings.php:297 loco:54d11fa214d725d25b8b4589
 msgid "Draw birthday of WordPress Users from the "
 msgstr ""
 
-#: class-birthdays-widget-settings.php:293 loco:54abd9d314d7255e5c8b458b
+#: class-birthdays-widget-settings.php:293 loco:54d11fa214d725d25b8b458a
 msgid "Enable Image"
 msgstr ""
 
-#: loco:54c01acb14d725cb1c8b4572
-msgid "Enabled"
+#: class-birthdays-widget-settings.php:533 loco:54d65b3714d725c2098b456c
+msgid ""
+"Ex: Consecutive days would be 1rst February, 2nd February, 3rd February ... "
+"etc"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:681 loco:54abd9d314d7255e5c8b45c0
+#: class-birthdays-widget-settings.php:931 loco:54d11fa214d725d25b8b458c
 msgid "Export Birthday List Page"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:682 loco:54abd9d314d7255e5c8b45c1
+#: class-birthdays-widget-settings.php:932 loco:54d11fa214d725d25b8b458d
 msgid "Export WordPress Users"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:169
-#: class-birthdays-widget-settings.php:172 loco:54abd9d314d7255e5c8b4576
+#: class-birthdays-widget-settings.php:231
+#: class-birthdays-widget-settings.php:234 loco:54d11fa214d725d25b8b458e
 msgid "Fields in Registration Form"
 msgstr ""
 
-#: birthday-widget.php:93 loco:54abd9d314d7255e5c8b4568
+#: birthday-widget.php:93 loco:54d11fa214d725d25b8b458f
 msgid "First Name"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:147 loco:54abd9d314d7255e5c8b456f
-msgid "General settings"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:259
-#: class-birthdays-widget-settings.php:262 loco:54abd9d314d7255e5c8b4585
+#: class-birthdays-widget-settings.php:336
+#: class-birthdays-widget-settings.php:339 loco:54d11fa214d725d25b8b4590
 msgid "Gravatar's profile image"
 msgstr ""
 
-#: class-birthdays-widget-installer.php:34
-#: class-birthdays-widget-installer.php:90
-#: class-birthdays-widget-settings.php:131 loco:54abd9d314d7255e5c8b456b
+#: class-birthdays-widget-installer.php:40
+#: class-birthdays-widget-installer.php:100
+#: class-birthdays-widget-settings.php:169 loco:54d11fa214d725d25b8b4591
 msgid "Happy Birthday"
 msgstr ""
 
-#: class-birthdays-widget.php:14 loco:54abd9d314d7255e5c8b45c5
+#: class-birthdays-widget.php:14 loco:54d11fa214d725d25b8b4592
 msgid "Happy birthday widget"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:633 loco:54abd9d314d7255e5c8b45bb
+#: class-birthdays-widget-settings.php:883 loco:54d11fa214d725d25b8b4593
 msgid " has been uploaded. "
 msgstr ""
 
-#: class-birthdays-widget-settings.php:319 loco:54abd9d314d7255e5c8b4592
+#: class-birthdays-widget-settings.php:444 loco:54d11fa214d725d25b8b4594
 msgid ""
 "Here you can select which roles of your website can have access to page "
 "editing/viewing the birthday list."
 msgstr ""
 
-#: class-birthdays-widget-settings.php:617 loco:54abd9d314d7255e5c8b45b6
+#: class-birthdays-widget-settings.php:866 loco:54d11fa214d725d25b8b4595
 msgid "Here you can upload a CSV file with your own data or from a plugin-export."
 msgstr ""
 
-#: class-birthdays-widget-settings.php:269 loco:54abd9d314d7255e5c8b4586
+#. Author URI of the plugin/theme
+#: loco:54d65b3714d725c2098b4574
+msgid "http://www.codescar.eu"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+#: loco:54d65b3714d725c2098b4571
+msgid "https://wordpress.org/plugins/birthdays-widget/"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:346 loco:54d11fa214d725d25b8b4596
 msgid ""
 "If disabled images for WordPress Users will be handled with WordPress Media "
 "Manager."
 msgstr ""
 
-#: class-birthdays-widget-settings.php:467 loco:54abd9d314d7255e5c8b459a
+#: class-birthdays-widget-settings.php:495 loco:54d11fa214d725d25b8b4597
 msgid "If you have consecutive days with birthdays and don't want the same color"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:195 loco:54abd9d314d7255e5c8b457a
+#: class-birthdays-widget-settings.php:257 loco:54d11fa214d725d25b8b4598
 msgid ""
 "If you want space between the names but no comma, consider adding a CSS rule "
 "to class "
 msgstr ""
 
-#: class-birthdays-widget-settings.php:149 loco:54abd9d314d7255e5c8b4571
+#: class-birthdays-widget-settings.php:209 loco:54d11fa214d725d25b8b4599
 msgid "Image Settings"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:308 loco:54abd9d314d7255e5c8b4591
+#: class-birthdays-widget-settings.php:433 loco:54d11fa214d725d25b8b459a
 msgid "Images in list template"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:616 loco:54abd9d314d7255e5c8b45b5
+#: class-birthdays-widget-settings.php:865 loco:54d11fa214d725d25b8b459b
 msgid "Import Birthday List Page"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:683 loco:54abd9d314d7255e5c8b45c2
+#: class-birthdays-widget-settings.php:933 loco:54d11fa214d725d25b8b459c
 msgid "In order to download the export file press "
 msgstr ""
 
-#: class-birthdays-widget-settings.php:296 loco:54abd9d314d7255e5c8b458c
+#: class-birthdays-widget-settings.php:396
+#: class-birthdays-widget-settings.php:419 loco:54d11fa214d725d25b8b459d
 msgid "Leaving this field empty will revert to the default image."
 msgstr ""
 
-#: class-birthdays-widget-settings.php:780 loco:54abd9d314d7255e5c8b45b8
+#. Author of the plugin/theme
+#: loco:54d65b3714d725c2098b4573
+msgid "lion2486, Sudavar"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:868 loco:54d11fa214d725d25b8b459e
 msgid "Make sure that the imported file is encoded in UTF-8."
 msgstr ""
 
-#: class-birthdays-widget-settings.php:228 loco:54abd9d314d7255e5c8b4580
+#: class-birthdays-widget-settings.php:305 loco:54d11fa214d725d25b8b459f
 msgid " meta field of WordPress User Profile"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:238
-#: class-birthdays-widget-settings.php:241 loco:54abd9d314d7255e5c8b4582
+#: class-birthdays-widget-settings.php:315
+#: class-birthdays-widget-settings.php:318 loco:54d11fa214d725d25b8b45a0
 msgid "Meta value as name"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:178 loco:54abd9d314d7255e5c8b4577
+#: class-birthdays-widget-settings.php:240 loco:54d11fa214d725d25b8b45a1
 msgid "Name and Birthday fields at WordPress User Registration Form"
 msgstr ""
 
-#: loco:54c01ad514d725a21c8b456d
-msgid "No"
-msgstr ""
-
-#: class-birthdays-widget.php:186 loco:54abd9d314d7255e5c8b45c9
+#: class-birthdays-widget.php:217 loco:54d11fa214d725d25b8b45a2
 msgid ""
 "Only one calendar template is available per page. Please check your widget "
 "and shortcode options."
 msgstr ""
 
-#: class-birthdays-widget-settings.php:136 loco:54abd9d314d7255e5c8b456e
+#: loco:54d666b914d72518058b4572
+msgid "Options"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:194 loco:54d11fa214d725d25b8b45a3
 msgid "Options successfully updated."
 msgstr ""
 
-#: class-birthdays-widget-settings.php:337 loco:54abd9d314d7255e5c8b45a1
+#: class-birthdays-widget-settings.php:578 loco:54d11fa214d725d25b8b45a4
 msgid "or you can click on our birthday button."
 msgstr ""
 
-#: birthday-widget.php:162 loco:54abd9d314d7255e5c8b456a
+#: birthday-widget.php:163 loco:54d11fa214d725d25b8b45a5
 msgid "Please enter user's birthday requested by birthdays widget"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:396
-#: class-birthdays-widget-settings.php:432 loco:54abd9d314d7255e5c8b45a5
+#: class-birthdays-widget-settings.php:637
+#: class-birthdays-widget-settings.php:673 loco:54d11fa214d725d25b8b45a6
 msgid "Please fill all the boxes!"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:333 loco:54abd9d314d7255e5c8b459e
+#: class-birthdays-widget-settings.php:574 loco:54d11fa214d725d25b8b45a7
 msgid "Plugin Version "
 msgstr ""
 
-#: class-birthdays-widget-settings.php:404 loco:54abd9d314d7255e5c8b45a7
+#: class-birthdays-widget-settings.php:823
+#: class-birthdays-widget-settings.php:831 loco:54d65b3714d725c2098b4570
+msgid "+"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:645 loco:54d11fa214d725d25b8b45a8
 msgid "Query error"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:662 loco:54abd9d314d7255e5c8b45bd
+#: class-birthdays-widget-settings.php:912 loco:54d11fa214d725d25b8b45a9
 msgid " records inserted!"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:215 loco:54abd9d314d7255e5c8b457e
+#: class-birthdays-widget-settings.php:292 loco:54d11fa214d725d25b8b45aa
 msgid ""
 "Save birthday of WordPress Users in our table and show birthday field in "
 "WordPress Profile Page"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:456
-#: class-birthdays-widget-settings.php:459 loco:54abd9d314d7255e5c8b4598
+#: class-birthdays-widget-settings.php:484
+#: class-birthdays-widget-settings.php:487 loco:54d11fa214d725d25b8b45ab
 msgid "Second Color"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:669 loco:54abd9d314d7255e5c8b45bf
+#: class-birthdays-widget-settings.php:919 loco:54d11fa214d725d25b8b45ac
 msgid "Select a file first!"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:375
-#: class-birthdays-widget-settings.php:378 loco:54abd9d314d7255e5c8b458d
+#: class-birthdays-widget-settings.php:403
+#: class-birthdays-widget-settings.php:406 loco:54d11fa214d725d25b8b45ad
 msgid "Select default User image"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:250 loco:54abd9d314d7255e5c8b457c
+#: class-birthdays-widget-settings.php:274 loco:54d11fa214d725d25b8b45ae
 msgid "Select if you want age of Users to be displayed"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:193 loco:54abd9d314d7255e5c8b4579
+#: class-birthdays-widget-settings.php:255 loco:54d11fa214d725d25b8b45af
 msgid "Select if you want comma (,) to be displayed between the names in widget"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:465 loco:54abd9d314d7255e5c8b4599
+#: class-birthdays-widget-settings.php:493 loco:54d11fa214d725d25b8b45b0
 msgid "Select if you want the colors of days marked with birthdays to change"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:288 loco:54abd9d314d7255e5c8b4588
+#: class-birthdays-widget-settings.php:531 loco:54d65b3714d725c2098b456b
+msgid ""
+"Select if you want the plugin to display # consecutive days from the current "
+"day or search for days with birthdays."
+msgstr ""
+
+#: class-birthdays-widget-settings.php:388
+#: class-birthdays-widget-settings.php:411 loco:54d11fa214d725d25b8b45b1
 msgid "Select Image"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:436 loco:54abd9d314d7255e5c8b4595
+#: class-birthdays-widget-settings.php:561 loco:54d65b3714d725c2098b456f
+msgid "Select number of consecutive days displayed in upcoming view"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:548 loco:54d65b3714d725c2098b456e
+msgid "Select number of days with birthdays displayed in upcoming view"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:464 loco:54d11fa214d725d25b8b45b2
 msgid "Select the color of current day in Calendar view of widget"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:449 loco:54abd9d314d7255e5c8b4597
+#: class-birthdays-widget-settings.php:477 loco:54d11fa214d725d25b8b45b3
 msgid "Select the color of days marked with birthdays in Calendar view of widget"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:352
-#: class-birthdays-widget-settings.php:355 loco:54abd9d314d7255e5c8b4587
+#: class-birthdays-widget-settings.php:380
+#: class-birthdays-widget-settings.php:383 loco:54d11fa214d725d25b8b45b4
 msgid "Select the image displayed on top of widget"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:284 loco:54abd9f914d7257f5c8b4567
+#: class-birthdays-widget-settings.php:284 loco:54d11fa214d725d25b8b45b5
 msgid "Select the image you want for the birthdays widget"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:481 loco:54abd9d314d7255e5c8b459c
+#: class-birthdays-widget-settings.php:509 loco:54d11fa214d725d25b8b45b6
 msgid "Select the second color to be displayed for consecutive days"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:250 loco:54abd9d314d7255e5c8b4583
+#: class-birthdays-widget-settings.php:327 loco:54d11fa214d725d25b8b45b7
 msgid ""
 "Select which Wordpress User's meta value you like to be shown as name in "
 "widget"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:301 loco:54abd9d314d7255e5c8b458e
+#: class-birthdays-widget-settings.php:426 loco:54d11fa214d725d25b8b45b8
 msgid "Set the width"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:304 loco:54abd9d314d7255e5c8b458f
+#: class-birthdays-widget-settings.php:429 loco:54d11fa214d725d25b8b45b9
 msgid "Set the width of "
 msgstr ""
 
-#: class-birthdays-widget-settings.php:334 loco:54abd9d314d7255e5c8b459f
+#: class-birthdays-widget-settings.php:575 loco:54d11fa214d725d25b8b45ba
 msgid "<b>Shortcode</b> is also available for use in posts or pages: "
 msgstr ""
 
-#: class-birthdays-widget-settings.php:241
-#: class-birthdays-widget-settings.php:244 loco:54abd9d314d7255e5c8b457b
+#: class-birthdays-widget-settings.php:265
+#: class-birthdays-widget-settings.php:268 loco:54d11fa214d725d25b8b45bb
 msgid "Show User's age"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:425 loco:54abd9d314d7255e5c8b45a9
+#: class-birthdays-widget-settings.php:666 loco:54d11fa214d725d25b8b45bc
 msgid "The record was deleted!"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:439 loco:54abd9d314d7255e5c8b45aa
+#: class-birthdays-widget-settings.php:680 loco:54d11fa214d725d25b8b45bd
 msgid "The record was updated!"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:420 loco:54abd9d314d7255e5c8b45a8
+#: class-birthdays-widget-settings.php:661 loco:54d11fa214d725d25b8b45be
 msgid "There was an error!"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:666 loco:54abd9d314d7255e5c8b45be
+#: class-birthdays-widget-settings.php:916 loco:54d11fa214d725d25b8b45bf
 msgid "There was an error uploading the file, please try again!"
 msgstr ""
 
-#: birthday-widget.php:96 birthday-widget.php:155 loco:54abd9d314d7255e5c8b4569
+#: birthday-widget.php:96 birthday-widget.php:156 loco:54d11fa214d725d25b8b45c0
 msgid "User Birthday"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:306 loco:54abd9d314d7255e5c8b4590
+#. Tags of the plugin/theme
+#: loco:54d65b3714d725c2098b4575
+msgid ""
+"widget, birthdays, custom birthday list, WordPress User birthday, birthday "
+"calendar"
+msgstr ""
+
+#: class-birthdays-widget-settings.php:431 loco:54d11fa214d725d25b8b45c1
 msgid "Widget's image"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:148 loco:54abd9d314d7255e5c8b4570
+#: class-birthdays-widget-settings.php:208 loco:54d11fa214d725d25b8b45c2
 msgid "WordPress User"
 msgstr ""
 
-#: class-birthdays-widget-settings.php:163 loco:54abd9d314d7255e5c8b4575
+#: class-birthdays-widget-settings.php:225 loco:54d11fa214d725d25b8b45c3
 msgid "Write your custom \"wish\""
 msgstr ""
 
-#: class-birthdays-widget-settings.php:640 loco:54abd9d314d7255e5c8b45bc
+#: class-birthdays-widget-settings.php:890 loco:54d11fa214d725d25b8b45c4
 msgid "Wrong CSV format!<br />"
 msgstr ""
 
-#: class-birthdays-widget.php:183 class-birthdays-widget.php:195
-#: class-birthdays-widget.php:267 loco:54abd9d314d7255e5c8b45c8
+#: class-birthdays-widget.php:197 class-birthdays-widget.php:209
+#: class-birthdays-widget.php:274 class-birthdays-widget.php:362 loco:#: 54d11fa214d725d25b8b45c5
 msgid "years old"
 msgstr ""
 
-#: loco:54c01ad214d725821c8b456c
-msgid "Yes"
-msgstr ""
-
-#: class-birthdays-widget-settings.php:336 loco:54abd9d314d7255e5c8b45a0
+#: class-birthdays-widget-settings.php:577 loco:54d11fa214d725d25b8b45c6
 msgid "You can either add it your self, "
 msgstr ""
 
 #: class-birthdays-widget-settings.php:48
-#: class-birthdays-widget-settings.php:385
-#: class-birthdays-widget-settings.php:613
-#: class-birthdays-widget-settings.php:677 loco:54abd9d314d7255e5c8b456c
+#: class-birthdays-widget-settings.php:626
+#: class-birthdays-widget-settings.php:862
+#: class-birthdays-widget-settings.php:927 loco:54d11fa214d725d25b8b45c7
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: class-birthdays-widget-settings.php:402 loco:54abd9d314d7255e5c8b45a6
+#: class-birthdays-widget-settings.php:643 loco:54d11fa214d725d25b8b45c8
 msgid "Your new record was added!"
 msgstr ""
