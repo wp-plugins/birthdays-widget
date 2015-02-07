@@ -11,7 +11,7 @@ function birthdays_widget_check_for_birthdays( $all = false ) {
 
     $table_name = $wpdb->prefix . "birthdays";
     if ( $all ) {
-        $query = "SELECT * FROM $table_name;";
+        $query = "SELECT * FROM $table_name ORDER BY DATE_FORMAT(date, '%m-%d');";
         $results = $wpdb->get_results( $query );
     } else {
         $query = "SELECT * FROM $table_name WHERE date LIKE '%%%s' ;";

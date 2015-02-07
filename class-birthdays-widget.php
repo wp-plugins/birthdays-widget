@@ -25,7 +25,7 @@ class Birthdays_Widget extends WP_Widget {
      */
     public function widget( $args, $instance ) {
         
-        if ( $instance[ 'template' ] == 2 ) {
+        if ( $instance[ 'template' ] == 2 || $instance[ 'template' ] == 3 ) {
             $birthdays = birthdays_widget_check_for_birthdays( true );
         } else {
             $birthdays = birthdays_widget_check_for_birthdays();
@@ -58,9 +58,9 @@ class Birthdays_Widget extends WP_Widget {
         $birth_widg = maybe_unserialize( $birth_widg );
         $instance = wp_parse_args( (array) $instance, $birth_widg );
         if ( !isset( $instance[ 'title' ] ) )
-			$instance[ 'title' ] = "Birthdays Widget";
-		if ( !isset( $instance[ 'template' ] ) )
-			$instance[ 'template' ] = 0;
+            $instance[ 'title' ] = "Birthdays Widget";
+        if ( !isset( $instance[ 'template' ] ) )
+            $instance[ 'template' ] = 0;
         ?>
         <p><fieldset class="basic-grey">
             <legend><?php _e( 'Settings', 'birthdays-widget' ); ?>:</legend>
@@ -77,11 +77,24 @@ class Birthdays_Widget extends WP_Widget {
                     <option value="0" <?php if ( $instance[ 'template' ] == 0 ) echo "selected='selected'"; ?>>Default</option>
                     <option value="1" <?php if ( $instance[ 'template' ] == 1 ) echo "selected='selected'"; ?>>List</option>
                     <option value="2" <?php if ( $instance[ 'template' ] == 2 ) echo "selected='selected'"; ?>>Calendar</option>
+                    <option value="3" <?php if ( $instance[ 'template' ] == 3 ) echo "selected='selected'"; ?>>Upcoming</option>
                 </select>
             </label>
         </fieldset></p>
-		<?php
-	}
+        <?php
+    }
+
+    public static function organize_days( $filtered ) {
+        $days_organized = array();
+        foreach ( $filtered as $user_birt ) {
+            $user_birt->tmp = substr( $user_birt->date, 5 );
+            if ( !isset ( $days_organized[ $user_birt->tmp ] ) ) {
+                $days_organized[ $user_birt->tmp ] = array();
+            }
+            $days_organized[ $user_birt->tmp ][] = $user_birt;
+        }
+        return $days_organized;
+    }
 
     public static function birthdays_code( $instance, $birthdays = NULL ) {
         wp_enqueue_style( 'birthdays-css' );
@@ -127,7 +140,7 @@ class Birthdays_Widget extends WP_Widget {
             $meta_key = $birthdays_settings[ 'meta_field' ];
             $prefix = "cs_birth_widg_";
             $filtered = array();
-			$year = true;
+            $year = true;
             foreach ( $birthdays as $row ) {
                 //Check if this is record represents a WordPress user
                 $wp_usr = strpos( $row->name, $prefix );
@@ -139,7 +152,8 @@ class Birthdays_Widget extends WP_Widget {
                 $row->image = $row->image[ 0 ];
                 if ( $wp_usr !== false ) {
                     //If birthdays are disabled for WP Users, or birthday date is drown from WP Profile, skip the record
-                    if ( ( $birthdays_settings[ 'profile_page' ] == 0 && $birthdays_settings[ 'date_from_profile' ] == 0 ) || $birthdays_settings[ 'date_from_profile' ] ) {
+                    if ( ( $birthdays_settings[ 'profile_page' ] == 0 && $birthdays_settings[ 'date_from_profile' ] == 0 ) 
+                        || $birthdays_settings[ 'date_from_profile' ] ) {
                         continue;
                     }
                     //Get the ID from the record, which is of the format $prefixID and get the user's data
@@ -165,9 +179,9 @@ class Birthdays_Widget extends WP_Widget {
             }
             switch ( $instance[ 'template' ] ) {
                 case 0:
-					wp_enqueue_script( 'jquery-ui-tooltip' );
-				    wp_enqueue_script( 'birthdays-script' );
-					wp_enqueue_style ( 'jquery-style' );
+                    wp_enqueue_script( 'jquery-ui-tooltip' );
+                    wp_enqueue_script( 'birthdays-script' );
+                    wp_enqueue_style ( 'jquery-style' );
                     $flag = false;
                     foreach ( $filtered as $row ) {
                         $html .= '<div class="birthday_element birthday_name">';
@@ -178,7 +192,7 @@ class Birthdays_Widget extends WP_Widget {
                         }
                         $html .= $row->name;
                         $age = date( "Y" ) - date( "Y", strtotime( $row->date ) );
-						$html .= '<a href="' . $row->image . '" target="_blank" ';
+                        $html .= '<a href="' . $row->image . '" target="_blank" ';
                         if( $birthdays_settings[ 'user_age' ] ) {
                             $html .= 'data-age="' . $age . ' ' . __( 'years old', 'birthdays-widget' ) . '" ';
                         }
@@ -188,8 +202,8 @@ class Birthdays_Widget extends WP_Widget {
                 case 1:
                     $html .= '<ul class="birthday_list">';
                         foreach ( $filtered as $row ) {
-                            $html .= "<li class=\"birthday_name\"><img style=\"width:{$birthdays_settings[ 'list_image_width' ]}\" src=\"{$row->image}\" 
-                                    class=\"birthday_list_image\" />{$row->name}";
+                            $html .= "<li class=\"birthday_name\"><img style=\"width:{$birthdays_settings[ 'list_image_width' ]}\" 
+                                    src=\"{$row->image}\" class=\"birthday_list_image\" />{$row->name}";
                             if( $birthdays_settings[ 'user_age' ] ) {
                                 $age = date( "Y" ) - date( "Y", strtotime( $row->date ) );
                                 $html .= '<span class="birthday_age"> ' . $age . ' ' . __( 'years old', 'birthdays-widget' ) . '</span>';
@@ -204,14 +218,7 @@ class Birthdays_Widget extends WP_Widget {
                         break;
                     }
                     define( 'CALENDAR' , true );
-                    $day_organized = array();
-                    foreach ( $filtered as $user_birt ) {
-                        $user_birt->tmp = substr( $user_birt->date, 5 );
-                        if ( !isset ( $day_organized[ $user_birt->tmp ] ) ) {
-                            $day_organized[ $user_birt->tmp ] = array();
-                        }
-                        $day_organized[ $user_birt->tmp ][] = $user_birt;
-                    }
+                    $days_organized = self::organize_days( $filtered );
                     wp_enqueue_style( 'birthdays-bootstrap-css' );
                     wp_enqueue_style( 'birthdays-calendar-css' );
                     wp_enqueue_script( 'birthdays-bootstrap-js' );
@@ -242,7 +249,7 @@ class Birthdays_Widget extends WP_Widget {
                             var dayNames = ' . $week_days . ';
                             var events = [ ';
                                 $flag = false;
-                                foreach ( $day_organized as $day ) {
+                                foreach ( $days_organized as $day ) {
                                     $html .= '{ date: "' . date( 'j/n', strtotime( $day[ 0 ]->date ) ) . '/' . date( 'Y' ) . '",';
                                     $html .= 'title: \'' . $birthdays_settings[ 'wish' ] . '\',';
                                     if ( date( 'm-d', strtotime( $day[ 0 ]->date ) ) == date( 'm-d' ) ) {
@@ -289,17 +296,86 @@ class Birthdays_Widget extends WP_Widget {
                     $html .= '</script>';
                     $html .= '<div id="birthday_calendar"></div>';
                     break;
+                case 3:
+                    wp_enqueue_script( 'jquery-ui-tooltip' );
+                    wp_enqueue_script( 'birthdays-script' );
+                    wp_enqueue_style ( 'jquery-style' );
+                    $days_organized = self::organize_days( $filtered );
+                    //TODO get current day in format MM-DD
+                    $today_key = date( 'm-d' );
+                    //var_dump( $today_key );
+                    $upcoming_days = $birthdays_settings[ 'upcoming_days_birthdays' ];
+                    $consecutive_days = $birthdays_settings[ 'upcoming_consecutive_days' ];
+                    $upcoming_mode = $birthdays_settings[ 'upcoming_mode' ];
+                    /* If today is not in the array, add the key and sort the array again */
+                    if ( ! array_key_exists( $today_key, $days_organized ) ) {
+                        $days_organized[ $today_key ] = array();
+                        ksort( $days_organized );
+                    }
+                    /* Find the current day in the array, then iterate to it */
+                    $offset = array_search( $today_key, array_keys( $days_organized ) );
+                    for ( $i = 0; $i < $offset; $i++ ) {
+                        next( $days_organized );
+                    }
+                    /* Now show the number of days user desires */
+                    $final_days = array();
+                    if ( $upcoming_mode ) {
+                        $today = DateTime::createFromFormat( 'm-d', $today_key );
+                        for ( $i = 0; $i < $consecutive_days; $i++ ) {
+                            $today->add( new DateInterval( 'P1D' ) );
+                            $tmp_day = $today->format( 'm-d' );
+                            if ( ! array_key_exists( $tmp_day, $days_organized ) ) {
+                                $days_organized[ $tmp_day ] = array();
+                            }
+                        }
+                        ksort( $days_organized );
+                        $offset = array_search( $today_key, array_keys( $days_organized ) );
+                        for ( $i = 0; $i < $offset; $i++ ) {
+                            next( $days_organized );
+                        }
+                        $upcoming_days = $consecutive_days;
+                    }
+                    for ( $i = 0; $i < $upcoming_days; $i++ ) {
+                        $final_days[] = current( $days_organized );
+                        next( $days_organized );
+                    }
+                    foreach ( $final_days as $day ) {
+                        if ( !$day )
+                            continue;
+                        //var_dump( $day[ 0 ]->date );
+                        $timestamp_date = strtotime( $day[ 0 ]->date );
+                        $html_date = date_i18n( 'j F', $timestamp_date );
+                        $html .= '<div class="birthday_date" >' . $html_date . '</div>';
+                        $flag = false;
+                        foreach ( $day as $row ) {
+                            //var_dump( $row );
+                            $html .= '<div class="birthday_element birthday_name">';
+                            if ( $flag && $birthdays_settings[ 'comma' ] ) {
+                                $html .= ', ';
+                            } else {
+                                $flag = true;
+                            }
+                            $html .= $row->name;
+                            $age = date( "Y" ) - date( "Y", strtotime( $row->date ) );
+                            $html .= '<a href="' . $row->image . '" target="_blank" ';
+                            if( $birthdays_settings[ 'user_age' ] ) {
+                                $html .= 'data-age="' . $age . ' ' . __( 'years old', 'birthdays-widget' ) . '" ';
+                            }
+                            $html .= '></a></div>';
+                        }
+                    }
+                    break;
             }
         $html .= '</div>';
         return $html;
     }
 
     /**
-	 * Processing widget options on save
-	 *
-	 * @param array $new_instance The new options
-	 * @param array $old_instance The previous options
-	 */
+     * Processing widget options on save
+     *
+     * @param array $new_instance The new options
+     * @param array $old_instance The previous options
+     */
     function update($new_instance, $old_instance) {
         $instance = $old_instance;
         $instance[ 'title' ] = strip_tags( $new_instance[ 'title' ] );

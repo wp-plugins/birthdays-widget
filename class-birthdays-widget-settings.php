@@ -79,6 +79,29 @@
                     } else {
                         $birthdays_settings[ 'user_age' ] = 0;
                     }
+                    if ( isset( $_POST[ 'upcoming_mode' ] ) && $_POST[ 'upcoming_mode' ] != '0' ) {
+                        $birthdays_settings[ 'upcoming_mode' ] = 1;
+                    } else {
+                        $birthdays_settings[ 'upcoming_mode' ] = 0;
+                    }
+                    if ( isset( $_POST[ 'upcoming_days_birthdays' ] ) ) {
+                        if ( !is_numeric( $_POST[ 'upcoming_days_birthdays' ] ) ) {
+                            $birthdays_settings[ 'upcoming_days_birthdays' ] = 3;
+                        } else {
+                            $birthdays_settings[ 'upcoming_days_birthdays' ] = $_POST[ 'upcoming_days_birthdays' ];
+                        }
+                    } else {
+                        $birthdays_settings[ 'upcoming_days_birthdays' ] = 3;
+                    }
+                    if ( isset( $_POST[ 'upcoming_consecutive_days' ] ) ) {
+                        if ( !is_numeric( $_POST[ 'upcoming_consecutive_days' ] ) ) {
+                            $birthdays_settings[ 'upcoming_consecutive_days' ] = 3;
+                        } else {
+                            $birthdays_settings[ 'upcoming_consecutive_days' ] = $_POST[ 'upcoming_consecutive_days' ];
+                        }
+                    } else {
+                        $birthdays_settings[ 'upcoming_consecutive_days' ] = 3;
+                    }
                     if ( isset( $_POST[ 'birthdays_date_meta_field' ] ) ) {
                         $birthdays_settings[ 'date_meta_field' ] = $_POST[ 'birthdays_date_meta_field' ];
                     } else {
@@ -186,8 +209,9 @@
                 <a href="#birthdays-tab-image" class="nav-tab"><?php _e( 'Image Settings', 'birthdays-widget' ); ?></a>
                 <a href="#birthdays-tab-access" class="nav-tab"><?php _e( 'Access', 'birthdays-widget' ); ?></a>
                 <a href="#birthdays-tab-calendar" class="nav-tab"><?php _e( 'Calendar', 'birthdays-widget' ); ?></a>
+                <a href="#birthdays-tab-upcoming" class="nav-tab"><?php _e( 'Upcoming', 'birthdays-widget' ); ?></a>
             </h2>
-            <form name="birthdays_form" method="post" action="">
+            <form id="birthdays_settings_form" name="birthdays_form" method="post" action="">
                 <div class="table" id="birthdays-tab-general">
                     <table class="form-table">
                         <tbody>
@@ -490,6 +514,58 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="table ui-tabs-hide" id="birthdays-tab-upcoming">
+                    <table class="form-table">
+                        <tbody>
+                        <tr>
+                            <th><?php _e( 'Mode', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Mode', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="upcoming_mode">
+                                        <select name="upcoming_mode" id="upcoming_mode">
+                                            <option value='1' <?php if ( $birthdays_settings[ 'upcoming_mode' ] == 1 ) echo "selected='selected'"; ?> ><?php _e( 'Consecutive days' , 'birthdays-widget' ); ?></option>
+                                            <option value='0' <?php if ( $birthdays_settings[ 'upcoming_mode' ] == 0 ) echo "selected='selected'"; ?> ><?php _e( 'Days with birthdays' , 'birthdays-widget' ); ?></option>
+                                        </select>
+                                        <br /><?php _e( 'Select if you want the plugin to display # consecutive days from the current day or search for days with birthdays.', 'birthdays-widget' ); ?>
+                                        <br /><span class="description">
+                                            <?php _e( 'Ex: Consecutive days would be 1rst February, 2nd February, 3rd February ... etc', 'birthdays-widget' ); ?><br />
+                                            <?php _e( 'Days with birthdays could be 1rst February, 3rd March, 15th March ... etc, based on the birthdays in your list', 'birthdays-widget' ); ?>
+                                        </span>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?php _e( 'Days with birthdays', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Days with birthdays', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="upcoming_days_birthdays">
+                                        <input name="upcoming_days_birthdays" id="upcoming_days_birthdays" type="number" 
+                                            value="<?php echo ( $birthdays_settings[ 'upcoming_days_birthdays' ] ); ?>" />
+                                        <br /><?php _e( 'Select number of days with birthdays displayed in upcoming view', 'birthdays-widget' ); ?>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?php _e( 'Consecutive days', 'birthdays-widget' ); ?></th>
+                            <td>
+                                <fieldset>
+                                    <legend class="screen-reader-text"><span><?php _e( 'Consecutive days', 'birthdays-widget' ); ?></span></legend>
+                                    <label for="upcoming_consecutive_days">
+                                        <input name="upcoming_consecutive_days" id="upcoming_consecutive_days" type="number" 
+                                            value="<?php echo ( $birthdays_settings[ 'upcoming_consecutive_days' ] ); ?>" />
+                                        <br /><?php _e( 'Select number of consecutive days displayed in upcoming view', 'birthdays-widget' ); ?>
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <p><input name="save" type="submit" class="button-primary" value="<?php _e( 'Save', 'birthdays-widget' ); ?>" /></p>
                 <?php wp_nonce_field( 'birthdays_form' ); ?>
             </form>               
@@ -732,7 +808,7 @@
                             $tmp2 = $tmp . 'value="' . $result->email . '"';
                             $name_input = "<input type=\"text\" name=\"birthday_name\" $tmp1 id=\"birthday_name\"  />" . $name_hidden;
                             $date_input = "<input type=\"text\" name=\"birthday_date\" id=\"birthday_date\" value=\"" . 
-                                            date_i18n( get_option( 'date_format' ), strtotime( $result->date ) ) . "\" />";
+                                            date_i18n( 'd-m-Y', strtotime( $result->date ) ) . "\" />";
                             $email_input = "<input type=\"email\" name=\"birthday_email\" $tmp2 />" . $email_hidden;
                             if ( $birthdays_settings[ 'wp_user_gravatar' ] && $wp_usr !== false ) {
                                 $image_input = "<input type=\"text\" name=\"birthday_image\" value=\"Gravatar\" disabled=\"disabled\" />";
@@ -744,7 +820,7 @@
                                     $img = $birthdays_settings[ 'user_image_url' ];
                                 }                                
                                 $image_input = '<img id="birthdays_user_image_preview" class="birthday_admin_edit_image" src="' . $img . '" alt="User Image" />'.
-                                    '<input name="image" type="button" class="button-primary upload_image_button" value="' . __( 'Add', 'birthdays-widget' ) . '" data-url-input="birthdays_user_image" >'.
+                                    '<input name="image" type="button" class="button-primary upload_image_button" value="' . __( '+', 'birthdays-widget' ) . '" data-url-input="birthdays_user_image" >'.
                                     '<input type="hidden" name="birthday_image" id="birthdays_user_image" class="upload_image_button bw-image" value="' . $result->image . '" />';
                             }
                         } else {
@@ -752,7 +828,7 @@
                             $date_input = '<input type="text" name="birthday_date" id="birthday_date" value="" />';
                             $email_input = '<input type="email" name="birthday_email" value="" />';
                             $image_input = '<img id="birthdays_user_image_preview" class="birthday_admin_edit_image" src="' . $birthdays_settings[ 'user_image_url' ] . '" alt="User Image" />'.
-                                           '<input name="image" type="button" class="button-primary upload_image_button" value="' . __( 'Add', 'birthdays-widget' ) . '" data-url-input="birthdays_user_image" >'.
+                                           '<input name="image" type="button" class="button-primary upload_image_button" value="' . __( '+', 'birthdays-widget' ) . '" data-url-input="birthdays_user_image" >'.
                                            '<input type="hidden" id="birthdays_user_image" name="birthday_image" class="upload_image_button bw-image" value="" />';
                         } ?>
                             <td>
