@@ -87,6 +87,8 @@ class Birthdays_Widget extends WP_Widget {
     public static function organize_days( $filtered ) {
         $days_organized = array();
         foreach ( $filtered as $user_birt ) {
+            if( !isset( $user_birt->date ) )
+                var_dump( $user_birt );
             $user_birt->tmp = substr( $user_birt->date, 5 );
             if ( !isset ( $days_organized[ $user_birt->tmp ] ) ) {
                 $days_organized[ $user_birt->tmp ] = array();
@@ -144,12 +146,15 @@ class Birthdays_Widget extends WP_Widget {
             foreach ( $birthdays as $row ) {
                 //Check if this is record represents a WordPress user
                 $wp_usr = strpos( $row->name, $prefix );
-                if ( $instance[ 'template' ] == 2 ) {
-                    $row->image = wp_get_attachment_image_src( $row->image, array( 150, 150 ) );
-                } else {
-                    $row->image = wp_get_attachment_image_src( $row->image, 'medium' );
+                //var_dump( $row );
+                if ( is_numeric( $row->image ) || $row->image == NULL ) {
+                    if ( $instance[ 'template' ] == 2 ) {
+                        $row->image = wp_get_attachment_image_src( $row->image, array( 150, 150 ) );
+                    } else {
+                        $row->image = wp_get_attachment_image_src( $row->image, 'medium' );
+                    }
+                    $row->image = $row->image[ 0 ];
                 }
-                $row->image = $row->image[ 0 ];
                 if ( $wp_usr !== false ) {
                     //If birthdays are disabled for WP Users, or birthday date is drown from WP Profile, skip the record
                     if ( ( $birthdays_settings[ 'profile_page' ] == 0 && $birthdays_settings[ 'date_from_profile' ] == 0 ) 
@@ -267,10 +272,7 @@ class Birthdays_Widget extends WP_Widget {
                                     foreach ( $day as $user ) {
                                         $html .= '<img src="' . $user->image . '" width="150" /><div class="birthday_center birthday_name">' . $user->name;
                                         if( $birthdays_settings[ 'user_age' ] ) {
-                                            $bdate = new DateTime( $user->date );
-                                            $date_now = new DateTime();
-                                            $interval = $date_now->diff( $bdate );
-                                            $age = $interval->y;
+                                            $age = date( "Y" ) - date( "Y", strtotime( $user->date ) );
                                             $html .= '<span class="birthday_age"> ' . $age . ' ' . __( 'years old', 'birthdays-widget' ) . '</span>';
                                         }
                                         $html .= '</div>';

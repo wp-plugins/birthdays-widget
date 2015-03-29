@@ -28,12 +28,13 @@ function birthdays_widget_check_for_birthdays( $all = false ) {
         $users = get_users();
         foreach ( $users as $user ) {
             //If this meta key exists for this user, and it's his/her birthday
-            if ( isset( $user->{$birthday_date_meta_field} ) ) {
-                $date = date( "-m-d", strtotime( $user->{$birthday_date_meta_field} ) );
+            if ( isset( $user->{$birthday_date_meta_field} ) && !empty( $user->{$birthday_date_meta_field} ) ) {
+                $date = date( "-m-d", strtotime( str_replace('/', '-', $user->{$birthday_date_meta_field} ) ) );
                 if ( ( !$all && $date == date_i18n( '-m-d' ) ) || $all ) {
                     $tmp_user = new stdClass();
                     $tmp_user->name = $user->{$meta_key};
                     $tmp_user->email = $user->user_email;
+                    $tmp_user->date = date( "Y-m-d", strtotime( str_replace('/', '-', $user->{$birthday_date_meta_field} ) ) );
                     //If user's image is drawn from Gravatar
                     if ( $birthdays_settings[ 'wp_user_gravatar' ] ) {
                         $tmp_user->image = Birthdays_Widget_Settings::get_avatar_url( $tmp_user->email, 256 );
